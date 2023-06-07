@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './style.css'
 import { useState, useEffect } from 'react'
 
 import SvgIcon from '@mui/material/SvgIcon';
@@ -10,12 +9,6 @@ import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
 import planimetry from '../../img/Immagine 2023-05-31 093913.jpg';
 
-//import Switch from '@material-ui/core/Switch';
-//import { useN01SwitchStyles } from '@mui-treasury/styles/switch/n01';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box/Box';
-import Typography from '@mui/material/Typography';
-import Switch from '@mui/material/Switch/Switch';
 import { Energy, Lights, Printer } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/Modals/ModalLights';
 import { Coffee } from '../../utils/interfaces/Interfaces';
@@ -24,9 +17,9 @@ import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
 
 const lightStyle = {
-  //color:"#ffea00",
   stroke: "#9d9d15",
   color: "#ffef3c66",
+  //color:"#ffea00",
   //stroke:"#FFFF07"
 }
 const coffeeStyle = {
@@ -38,6 +31,7 @@ const printerStyle = {
   stroke: "#212121"
 }
 
+const baseURL = process.env.REACT_APP_API_BASE_URL
 
 const MainPage = () => {
   const [boltStyle, setBoltStyle] = useState({
@@ -108,10 +102,10 @@ const MainPage = () => {
 
 
   const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);
-
   const fetchLights = async () => {
+    const apiRooms = process.env.REACT_APP_ROOMS_DATAS
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/shelly/relays/all/status");
+      const response = await fetch(`${apiRooms}`);
       const data = await response?.json();
       setLightsStatusArray(data);
       console.log(data);
@@ -263,7 +257,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <svg className="svgMain" viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" style={{}} >
+      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
         <image href={planimetry} width={'100%'}></image>
 
         {lightsStatusArray.length ? (
@@ -294,7 +288,7 @@ const MainPage = () => {
               <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.id)} style={coffeeStyle} />
               <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={360} y={380} fill="black" fontSize="15px">
-                <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData.watt !== null ? coffee.data.macchinettaCaffe?.receivedData.watt : ''} W`}</tspan>
+                <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== null ? coffee.data.macchinettaCaffe?.receivedData?.watt : ''} W`}</tspan>
               </text>
               {/* 
                       <text x={350} y={360} fill="black" fontSize="15px">

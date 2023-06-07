@@ -3,18 +3,19 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { Lights } from '../../utils/interfaces/Interfaces';
 
 interface Props {
-    lightsStatusArray : any[]
+    lightsStatusArray : Lights[]
 }
 
 const TableLights = ({lightsStatusArray}: Props) => {
     //sum of current consumption 
+    
     const totalApower = lightsStatusArray.length ? lightsStatusArray.reduce(
         //on= somma actual
         //light= somma da aggiungere
-        (currentValueSum, light) => 
-        currentValueSum + light.state.apower|| 0, 
+        (currentValueSum, light) => currentValueSum + (light.state.apower  || 0),
         //somma di partenza
-        0) : [];
+         0) : 0;
+   
     //sum of hour consumption 
     const totalAenergy = lightsStatusArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
     //total count of room with light on

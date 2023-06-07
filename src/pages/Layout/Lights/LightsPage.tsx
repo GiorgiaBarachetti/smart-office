@@ -98,7 +98,7 @@ const LightsPage = () => {
   return <>
     <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }}>
       <Typography sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
-      <Button onClick={() => switchAllOffLightStatus} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
+      <Button onClick={() => switchAllOffLightStatus()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'center'} sx={{ p: '19px', gap: '32px' }}>
         {sortedLightsStatusArray?.filter((light) =>
           light.room !== "----" &&

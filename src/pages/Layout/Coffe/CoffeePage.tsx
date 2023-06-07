@@ -1,29 +1,38 @@
 import { Box, Button, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import coffee from '../../../img/Immagine_2023-06-05_090757-removebg-preview.png';
 import doubleCoffee from '../../../img/Immagine_2023-06-01_175307-removebg-preview.png';
 import background from '../../../img/output-onlinepngtools.png';
+import { Coffee } from '../../../utils/interfaces/Interfaces';
+import TableCoffee from '../../../components/Tables/TableCoffee';
 
 const CoffeePage = () => {
-  const fetchCoffee = async (number: number) => {
+
+  const [coffeeData, setCoffeeData] = useState<Coffee[]>([]);
+
+  const fetchCoffee = async () => {
     try {
-      const response = await fetch(`http://192.168.1.6:3000/api/coffee/${number}`);
-      const data = await response.json();
-      // Process the response data if needed
+      const response = await fetch("http://192.168.1.6:3000/api/coffee/data");
+      const data = await response?.json();
+      //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
+      setCoffeeData(Array.isArray(data) ? data : [data]);
+      console.log(data);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
   };
 
+
+
   const handleCoffeeClick = () => {
-    coffeeNumber(1);
+    fetchCoffeeNumber(1);
   };
 
   const handleDoubleCoffeeClick = () => {
-    coffeeNumber(2);
+    fetchCoffeeNumber(2);
   };
 
-  const coffeeNumber = async (number: number) => {
+  const fetchCoffeeNumber = async (number: number) => {
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -33,12 +42,14 @@ const CoffeePage = () => {
       method: 'POST',
       headers,
     });
-
-    await fetchCoffee(number);
+    console.log('made')
+    await fetchCoffee();
+    return alert('fatto, esco')
   };
 
   useEffect(() => {
-    fetchCoffee(0);
+   
+    fetchCoffee()
   }, []);
 
   return (
@@ -47,12 +58,6 @@ const CoffeePage = () => {
       <Box
         component="div"
         sx={{
-          //backgroundImage: `url(${background})`,
-          //backgroundImage:'linear-gradient(black, white);',
-          //backgroundRepeat: "no-repeat",
-          //backgroundSize: "cover",
-          backgroundColor: '#121211',
-          backgroundImage: 'radial-gradient(#ffffff2b, #000000)',
           position: 'absolute',
           top: 0,
           left: 0,
@@ -101,6 +106,7 @@ const CoffeePage = () => {
           </Button>
         </Box>
       </Box>
+      <TableCoffee coffee={coffeeData}/>
     </Box>
   );
 };
