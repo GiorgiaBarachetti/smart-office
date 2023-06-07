@@ -31,19 +31,14 @@ const printerStyle = {
   stroke: "#212121"
 }
 
-const baseURL = process.env.REACT_APP_API_BASE_URL
+const baseURL = process.env.REACT_APP_BASE_API_URL
+const urlShelly = process.env.REACT_APP_SHELLY_URL
 
 const MainPage = () => {
-  const [boltStyle, setBoltStyle] = useState({
-    color: "#3cff427a",
-    stroke: "#068b15"
-  })
-
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
 
   const openModalLights = (id: number) => {
-    console.log(id)
     if (id !== undefined) {
       setIdRoomModal(id);
     }
@@ -57,7 +52,6 @@ const MainPage = () => {
   const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
 
   const openCoffeeModal = (id: number) => {
-    console.log(id)
     if (id !== undefined) {
       setIdCoffeeModal(id);
     }
@@ -72,7 +66,6 @@ const MainPage = () => {
   const [idEnergyModal, setIdEnergyModal] = useState<number | undefined>();
 
   const openEnergyModal = (id: number) => {
-    console.log(id)
     if (id !== undefined) {
       setIdEnergyModal(id);
     }
@@ -88,7 +81,6 @@ const MainPage = () => {
   const [idPrinterModal, setIdPrinterModal] = useState<number | undefined>();
 
   const openPrinterModal = (id: number) => {
-    console.log(id)
     if (id !== undefined) {
       setIdPrinterModal(id);
     }
@@ -103,9 +95,10 @@ const MainPage = () => {
 
   const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);
   const fetchLights = async () => {
-    const apiRooms = process.env.REACT_APP_ROOMS_DATAS
     try {
-      const response = await fetch(`${apiRooms}`);
+      
+      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+      
       const data = await response?.json();
       setLightsStatusArray(data);
       console.log(data);
@@ -162,29 +155,36 @@ const MainPage = () => {
     fetchPrinter();
   }, []);
 
-
+  const [boltStyle, setBoltStyle] = useState({
+    color: "rgba(113,200, 46)",
+    //stroke: "rgba(25, 104, 34,1)"
+  })
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
     if (energyStatus[0]?.powerUsed >= 1308) {
       console.log(energyStatus[0]?.powerUsed);
       return {
         ...boltStyle,
-        color: "rgba(202,232,76)"
+        color: "rgba(202,232,76)",
+        stroke: "rgba(41,146,53,1)"
       };
     } else if (energyStatus[0]?.powerUsed >= 2070) {
       return {
         ...boltStyle,
-        color: "rgba(244,245,27)"
+        color: "rgba(244,245,27)",
+        stroke:"rgba(136,135,46,1)"
       };
     } else if (energyStatus[0]?.powerUsed >= 2760) {
       return {
         ...boltStyle,
-        color: "rgba(226,172,26)"
+        color: "rgba(226,172,26)",
+        stroke: "rgba(175,106,5,1)"
       };
     } else if (energyStatus[0]?.powerUsed >= 3450) {
       return {
         ...boltStyle,
-        color: "rgba(224,60,60)"
+        color: "rgba(224,60,60)",
+        stroke: "rgba(106,20,20,1)"
       };
     }
     return boltStyle;
