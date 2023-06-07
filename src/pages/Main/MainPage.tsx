@@ -47,7 +47,7 @@ const MainPage = () => {
 
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
-  
+
   const openModalLights = (id: number) => {
     console.log(id)
     if (id !== undefined) {
@@ -58,7 +58,7 @@ const MainPage = () => {
   const closeModalLight = () => {
     setOpenModalLight(false)
   }
-  
+
   const [openModalCoffee, setOpenModalCoffee] = useState(false)
   const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
 
@@ -73,7 +73,7 @@ const MainPage = () => {
     setOpenModalCoffee(false)
   }
 
-  
+
   const [openModalEnergy, setOpenModalEnergy] = useState(false)
   const [idEnergyModal, setIdEnergyModal] = useState<number | undefined>();
 
@@ -88,7 +88,7 @@ const MainPage = () => {
     setOpenModalEnergy(false)
   }
 
- 
+
 
   const [openModalPrinter, setOpenModalPrinter] = useState(false)
   const [idPrinterModal, setIdPrinterModal] = useState<number | undefined>();
@@ -103,12 +103,12 @@ const MainPage = () => {
   const closePrinterModal = () => {
     setOpenModalPrinter(false)
   }
- 
+
 
 
 
   const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);
-  
+
   const fetchLights = async () => {
     try {
       const response = await fetch("http://192.168.1.6:3000/api/shelly/relays/all/status");
@@ -119,6 +119,7 @@ const MainPage = () => {
       console.log('error fetching lights', error);
     }
   };
+
 
   const [coffeeStatus, setCoffeeStatus] = useState<Coffee[]>([]);
 
@@ -152,7 +153,7 @@ const MainPage = () => {
 
   const fetchPrinter = async () => {
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/alpha/data");
+      const response = await fetch("http://192.168.1.6:3000/api/tplink/data");
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerStatus non è una function
       setPrinterStatus(Array.isArray(data) ? data : [data]);
@@ -172,16 +173,26 @@ const MainPage = () => {
 
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
-    if (energyStatus[0]?.powerUsed >= 690) {
+    if (energyStatus[0]?.powerUsed >= 1308) {
       console.log(energyStatus[0]?.powerUsed);
       return {
         ...boltStyle,
-        color: "green"
+        color: "rgba(202,232,76)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 1308) {
+    } else if (energyStatus[0]?.powerUsed >= 2070) {
       return {
         ...boltStyle,
-        color: "black"
+        color: "rgba(244,245,27)"
+      };
+    } else if (energyStatus[0]?.powerUsed >= 2760) {
+      return {
+        ...boltStyle,
+        color: "rgba(226,172,26)"
+      };
+    } else if (energyStatus[0]?.powerUsed >= 3450) {
+      return {
+        ...boltStyle,
+        color: "rgba(224,60,60)"
       };
     }
     return boltStyle;
@@ -250,82 +261,6 @@ const MainPage = () => {
   };
 
 
-  /*
-            {/*UFFICIO ANDREA = 0}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="1000" y="-245" width='90px'
-                    //()=>openModal se scrivo cosi non mi apre il modal
-                    onClick={openModal} ></SvgIcon>
-                <Box>
-                    <Typography>power: </Typography>
-                </Box>
-            </g>
-
-            {/*SALA RIUNIONI = 1}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="810" y="-245" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*UFFICIO FLAVIO = 2}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="565" y="-245" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*LABORATORIO = 3}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="370" y="-245" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*CUCINA-RIPOSTIGLIO = 4}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="185" y="-245" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*BREAKTIME SPACE = 6}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="280" y="-50" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-            <g style={coffeeStyle}>
-                <SvgIcon component={CoffeeMakerIcon} x="300" y="60" width='80px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*INGRESSO = 5}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="585" y="-50" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-            <g style={boltStyle}>
-                <SvgIcon component={BoltIcon} x="600" y="100" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-            {/*OPEN SPACE = 7}
-            <g style={lightStyle}>
-                <SvgIcon component={LightbulbIcon} x="850" y="-50" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-            <g style={printerStyle}>
-                <SvgIcon component={PrintIcon} x="980" y="110" width='90px' 
-                onClick={openModal} ></SvgIcon>
-            </g>
-
-
-             {printer.map((p) => {
-                    const { x, y } = getCoordinates(p.state.id);
-                    return (
-                    <g key={light.room} style={printerStyle}>
-                        <SvgIcon component={LightbulbIcon} x='980' y='110' width="80px" onClick={() => openModal(light.state.id)} />
-                    </g>
-                    );
-                })}
-  */
-
   return (
     <div>
       <svg className="svgMain" viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" style={{}} >
@@ -336,9 +271,16 @@ const MainPage = () => {
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
               return (
-                <g key={light.state.id} style={lightStyle}>
-                  <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px"
+                <g key={light.state.id}>
+                  <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
                     onClick={() => openModalLights(light.state.id)} />
+                  <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                    <tspan>{`Power: ${light.state.apower} W`}</tspan>
+                  </text>
+                  <text x={x + 60} y={y + 340} fill="black" fontSize="15px">
+                    <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+                  </text>
                 </g>
               );
             })
@@ -348,9 +290,19 @@ const MainPage = () => {
 
         {coffeeStatus.length ? (
           coffeeStatus.map((coffee) => (
-            <g key={coffee.id} style={coffeeStyle}>
-              <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.id)} />
+            <g key={100} >
+              <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.id)} style={coffeeStyle} />
+              <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+              <text x={360} y={380} fill="black" fontSize="15px">
+                <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData.watt !== null ? coffee.data.macchinettaCaffe?.receivedData.watt : ''} W`}</tspan>
+              </text>
+              {/* 
+                      <text x={350} y={360} fill="black" fontSize="15px">
+                   <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+                  </text>
+                   */}
             </g>
+
           ))
         ) : (
           'CoffeeStatus array is empty'
@@ -358,8 +310,12 @@ const MainPage = () => {
 
         {energyStatus.length ? (
           energyStatus.map((energy) => (
-            <g key={energy.id} style={boltStyle}>
+            <g key={200} style={boltStyle}>
               <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} style={boltStyle} />
+              <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+              <text x={670} y={425} fill="black" fontSize="15px">
+                <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
+              </text>
             </g>
           ))
         ) : (
@@ -368,22 +324,25 @@ const MainPage = () => {
         }
 
         {printerStatus.length ? (
-        printerStatus.map((printer) => (
-          <g key={printer.id} style={printerStyle}>
-            <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.id)}/>
-          </g>
-        ))
-        ):(
+          printerStatus.map((printer) => (
+            <g key={300} >
+              <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.id)} style={printerStyle} />
+              <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+              <text x={1050} y={435} fill="black" fontSize="15px">
+                <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
+              </text>
+            </g>
+          ))
+        ) : (
           'printerStatus is empty'
         )}
-
 
       </svg>
 
       <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={closeModalLight} lights={lightsStatusArray} />
       <ModalCoffee open={openModalCoffee} handleClose={closeCoffeeModal} idCoffee={idCoffeeModal}></ModalCoffee>
       <ModalEnergy open={openModalEnergy} handleClose={closeEnergyModal} idEnergy={idEnergyModal}></ModalEnergy>
-      <ModalPrinter open={openModalPrinter} handleClose={closePrinterModal} printer={printerStatus}></ModalPrinter>
+      <ModalPrinter open={openModalPrinter} handleClose={closePrinterModal} idPrinter={idPrinterModal}></ModalPrinter>
 
     </div>
   )

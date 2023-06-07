@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, ButtonGroup, CardContent, CardHeader, Stack, Switch, Typography } from '@mui/material'
-import TableLights from '../../../components/Tables/TableLights/TableLights'
+import TableLights from '../../../components/Tables/TableLights'
 import Card from '@mui/material/Card';
 import { Lights } from '../../../utils/interfaces/Interfaces';
 import { useState, useEffect } from 'react'
@@ -93,7 +93,7 @@ const LightsPage = () => {
     }
   }
 
-  const sortedLightsStatusArray = lightsStatusArray.sort((a, b) => a.state.id - b.state.id);
+  const sortedLightsStatusArray = lightsStatusArray.length ? lightsStatusArray.sort((a, b) => a.state.id - b.state.id) : [];
 
   return <>
     <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }}>

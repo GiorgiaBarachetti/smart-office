@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Energy} from '../../../utils/interfaces/Interfaces';
-import TableEnergy from '../../../components/Tables/TableEnergy/TableEnergy'
+import TableEnergy from '../../../components/Tables/TableEnergy'
 
 const EnergyPage = () => {
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);

@@ -16,13 +16,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { SIDEBAR } from '../../utils/routes/path';
+import { SIDEBAR, PATHDROPDOWNROOMS, PATH } from '../../utils/routes/path';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 
-const drawerWidth = 240;
+const drawerWidth = '240px';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -58,10 +59,14 @@ export default function PersistentDrawerLeft() {
 
   const navigate = useNavigate()
   const handleClick = (path: string) => {
-    navigate(path)
+    if (path === '/rooms') {
+      handleDropdownToggle(); // Open the dropdown menu
+    } else {
+      navigate(path);
+    }
   }
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -71,10 +76,19 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+
+  const handleDropdownToggle = () => {
+    setDropdownOpen(!dropdownOpen);
+    setSelectedMenuItem(selectedMenuItem === '/rooms' ? null : '/rooms');
+  };
+
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar sx={{bgcolor:'rgba(240, 248, 255, 0)', boxShadow:'none'}} position="fixed" open={open}>
+      <AppBar sx={{backgroundColor:'#009ee3', overflow: 'hidden', position: 'fixed', top: 0 }} open={open}>
         <Toolbar>
           {/*HAMBURGER ICON */}
           <IconButton
@@ -87,11 +101,12 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-          {/*inserisci NOME PAGINA APERTA */}
-            
+            {/*inserisci NOME PAGINA APERTA */}
+
           </Typography>
         </Toolbar>
       </AppBar>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -113,25 +128,90 @@ export default function PersistentDrawerLeft() {
 
         <Divider />
 
-          <Box component='nav'>
-            <List>
-              {SIDEBAR?.filter((elem) =>
-                elem.href !== '/'
-                ) 
-                .map((elem) => (
-                  
-                  <ListItem 
-                    key={elem.href} 
-                    onClick={() => handleClick(elem.href)}
-                    disablePadding>
+        <Box component='nav'>
+          <List sx={{paddingTop:'0'}}>
+            {SIDEBAR?.filter((elem) =>
+              elem.href !== PATH.main &&
+              elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
+              elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
+              elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
+              elem.href !== PATHDROPDOWNROOMS.laboratory &&
+              elem.href !== PATHDROPDOWNROOMS.kitchen &&
+              elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
+              elem.href !== PATHDROPDOWNROOMS.entrance &&
+              elem.href !== PATHDROPDOWNROOMS.openSpace
+            )
+              .map((elem) => {
+                if (elem.href === '/rooms') {
+                  return (
+                    <List key={elem.href} sx={{paddingTop:'0', paddingBottom:'0'}}>
+                      <ListItem disablePadding onClick={handleDropdownToggle}>
+                        <ListItemButton>
+                          <ListItemText sx={{paddingLeft:'10px'}}>ROOMS</ListItemText>
+                          {dropdownOpen ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                      </ListItem>
+                      <List
+                        component="div"
+                        disablePadding
+                        style={{ display: dropdownOpen ? 'block' : 'none' }}
+                      >
+                        {Object.entries(PATHDROPDOWNROOMS).map(([roomName, roomPath]) => (
+                          <ListItem
+                            key={roomPath}
+                            onClick={() => handleClick(roomPath)}
+                            disablePadding
+                            sx={{ pl: 4 }}
+                            selected={selectedMenuItem === roomPath}
+                          >
+                            <ListItemButton>
+                              <ListItemText>{SIDEBAR.find((elem) => elem.href === roomPath)?.name}</ListItemText>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+
+                    </List>
+                  );
+                } else {
+                  return (
+                    <ListItem
+                      key={elem.href}
+                      onClick={() => handleClick(elem.href)}
+                      disablePadding
+                    >
+                      <ListItemButton>
+                        <ListItemText>{elem.name}</ListItemText>
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                }
+              })}
+          </List>
+        </Box>
+
+        <Divider />
+
+        <Box component='nav'>
+          <List>
+            {SIDEBAR?.filter((elem) =>
+              elem.href == '/'
+            )
+              .map((elem) => (
+
+                <ListItem
+                  key={elem.href}
+                  onClick={() => handleClick(elem.href)}
+                  disablePadding>
                   <ListItemButton>
-                    <ListItemText>{elem.name}</ListItemText>
+                    <ListItemText>RETURN TO {elem.name} PAGE</ListItemText>
                   </ListItemButton>
                 </ListItem>
               ))}
-            </List>
-          </Box>
-        <Divider />
+          </List>
+
+
+        </Box>
       </Drawer>
     </Box>
   );

@@ -3,6 +3,13 @@
 export const PATH = {
     main: '/',
     lightsPage: '/lights',
+    rooms: '/rooms',    
+    coffee: '/coffee',
+    printer: '/printer',
+    energy: '/energy'
+};
+
+export const PATHDROPDOWNROOMS  = {
     andreaOffice: '/lights/ufficioAndrea',
     meetingRoom: '/lights/meetingRoom',
     flavioOffice: '/lights/ufficioFlavio',
@@ -11,23 +18,20 @@ export const PATH = {
     breaktimeSpace: '/lights/breaktimeSpace',
     entrance: '/lights/entrance',
     openSpace: '/lights/openSpace',
-    
-    coffee: '/coffee',
-    printer: '/printer',
-    energy: '/energy'
-};
+}
 
 export const SIDEBAR = [
     { name: "MAIN", href: PATH.main},
     { name: "LIGHTS", href: PATH.lightsPage},
-    { name: "ANDREA'S OFFICE", href: PATH.andreaOffice},
-    { name: "MEETING ROOM", href: PATH.meetingRoom },
-    { name: "FLAVIO'S OFFICE", href: PATH.flavioOffice},
-    { name: "LABORATORY", href: PATH.laboratory},
-    { name: "KITCHEN", href: PATH.kitchen},
-    { name: "BREAKTIME SPACE", href: PATH.breaktimeSpace},
-    { name: "ENTRANCE", href: PATH.entrance},
-    { name: "OPEN SPACE", href: PATH.openSpace},
+    { name: "ROOMS", href: PATH.rooms},
+    { name: "ANDREA'S OFFICE", href: PATHDROPDOWNROOMS.andreaOffice},
+    { name: "MEETING ROOM", href: PATHDROPDOWNROOMS.meetingRoom },
+    { name: "FLAVIO'S OFFICE", href: PATHDROPDOWNROOMS.flavioOffice},
+    { name: "LABORATORY", href: PATHDROPDOWNROOMS.laboratory},
+    { name: "KITCHEN", href: PATHDROPDOWNROOMS.kitchen},
+    { name: "BREAKTIME SPACE", href: PATHDROPDOWNROOMS.breaktimeSpace},
+    { name: "ENTRANCE", href: PATHDROPDOWNROOMS.entrance},
+    { name: "OPEN SPACE", href: PATHDROPDOWNROOMS.openSpace},
     { name: "COFFEE", href: PATH.coffee},
     { name: "PRINTER", href: PATH.printer},
     { name: "ENERGY", href: PATH.energy}

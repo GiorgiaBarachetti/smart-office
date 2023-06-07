@@ -19,7 +19,7 @@ export interface Lights {
 }
 
 export interface Printer {
-  id: 100
+  id: number
   tplinkStampante: {
         power: {
             value: number,
@@ -42,7 +42,7 @@ export interface Printer {
 
 export interface Energy {
   //id setted by me, inexistent in api
-    id : 200,
+    id : number,
     powerUsed: number,
     averagePowerUsed: number,
     energyUsedF1: number,
@@ -55,13 +55,13 @@ export interface PrinterStatus{
   stato_presa: boolean
 }
 export interface Coffee {
-  id: 100; 
+  id: number; 
   coffees: {
     accensioni: number;
     coffeeCount: number;
   };
   data: {
-    macchinettaCaffe: {
+    macchinettaCaffe?: {
       receivedData: {
         volts: number;
         ampere: number;

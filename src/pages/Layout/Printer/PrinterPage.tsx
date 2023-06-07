@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TablePrinter from '../../../components/Tables/TablePrinter/TablePrinter';
+import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 

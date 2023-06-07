@@ -11,8 +11,7 @@ import { Printer } from '../../utils/interfaces/Interfaces';
 interface Props {
   open: boolean;
   handleClose: () => void;
-  printer: Printer[];
-  //idRoomModal: number | undefined;
+  idPrinter: number | undefined;
 }
 
 const style = {
@@ -32,7 +31,7 @@ const style = {
   borderRadius:5,
 };
 
-const ModalPrinter = ({ open, handleClose, printer}: Props) => {
+const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
   const navigate = useNavigate();
 
   const gotoPage = () => {
@@ -41,7 +40,6 @@ const ModalPrinter = ({ open, handleClose, printer}: Props) => {
 
 
   const [statoPresa, setStatoPresa] = useState<boolean>(false);
-
 
   const switchOnPrinter = async () => {
     try {
