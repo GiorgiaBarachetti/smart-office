@@ -36,20 +36,24 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
     navigate(PATH.coffee);
   };
 
-  return (
-    <Modal
-      open={open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-      <Typography variant="h6" component="h1">Coffee, id {idCoffee}</Typography>
-        <Box>
-          <Button onClick={gotoPage}>GO TO COFFEE PAGE</Button>
-          <Button onClick={handleClose}>CLOSE</Button>
-        </Box>
-      </Box>
-    </Modal>
+  return (<Box
+            // chiude modalquando clicchi di fuori
+            onClick={() => { handleClose() }}>
+
+            <Modal
+              open={open}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography variant="h6" component="h1">Coffee, id {idCoffee}</Typography>
+                <Box>
+                  <Button onClick={gotoPage}>GO TO COFFEE PAGE</Button>
+                  <Button onClick={handleClose}>CLOSE</Button>
+                </Box>
+              </Box>
+            </Modal>
+          </Box>
   );
 };
 

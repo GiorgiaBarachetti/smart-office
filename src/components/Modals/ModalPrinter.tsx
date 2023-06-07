@@ -28,7 +28,7 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius:5,
+  borderRadius: 5,
 };
 
 const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
@@ -60,24 +60,31 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
   };
 
   return (
-    <Modal
-      open={open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography variant="h6" component="h1">Printer, id</Typography>
-        <ButtonGroup>
-          <Button onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>
-          <Button onClick={() => switchOffPrinter()} disabled={statoPresa}>OFF</Button>
-        </ButtonGroup>
-        <Box>
-          <Button onClick={gotoPage}>GO TO PRINTER PAGE</Button>
-          <Button onClick={handleClose}>CLOSE</Button>
+    <Box
+      onClick={() => {
+        // chiude modalquando clicchi di fuori
+        handleClose();
+      }}>
+
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : 'none'}</Typography>
+          <ButtonGroup>
+            <Button onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>
+            <Button onClick={() => switchOffPrinter()} disabled={statoPresa}>OFF</Button>
+          </ButtonGroup>
+          <Box>
+            <Button onClick={gotoPage}>GO TO PRINTER PAGE</Button>
+            <Button onClick={handleClose}>CLOSE</Button>
+          </Box>
+
         </Box>
-        
-      </Box>
-    </Modal>
+      </Modal>
+    </Box>
   );
 };
 

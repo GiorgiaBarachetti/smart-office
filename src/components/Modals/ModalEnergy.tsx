@@ -28,10 +28,10 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius:5,
+  borderRadius: 5,
 };
 
-const ModalEnergy = ({ open, handleClose, idEnergy}: Props) => {
+const ModalEnergy = ({ open, handleClose, idEnergy }: Props) => {
   const navigate = useNavigate();
 
   const gotoPage = () => {
@@ -40,21 +40,28 @@ const ModalEnergy = ({ open, handleClose, idEnergy}: Props) => {
 
 
   return (
-    <Modal
-      open={open}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography variant="h6" component="h1">Bolt, id {idEnergy}</Typography>
-        
-        <Box>
-          <Button onClick={gotoPage}>GO TO ENERGY PAGE</Button>
-          <Button onClick={handleClose}>CLOSE</Button>
+    <Box
+      onClick={() => {
+        // chiude modalquando clicchi di fuori
+        handleClose();
+      }}>
+
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography variant="h6" component="h1">Bolt, id {idEnergy}</Typography>
+
+          <Box>
+            <Button onClick={gotoPage}>GO TO ENERGY PAGE</Button>
+            <Button onClick={handleClose}>CLOSE</Button>
+          </Box>
+
         </Box>
-        
-      </Box>
-    </Modal>
+      </Modal>
+    </Box>
   );
 };
 

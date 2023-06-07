@@ -32,6 +32,7 @@ const style = {
 };
 
 const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
+  
   const navigate = useNavigate();
 
   const gotoPage = () => {
@@ -128,6 +129,11 @@ useEffect(() => {
 }, [lights, idRoomModal]);
 
   return (
+    <Box
+    onClick={() => {
+      // chiude modalquando clicchi di fuori
+      handleClose();}}>
+
     <Modal open={open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={style}>
         {idRoomModal !== undefined && (
@@ -154,6 +160,7 @@ useEffect(() => {
         </Box>
       </Box>
     </Modal>
+        </Box>
   );
 };
 

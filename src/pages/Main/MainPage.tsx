@@ -116,7 +116,6 @@ const MainPage = () => {
 
 
   const [coffeeStatus, setCoffeeStatus] = useState<Coffee[]>([]);
-
   const fetchCoffee = async () => {
     try {
       const response = await fetch("http://192.168.1.6:3000/api/coffee/data");
@@ -130,7 +129,6 @@ const MainPage = () => {
   };
 
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
-
   const fetchEnergy = async () => {
     try {
       const response = await fetch("http://192.168.1.6:3000/api/alpha/data");
@@ -333,10 +331,10 @@ const MainPage = () => {
 
       </svg>
 
-      <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={closeModalLight} lights={lightsStatusArray} />
-      <ModalCoffee open={openModalCoffee} handleClose={closeCoffeeModal} idCoffee={idCoffeeModal}></ModalCoffee>
-      <ModalEnergy open={openModalEnergy} handleClose={closeEnergyModal} idEnergy={idEnergyModal}></ModalEnergy>
-      <ModalPrinter open={openModalPrinter} handleClose={closePrinterModal} idPrinter={idPrinterModal}></ModalPrinter>
+      <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={()=>closeModalLight()} lights={lightsStatusArray} />
+      <ModalCoffee open={openModalCoffee} handleClose={()=>closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
+      <ModalEnergy open={openModalEnergy} handleClose={()=>closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
+      <ModalPrinter open={openModalPrinter} handleClose={()=>closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
 
     </div>
   )
