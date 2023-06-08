@@ -7,25 +7,7 @@ import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 
 const AndreaOffice = () => {
 
-  const [room, setRoom] = useState<Lights[]>([]);
 
-  const id = 0;
-  const fetchRoom = async () => {
-    try {
-      //trasforma in file .env chiave-valore
-      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
-      const data = await response?.json(); 
-      console.log(data);
-      setRoom(data);
-    } catch (error) {
-      console.log('Error fetching room', error);
-    }
-  };
-
-
-  useEffect(() => {
-    fetchRoom();
-  }, []);
 
   return (
     <Box component="div">
@@ -34,7 +16,7 @@ const AndreaOffice = () => {
       </Box>
 
       <Box component="div"></Box>
-    <TableRooms room={room} idRoom={id}/>
+    <TableRooms />
     </Box>
   )
 }

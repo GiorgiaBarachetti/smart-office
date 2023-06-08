@@ -4,10 +4,11 @@ import TableLights from '../../../components/Tables/TableLights'
 import Card from '@mui/material/Card';
 import { Lights } from '../../../utils/interfaces/Interfaces';
 import { useState, useEffect } from 'react'
-import SwitchComponent from '../../../components/Switch/Switch';
 import { baseURL, urlShelly } from '../../../utils/fetch/api';
-//import dotenv from 'dotenv'
-//dotenv.config();
+import { SHADOWSTYLE } from '../../../utils/const/Const';
+
+
+
 
 const LightsPage = () => {
  // const apiUrl = process.env.LIGHTS_FETCH;
@@ -22,7 +23,7 @@ const LightsPage = () => {
       setLightsDatasArray(data);
       //console.log(data);
     } catch (error) {
-      console.log('nooo');
+      console.log('failed fetching all the lights', error);
     }
   };
 
@@ -95,7 +96,7 @@ const LightsPage = () => {
   const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
 
   return <>
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }}>
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey' , mx: 'auto', my: '30px', width: '80%', ...SHADOWSTYLE}} >
       <Typography sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
       <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'center'} sx={{ p: '19px', gap: '32px' }}>
@@ -103,7 +104,7 @@ const LightsPage = () => {
           light.room !== "----" &&
           light.room !== "Punto luce non attivo"
         ).map((light) => (
-          <Card key={light.room} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '201px', padding: '20px' }}>
+          <Card key={light.room} sx={{cursor:'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '201px', padding: '20px' }}>
             {/* <CardMedia
                                 component="img"
                                 height="194"
@@ -121,7 +122,7 @@ const LightsPage = () => {
         ))}
       </Box>
     </Box>
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }}>
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
       <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
       <TableLights lightsDatasArray={lightsDatasArray} />
     </Box>

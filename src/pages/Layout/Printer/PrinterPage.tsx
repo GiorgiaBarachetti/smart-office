@@ -3,6 +3,7 @@ import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
+import { SHADOWSTYLE } from '../../../utils/const/Const';
 
 const PrinterPage = () => {
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
@@ -15,7 +16,7 @@ const PrinterPage = () => {
       setPrinterDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
     } catch (error) {
-      console.log('not found datas');
+      console.log('not found datas of printer');
     }
   };
 
@@ -68,6 +69,7 @@ const PrinterPage = () => {
           mx: 'auto',
           my: '30px',
           width: '80%',
+          ...SHADOWSTYLE
         }}
       >
         <Typography>SWITCH THE PRINTER STATUS</Typography>
@@ -77,7 +79,8 @@ const PrinterPage = () => {
         </ButtonGroup>
       </Box>
 
-      <Box>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
+      <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
         <TablePrinter printer={printerDatas} />
       </Box>
     </div>

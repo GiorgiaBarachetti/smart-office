@@ -1,63 +1,66 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
+import { baseURL, urlShelly } from '../../utils/fetch/api';
+import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props {
-    room : Lights[]
-    idRoom: number
+  room: Lights[];
+  idRoom: number;
 }
 
-const TableRooms = ({room, idRoom}: Props) => {
-  console.log(idRoom)
-    /*
-    //sum of current consumption 
-    const totalApower = room.length ? room.reduce(
-        //on= somma actual
-        //light= somma da aggiungere
-        (currentValueSum, r) => 
-        currentValueSum + r.state.apower || 0, 
-        //somma di partenza
-        0) : [];
-    //sum of hour consumption 
-    const totalAenergy = lightsStatusArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
-    //total count of room with light on
-    const totalLightsOn = lightsStatusArray.filter((light) => light.state.output).length;
-    //ordinamento per id ascendente
-    const sortedLightsStatusArray = lightsStatusArray.sort((a, b) => a.state.id - b.state.id);
-    */
-   console.log(room)
+const TableRooms = () => {
+  const [room, setRoom] = useState<Lights[]>([]);
+
+  const id = 0;
+
+  const fetchRoom = async () => {
+    try {
+      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
+      const data = await response?.json();
+      console.log(data);
+      setRoom(data);
+    } catch (error) {
+      console.log('Error fetching room', error);
+    }
+  };
+  
+  console.log(room);
+  useEffect(() => {
+      fetchRoom();
+  }, []);
+
 
   return (
-    <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '95%'}}>
-    <Table size="small">
+    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '95%', ...SHADOWSTYLE, ...TABLECOLOR }}>
+      <Table size="small">
         <TableHead>
-            <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>ROOM NAME</TableCell>
-                <TableCell>STATUS</TableCell>
-                <TableCell>ACTUAL CONSUMPTION</TableCell>
-                <TableCell>HOUR CONSUMPTION</TableCell>                        
-             </TableRow>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>ROOM NAME</TableCell>
+            <TableCell>STATUS</TableCell>
+            <TableCell>ACTUAL CONSUMPTION</TableCell>
+            <TableCell>HOUR CONSUMPTION</TableCell>
+          </TableRow>
         </TableHead>
         <TableBody>
-            {/*seleziono la stanza grazie a idRoom fornito dal componente {room(ex andreaoffice, meeting...)}*/}
-        {room?.map((r)=>(
-                    <TableRow key={idRoom}>
-                        <TableCell>{r.state.id}</TableCell>
-                        <TableCell>{r.room != undefined ? r.room : ''}</TableCell>
-                        {/*if light is on color:green else if is off color red */}
-                        <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>{r.state.output ? 'ON' : 'OFF'}</TableCell>
-                        <TableCell>{r.state.apower} Watt</TableCell>
-                        <TableCell>{r.state.aenergy?.total} Watt/h</TableCell>
-                        </TableRow>
-           
-           
-           ))  
-        }
-        </TableBody>
-    </Table>
-</TableContainer>
-  )
-}
+          {room.length ?( room.map((r) => {
+            return (
+            <TableRow key={id}>
+              <TableCell>{r.state.id}</TableCell>
+              <TableCell>{r.room}</TableCell>
+              <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>
+                {r.state.output ? 'ON' : 'OFF'}
+              </TableCell>
+              <TableCell>{r.state.apower} Watt</TableCell>
+              <TableCell>{r.state.aenergy?.total} Watt/h</TableCell>
+            </TableRow>
 
-export default TableRooms
+            )})):[]}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default TableRooms;

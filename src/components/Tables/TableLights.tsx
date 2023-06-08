@@ -1,14 +1,13 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
-
+import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 interface Props {
     lightsDatasArray : Lights[]
 }
 
 const TableLights = ({lightsDatasArray}: Props) => {
     //sum of current consumption 
-    
     const totalApower = lightsDatasArray.length ? lightsDatasArray.reduce(
         //on= somma actual
         //light= somma da aggiungere
@@ -17,13 +16,13 @@ const TableLights = ({lightsDatasArray}: Props) => {
          0) : 0;
    
     //sum of hour consumption 
-    const totalAenergy = lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
+    const totalAenergy = lightsDatasArray.length ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0): 0;
     //total count of room with light on
-    const totalLightsOn = lightsDatasArray.filter((light) => light.state.output).length;
+    const totalLightsOn = lightsDatasArray.length ? lightsDatasArray.filter((light) => light.state.output).length : 0;
     //ordinamento per id ascendente
-    const sortedLightsDatasArray = lightsDatasArray.sort((a, b) => a.state.id - b.state.id);
+    const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
   return (
-    <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '95%'}}>
+    <TableContainer sx={{borderRadius:'6px', mx:'auto', my: '30px', width: '95%', ...SHADOWSTYLE, ...TABLECOLOR}}>
     <Table size="small">
         <TableHead>
             <TableRow>

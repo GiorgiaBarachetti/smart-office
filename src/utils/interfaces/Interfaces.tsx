@@ -55,22 +55,22 @@ export interface PrinterStatus{
   stato_presa: boolean
 }
 export interface Coffee {
-  id: number; 
-  coffees: {
-    accensioni: number;
-    coffeeCount: number;
-  };
+  coffes: {
+      id: number,
+      accensioni: number,
+      coffeeCount: number
+  },
   data: {
-    macchinettaCaffe?: {
-      receivedData: {
-        volts: number;
-        ampere: number;
-        watt: number;
-      };
-      timestamp: number;
-    };
-    totalCoffeeToday: number;
-    count1: number;
-    count2: number;
-  };
+      macchinettaCaffe: {
+          receivedData : {
+            volts: number;
+            ampere: number;
+            watt: number;
+          };
+          timestamp: number
+      },
+      totalCoffeeToday: number,
+      count1: number,
+      count2: number
+  }
 }

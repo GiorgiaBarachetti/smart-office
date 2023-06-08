@@ -1,13 +1,14 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import {Printer} from '../../utils/interfaces/Interfaces';
+import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props{
   printer : Printer[]
 }
 
 const TablePrinter = ({printer}:Props) => {
-  return <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '85%'}}>
+  return <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '85%', ...SHADOWSTYLE, ...TABLECOLOR}}>
   <Table size="small">
       <TableHead>
           <TableRow>
@@ -19,7 +20,7 @@ const TablePrinter = ({printer}:Props) => {
       </TableHead>
       <TableBody>
       {printer?.map((p)=>(
-                  <TableRow key={1245}>
+                  <TableRow key={p.id}>
                       <TableCell>{p.tplinkStampante.power.value} {p.tplinkStampante.power.unit}</TableCell>
                       <TableCell>{p.tplinkStampante.voltage.value} {p.tplinkStampante.voltage.unit}</TableCell>
                       <TableCell>{p.tplinkStampante.current.value} {p.tplinkStampante.current.unit}</TableCell>

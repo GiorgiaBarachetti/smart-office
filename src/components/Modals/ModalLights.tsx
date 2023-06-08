@@ -54,7 +54,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
       if (light) {
         const id = light.state.id;
         if (light.state.output === false) {
-          await fetch(`${baseURL}${urlShelly}http://192.168.1.6:3000/api/shelly/relays/${id}/on`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
           setLightDatas(true);
           setLightsDatasArray((prevState) =>
             prevState.map((light) =>
@@ -74,7 +74,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
       if (light) {
         const id = light.state.id;
         if (light.state.output === true) {
-          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
           setLightDatas(false);
           setLightsDatasArray((prevState) =>
             prevState.map((light) =>
@@ -98,10 +98,10 @@ useEffect(() => {
     setLightDatas(false);
   }
 }, [lightsDatasArray, idRoomModal]);
-
+/*
 useEffect(() => {
   setLightsDatasArray(lights);
-  const light = lights.find((light) => light.room === idRoomModal);
+  const light =  lights.find((light) => light.room === idRoomModal);
   if (light) {
     setLightDatas(light.state.output ?? false);
   } else {
@@ -109,7 +109,7 @@ useEffect(() => {
   }
 }, [lights, idRoomModal]);
 
-
+*/
 useEffect(() => {
   const light = lightsDatasArray.find((light) => light?.state.id === idRoomModal);
   if (light) {
@@ -118,7 +118,7 @@ useEffect(() => {
     setLightDatas(false);
   }
 }, [lightsDatasArray, idRoomModal]);
-
+/*
 useEffect(() => {
   setLightsDatasArray(lights);
   const light = lights.find((light) => light.state.id === idRoomModal);
@@ -128,7 +128,7 @@ useEffect(() => {
     setLightDatas(false);
   }
 }, [lights, idRoomModal]);
-
+*/
   return (
     <Box
     onClick={() => {

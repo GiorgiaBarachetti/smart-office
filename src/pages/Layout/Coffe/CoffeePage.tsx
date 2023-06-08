@@ -6,6 +6,7 @@ import background from '../../../img/output-onlinepngtools.png';
 import { Coffee } from '../../../utils/interfaces/Interfaces';
 import TableCoffee from '../../../components/Tables/TableCoffee';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
+import { SHADOWSTYLE } from '../../../utils/const/Const';
 
 const CoffeePage = () => {
 
@@ -84,7 +85,8 @@ const CoffeePage = () => {
             mb: '40px',
             color:'white',
             fontSize: '20px',
-            borderRadius:'7px'
+            borderRadius:'7px',
+            ...SHADOWSTYLE
           }}
         >
           SELECT THE QUANTITY OF COFFEE
@@ -110,7 +112,10 @@ const CoffeePage = () => {
         </Box>
         <Typography>{message}</Typography>
       </Box>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
+      <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>COFFEE COUNT</Typography>
       <TableCoffee coffee={coffeeData}/>
+      </Box>
     </Box>
   );
 };

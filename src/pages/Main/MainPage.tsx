@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
@@ -9,15 +7,13 @@ import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
 import planimetry from '../../img/Immagine 2023-05-31 093913.jpg';
 
-import { Energy, Lights, Printer } from '../../utils/interfaces/Interfaces';
+import { Energy, Lights, Printer, Coffee } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/Modals/ModalLights';
-import { Coffee } from '../../utils/interfaces/Interfaces';
 import ModalPrinter from '../../components/Modals/ModalPrinter';
 import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
 import CircularProgress from '@mui/material/CircularProgress';
-
 
 const lightStyle = {
   stroke: "#9d9d15",
@@ -116,6 +112,7 @@ const MainPage = () => {
     try {
       setIsLoading(true);
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
+      console.log(response)
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeDatas(Array.isArray(data) ? data : [data]);
@@ -276,7 +273,7 @@ const MainPage = () => {
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
               return (
-                <g key={light.state.id}>
+                <g key={light.state.id} style={{cursor:'pointer'}}>
                   <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
                     onClick={() => openModalLights(light.state.id)} />
                   <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
@@ -295,8 +292,8 @@ const MainPage = () => {
 
         {coffeeDatas.length ? (
           coffeeDatas.map((coffee) => (
-            <g key={100} >
-              <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.id)} style={coffeeStyle} />
+            <g key={coffee.coffes.id} style={{cursor:'pointer'}} >
+              <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={coffeeStyle} />
               <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={360} y={380} fill="black" fontSize="15px">
                 <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== null ? coffee.data.macchinettaCaffe?.receivedData?.watt : ''} W`}</tspan>
@@ -315,7 +312,7 @@ const MainPage = () => {
 
         {energyDatas.length ? (
           energyDatas.map((energy) => (
-            <g key={200} style={boltStyle}>
+            <g key={energy.id} style={{...boltStyle, cursor:'pointer'}}>
               <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} style={boltStyle} />
               <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={670} y={425} fill="black" fontSize="15px">
@@ -330,7 +327,7 @@ const MainPage = () => {
 
         {printerDatas.length ? (
           printerDatas.map((printer) => (
-            <g key={300} >
+            <g key={printer.id} style={{cursor:'pointer'}}>
               <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.id)} style={printerStyle} />
               <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={1050} y={435} fill="black" fontSize="15px">

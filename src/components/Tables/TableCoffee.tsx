@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Typography } from '@mui/material';
 import { Coffee, Energy } from '../../utils/interfaces/Interfaces';
+import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props {
   coffee: Coffee[]
@@ -9,9 +10,8 @@ interface Props {
 const TableCoffee = ({ coffee }: Props) => {
 
 
-  return <Box component='div'>
-    <TableContainer sx={{ borderRadius: '6px', mx: 'auto', my: '30px', width: '85%' }}>
-      <Typography>COFFEE COUNT</Typography>
+  return <Box component='div' >
+    <TableContainer sx={{ borderRadius: '6px', mx: 'auto', my: '30px', width: '85%', ...SHADOWSTYLE, ...TABLECOLOR }}>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -33,7 +33,7 @@ const TableCoffee = ({ coffee }: Props) => {
       </Table>
     </TableContainer>
 
-    <TableContainer sx={{ borderRadius: '6px', mx: 'auto', my: '30px', width: '85%' }}>
+    <TableContainer sx={{ borderRadius: '6px', mx: 'auto', my: '30px', width: '85%', ...SHADOWSTYLE,  ...TABLECOLOR }}>
       <Table size="small">
         <TableHead>
           <TableRow>
