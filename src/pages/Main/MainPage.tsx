@@ -16,6 +16,8 @@ import ModalPrinter from '../../components/Modals/ModalPrinter';
 import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const lightStyle = {
   stroke: "#9d9d15",
@@ -33,6 +35,8 @@ const printerStyle = {
 }
 
 const MainPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
 
@@ -91,13 +95,15 @@ const MainPage = () => {
 
 
 
-  const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);
+  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
   const fetchLights = async () => {
     try {
       
-      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+      setIsLoading(true);
+      const response = await fetch(`${baseURL}${urlShelly}/all/Datas`);
       const data = await response?.json();
-      setLightsStatusArray(data);
+      setLightsDatasArray(data);
+      setIsLoading(false);
       console.log(data);
     } catch (error) {
       console.log('error fetching lights', error);
@@ -105,41 +111,47 @@ const MainPage = () => {
   };
 
 
-  const [coffeeStatus, setCoffeeStatus] = useState<Coffee[]>([]);
+  const [coffeeDatas, setCoffeeDatas] = useState<Coffee[]>([]);
   const fetchCoffee = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
-      //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
-      setCoffeeStatus(Array.isArray(data) ? data : [data]);
+      //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
+      setCoffeeDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
+      setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
   };
 
-  const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
+  const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
   const fetchEnergy = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
-      //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
-      setEnergyStatus(Array.isArray(data) ? data : [data]);
+      //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
+      setEnergyDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
+      setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
   };
 
-  const [printerStatus, setPrinterStatus] = useState<Printer[]>([]);
+  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
 
   const fetchPrinter = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
-      //Array.isArray(data) ? data : [data] senno dice che printerStatus non è una function
-      setPrinterStatus(Array.isArray(data) ? data : [data]);
+      //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
+      setPrinterDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
+      setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -158,26 +170,26 @@ const MainPage = () => {
   })
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
-    if (energyStatus[0]?.powerUsed >= 1308) {
-      console.log(energyStatus[0]?.powerUsed);
+    if (energyDatas[0]?.powerUsed >= 1308) {
+      console.log(energyDatas[0]?.powerUsed);
       return {
         ...boltStyle,
         color: "rgba(202,232,76)",
         stroke: "rgba(41,146,53,1)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 2070) {
+    } else if (energyDatas[0]?.powerUsed >= 2070) {
       return {
         ...boltStyle,
         color: "rgba(244,245,27)",
         stroke:"rgba(136,135,46,1)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 2760) {
+    } else if (energyDatas[0]?.powerUsed >= 2760) {
       return {
         ...boltStyle,
         color: "rgba(226,172,26)",
         stroke: "rgba(175,106,5,1)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 3450) {
+    } else if (energyDatas[0]?.powerUsed >= 3450) {
       return {
         ...boltStyle,
         color: "rgba(224,60,60)",
@@ -191,7 +203,7 @@ const MainPage = () => {
   useEffect(() => {
     const updatedBoltStyle = changeStyleBolt();
     setBoltStyle(updatedBoltStyle);
-  }, [energyStatus]);
+  }, [energyDatas]);
 
 
 
@@ -252,11 +264,15 @@ const MainPage = () => {
 
   return (
     <div>
+      {/*MOSTRA Il loader se è true  */}
+      {isLoading ? (
+      <CircularProgress /> 
+    ) : (
       <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
         <image href={planimetry} width={'100%'}></image>
 
-        {lightsStatusArray.length ? (
-          lightsStatusArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
+        {lightsDatasArray.length ? (
+          lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
               return (
@@ -274,11 +290,11 @@ const MainPage = () => {
               );
             })
         ) : (
-          'lightsStatusArray is empty'
+          'lightsDatasArray is empty'
         )}
 
-        {coffeeStatus.length ? (
-          coffeeStatus.map((coffee) => (
+        {coffeeDatas.length ? (
+          coffeeDatas.map((coffee) => (
             <g key={100} >
               <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.id)} style={coffeeStyle} />
               <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
@@ -294,11 +310,11 @@ const MainPage = () => {
 
           ))
         ) : (
-          'CoffeeStatus array is empty'
+          'CoffeeDatas array is empty'
         )}
 
-        {energyStatus.length ? (
-          energyStatus.map((energy) => (
+        {energyDatas.length ? (
+          energyDatas.map((energy) => (
             <g key={200} style={boltStyle}>
               <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} style={boltStyle} />
               <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
@@ -308,12 +324,12 @@ const MainPage = () => {
             </g>
           ))
         ) : (
-          'energyStatus is empty'
+          'energyDatas is empty'
         )
         }
 
-        {printerStatus.length ? (
-          printerStatus.map((printer) => (
+        {printerDatas.length ? (
+          printerDatas.map((printer) => (
             <g key={300} >
               <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.id)} style={printerStyle} />
               <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
@@ -323,12 +339,13 @@ const MainPage = () => {
             </g>
           ))
         ) : (
-          'printerStatus is empty'
+          'printerDatas is empty'
         )}
 
       </svg>
+       )}
 
-      <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={()=>closeModalLight()} lights={lightsStatusArray} />
+      <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={()=>closeModalLight()} lights={lightsDatasArray} />
       <ModalCoffee open={openModalCoffee} handleClose={()=>closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
       <ModalEnergy open={openModalEnergy} handleClose={()=>closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
       <ModalPrinter open={openModalPrinter} handleClose={()=>closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>

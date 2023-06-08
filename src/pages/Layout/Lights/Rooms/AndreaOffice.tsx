@@ -1,6 +1,3 @@
-
-
-
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Lights } from '../../../../utils/interfaces/Interfaces';
@@ -16,12 +13,12 @@ const AndreaOffice = () => {
   const fetchRoom = async () => {
     try {
       //trasforma in file .env chiave-valore
-      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
-      const data = await response?.json();
-      setRoom(data);
+      const response = await fetch(`${baseURL}${urlShelly}/${id}/Datas`);
+      const data = await response?.json(); 
       console.log(data);
+      setRoom(data);
     } catch (error) {
-      console.log('Error fetching room');
+      console.log('Error fetching room', error);
     }
   };
 
@@ -37,7 +34,7 @@ const AndreaOffice = () => {
       </Box>
 
       <Box component="div"></Box>
-    <TableRooms rooms={room} idRoom={id}/>
+    <TableRooms room={room} idRoom={id}/>
     </Box>
   )
 }

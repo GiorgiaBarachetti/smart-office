@@ -3,13 +3,13 @@ import {useState, useEffect} from 'react'
 
 const Fetch = () => {
     
-    const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);  
+    const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);  
 
     const fetchLights = async () => {
         try {
-          const response = await fetch("http://192.168.1.6:3000/api/shelly/relays/all/status");
+          const response = await fetch("http://192.168.1.6:3000/api/shelly/relays/all/Datas");
           const data = await response?.json();
-          setLightsStatusArray(data);
+          setLightsDatasArray(data);
           console.log(data);
         } catch (error) {
           console.log('nooo');

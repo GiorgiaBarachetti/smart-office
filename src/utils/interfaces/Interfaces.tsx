@@ -51,7 +51,7 @@ export interface Energy {
     currentHour : number
 }
 
-export interface PrinterStatus{
+export interface PrinterDatas{
   stato_presa: boolean
 }
 export interface Coffee {

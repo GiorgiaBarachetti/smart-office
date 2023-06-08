@@ -15,7 +15,7 @@ const CoffeePage = () => {
     try {
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
-      //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
+      //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeData(Array.isArray(data) ? data : [data]);
       console.log(data);
     } catch (error) {

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
-import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
+import { Printer, PrinterDatas } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
 
 const PrinterPage = () => {
-  const [printerStatus, setPrinterStatus] = useState<Printer[]>([]);
+  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
   const [statoPresa, setStatoPresa] = useState<boolean>(false);
 
   const fetchPrinter = async () => {
     try {
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
-      setPrinterStatus(Array.isArray(data) ? data : [data]);
+      setPrinterDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
     } catch (error) {
       console.log('not found datas');
@@ -37,20 +37,20 @@ const PrinterPage = () => {
     }
   };
 
-  const fetchPrinterStatus = async () => {
+  const fetchPrinterDatas = async () => {
     try {
-      const response = await fetch(`${baseURL}${urlTplink}/status`);
-      const data: PrinterStatus = await response.json();
+      const response = await fetch(`${baseURL}${urlTplink}/Datas`);
+      const data: PrinterDatas = await response.json();
       const isPrinterOn = data.stato_presa;
       setStatoPresa(isPrinterOn);
       console.log(isPrinterOn);
     } catch (error) {
-      console.log('Error fetching printer status:', error);
+      console.log('Error fetching printer Datas:', error);
     }
   };
 
   useEffect(() => {
-    fetchPrinterStatus();
+    fetchPrinterDatas();
     fetchPrinter();
   }, []);
 
@@ -70,7 +70,7 @@ const PrinterPage = () => {
           width: '80%',
         }}
       >
-        <Typography>SWITCH THE PRINTER STATUS</Typography>
+        <Typography>SWITCH THE PRINTER Datas</Typography>
         <ButtonGroup>
           <Button onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
           <Button onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
@@ -78,7 +78,7 @@ const PrinterPage = () => {
       </Box>
 
       <Box>
-        <TablePrinter printer={printerStatus} />
+        <TablePrinter printer={printerDatas} />
       </Box>
     </div>
   );

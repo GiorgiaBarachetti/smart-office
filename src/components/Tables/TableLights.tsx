@@ -3,13 +3,13 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { Lights } from '../../utils/interfaces/Interfaces';
 
 interface Props {
-    lightsStatusArray : Lights[]
+    lightsDatasArray : Lights[]
 }
 
-const TableLights = ({lightsStatusArray}: Props) => {
+const TableLights = ({lightsDatasArray}: Props) => {
     //sum of current consumption 
     
-    const totalApower = lightsStatusArray.length ? lightsStatusArray.reduce(
+    const totalApower = lightsDatasArray.length ? lightsDatasArray.reduce(
         //on= somma actual
         //light= somma da aggiungere
         (currentValueSum, light) => currentValueSum + (light.state.apower  || 0),
@@ -17,11 +17,11 @@ const TableLights = ({lightsStatusArray}: Props) => {
          0) : 0;
    
     //sum of hour consumption 
-    const totalAenergy = lightsStatusArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
+    const totalAenergy = lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
     //total count of room with light on
-    const totalLightsOn = lightsStatusArray.filter((light) => light.state.output).length;
+    const totalLightsOn = lightsDatasArray.filter((light) => light.state.output).length;
     //ordinamento per id ascendente
-    const sortedLightsStatusArray = lightsStatusArray.sort((a, b) => a.state.id - b.state.id);
+    const sortedLightsDatasArray = lightsDatasArray.sort((a, b) => a.state.id - b.state.id);
   return (
     <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '95%'}}>
     <Table size="small">
@@ -29,14 +29,14 @@ const TableLights = ({lightsStatusArray}: Props) => {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>ROOM NAME</TableCell>
-                <TableCell>STATUS</TableCell>
+                <TableCell>Datas</TableCell>
                 <TableCell>ACTUAL CONSUMPTION</TableCell>
                 <TableCell>HOUR CONSUMPTION</TableCell>                        
              </TableRow>
         </TableHead>
         <TableBody>
             {/*elimino le due stanze che sono in piu*/}
-        {sortedLightsStatusArray?.filter((light) =>
+        {sortedLightsDatasArray?.filter((light) =>
                         light.state.id !== 8 &&
                         light.state.id !== 9
                         /*

@@ -4,13 +4,13 @@ import TableEnergy from '../../../components/Tables/TableEnergy'
 import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
 
 const EnergyPage = () => {
-  const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
+  const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
 
   const fetchPrinter = async () => {
     try {
       const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
-      setEnergyStatus(Array.isArray(data) ? data : [data]);
+      setEnergyDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
     } catch (error) {
       console.log('not found datas');
@@ -23,7 +23,7 @@ const EnergyPage = () => {
 
   return (
     <div>
-      <TableEnergy energy={energyStatus}/>
+      <TableEnergy energy={energyDatas}/>
     </div>
   )
 }

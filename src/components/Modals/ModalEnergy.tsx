@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
-import { ButtonGroup } from '@mui/material';
-import { Printer } from '../../utils/interfaces/Interfaces';
 
 interface Props {
   open: boolean;

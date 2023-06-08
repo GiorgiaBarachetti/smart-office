@@ -9,12 +9,12 @@ interface Props {
 
 const TableEnergy = ({ energy }: Props) => {
   
-  const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
+  const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
   const fetchPrinter = async () => {
     try {
       const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
-      setEnergyStatus(Array.isArray(data) ? data : [data]);
+      setEnergyDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
     } catch (error) {
       console.log('not found datas');
@@ -31,23 +31,23 @@ const TableEnergy = ({ energy }: Props) => {
   })
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
-    if (energyStatus[0]?.powerUsed >= 1308) {
-      console.log(energyStatus[0]?.powerUsed);
+    if (energyDatas[0]?.powerUsed >= 1308) {
+      console.log(energyDatas[0]?.powerUsed);
       return {
         ...boltStyle,
         color: "rgba(202,232,76)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 2070) {
+    } else if (energyDatas[0]?.powerUsed >= 2070) {
       return {
         ...boltStyle,
         color: "rgba(244,245,27)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 2760) {
+    } else if (energyDatas[0]?.powerUsed >= 2760) {
       return {
         ...boltStyle,
         color: "rgba(226,172,26)"
       };
-    } else if (energyStatus[0]?.powerUsed >= 3450) {
+    } else if (energyDatas[0]?.powerUsed >= 3450) {
       return {
         ...boltStyle,
         color: "rgba(224,60,60)"
@@ -60,7 +60,7 @@ const TableEnergy = ({ energy }: Props) => {
   useEffect(() => {
     const updatedBoltStyle = changeStyleBolt();
     setBoltStyle(updatedBoltStyle);
-  }, [energyStatus]);
+  }, [energyDatas]);
 
 
   return <TableContainer sx={{ borderRadius: '6px', mx: 'auto', my: '30px', width: '85%'}} style={boltStyle}>

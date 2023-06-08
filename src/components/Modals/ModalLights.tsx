@@ -7,7 +7,7 @@ import { Lights } from '../../utils/interfaces/Interfaces';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
 import { ButtonGroup } from '@mui/material';
-import { baseURL, urlShelly } from '../../utils/fetch/api';
+import { baseURL } from '../../utils/fetch/api';
 
 interface Props {
   open: boolean;
@@ -45,18 +45,18 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
     return roomName ? roomName.room : '';
   };
 
-  const [lightsStatusArray, setLightsStatusArray] = useState<Lights[]>([]);
-  const [lightStatus, setLightStatus] = useState<boolean>(false);
+  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+  const [lightDatas, setLightDatas] = useState<boolean>(false);
   
   const switchOnLightById = async (key: any) => {
     try {
-      const light = lightsStatusArray.find((light) => light.state.id === key);
+      const light = lightsDatasArray.find((light) => light.state.id === key);
       if (light) {
         const id = light.state.id;
         if (light.state.output === false) {
-          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
-          setLightStatus(true);
-          setLightsStatusArray((prevState) =>
+          await fetch(`${baseURL}${url}http://192.168.1.6:3000/api/shelly/relays/${id}/on`, { method: 'POST' });
+          setLightDatas(true);
+          setLightsDatasArray((prevState) =>
             prevState.map((light) =>
               light.state.id === key ? { ...light, state: { ...light.state, output: true } } : light
             )
@@ -70,13 +70,13 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
 
   const switchOffLightById = async (key: any) => {
     try {
-      const light = lightsStatusArray.find((light) => light.state.id === key);
+      const light = lightsDatasArray.find((light) => light.state.id === key);
       if (light) {
         const id = light.state.id;
         if (light.state.output === true) {
-          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
-          setLightStatus(false);
-          setLightsStatusArray((prevState) =>
+          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
+          setLightDatas(false);
+          setLightsDatasArray((prevState) =>
             prevState.map((light) =>
               light.state.id === key ? { ...light, state: { ...light.state, output: false } } : light
             )
@@ -91,41 +91,41 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
  // ...
 
 useEffect(() => {
-  const light = lightsStatusArray.find((light) => light?.room === idRoomModal);
+  const light = lightsDatasArray.find((light) => light?.room === idRoomModal);
   if (light) {
-    setLightStatus(light.state.output ?? false);
+    setLightDatas(light.state.output ?? false);
   } else {
-    setLightStatus(false);
+    setLightDatas(false);
   }
-}, [lightsStatusArray, idRoomModal]);
+}, [lightsDatasArray, idRoomModal]);
 
 useEffect(() => {
-  setLightsStatusArray(lights);
+  setLightsDatasArray(lights);
   const light = lights.find((light) => light.room === idRoomModal);
   if (light) {
-    setLightStatus(light.state.output ?? false);
+    setLightDatas(light.state.output ?? false);
   } else {
-    setLightStatus(false);
+    setLightDatas(false);
   }
 }, [lights, idRoomModal]);
 
 
 useEffect(() => {
-  const light = lightsStatusArray.find((light) => light?.state.id === idRoomModal);
+  const light = lightsDatasArray.find((light) => light?.state.id === idRoomModal);
   if (light) {
-    setLightStatus(light.state.output ?? false);
+    setLightDatas(light.state.output ?? false);
   } else {
-    setLightStatus(false);
+    setLightDatas(false);
   }
-}, [lightsStatusArray, idRoomModal]);
+}, [lightsDatasArray, idRoomModal]);
 
 useEffect(() => {
-  setLightsStatusArray(lights);
+  setLightsDatasArray(lights);
   const light = lights.find((light) => light.state.id === idRoomModal);
   if (light) {
-    setLightStatus(light.state.output ?? false);
+    setLightDatas(light.state.output ?? false);
   } else {
-    setLightStatus(false);
+    setLightDatas(false);
   }
 }, [lights, idRoomModal]);
 
@@ -145,10 +145,10 @@ useEffect(() => {
         <Box sx={{textAlign: 'center'}}>
           <Box>
           <ButtonGroup>
-              <Button onClick={() => switchOnLightById(idRoomModal)} disabled={lightStatus}>
+              <Button onClick={() => switchOnLightById(idRoomModal)} disabled={lightDatas}>
                 ON
               </Button>
-              <Button onClick={() => switchOffLightById(idRoomModal)} disabled={!lightStatus}>
+              <Button onClick={() => switchOffLightById(idRoomModal)} disabled={!lightDatas}>
                 OFF
               </Button>
             </ButtonGroup>
