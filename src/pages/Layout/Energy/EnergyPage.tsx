@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Energy} from '../../../utils/interfaces/Interfaces';
 import TableEnergy from '../../../components/Tables/TableEnergy'
+import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
 
 const EnergyPage = () => {
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
 
   const fetchPrinter = async () => {
     try {
-      const response = await fetch('http://192.168.1.6:3000/api/alpha/data');
+      const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
       setEnergyStatus(Array.isArray(data) ? data : [data]);
       console.log(data);

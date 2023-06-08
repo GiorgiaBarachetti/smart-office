@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
 import { ButtonGroup } from '@mui/material';
 import { Printer } from '../../utils/interfaces/Interfaces';
+import { baseURL, urlTplink } from '../../utils/fetch/api';
 
 interface Props {
   open: boolean;
@@ -43,7 +44,7 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
 
   const switchOnPrinter = async () => {
     try {
-      await fetch('http://192.168.1.6:3000/api/tplink/on', { method: 'POST' });
+      await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
     } catch (error) {
       console.log('Error switching on the printer:', error);
@@ -52,7 +53,7 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
 
   const switchOffPrinter = async () => {
     try {
-      await fetch('http://192.168.1.6:3000/api/tplink/off', { method: 'POST' });
+      await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
     } catch (error) {
       console.log('Error switching off the printer:', error);

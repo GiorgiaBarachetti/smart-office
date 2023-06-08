@@ -5,6 +5,7 @@ import doubleCoffee from '../../../img/Immagine_2023-06-01_175307-removebg-previ
 import background from '../../../img/output-onlinepngtools.png';
 import { Coffee } from '../../../utils/interfaces/Interfaces';
 import TableCoffee from '../../../components/Tables/TableCoffee';
+import { baseURL, urlCoffee } from '../../../utils/fetch/api';
 
 const CoffeePage = () => {
 
@@ -12,7 +13,7 @@ const CoffeePage = () => {
 
   const fetchCoffee = async () => {
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/coffee/data");
+      const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
       setCoffeeData(Array.isArray(data) ? data : [data]);
@@ -31,20 +32,22 @@ const CoffeePage = () => {
   const handleDoubleCoffeeClick = () => {
     fetchCoffeeNumber(2);
   };
-
+  
+  
+  const [message, setMessage] = useState('')
   const fetchCoffeeNumber = async (number: number) => {
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
 
-    await fetch(`http://192.168.1.6:3000/api/coffee/${number}`, {
+    await fetch(`${baseURL}${urlCoffee}/${number}`, {
       method: 'POST',
       headers,
     });
     console.log('made')
     await fetchCoffee();
-    return alert('fatto, esco')
+    return setMessage('Coffee number has been saved')
   };
 
   useEffect(() => {
@@ -105,6 +108,7 @@ const CoffeePage = () => {
             }} component="img" src={doubleCoffee} />
           </Button>
         </Box>
+        <Typography>{message}</Typography>
       </Box>
       <TableCoffee coffee={coffeeData}/>
     </Box>

@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import { Lights } from '../../../utils/interfaces/Interfaces';
 import { useState, useEffect } from 'react'
 import SwitchComponent from '../../../components/Switch/Switch';
+import { baseURL, urlShelly } from '../../../utils/fetch/api';
 //import dotenv from 'dotenv'
 //dotenv.config();
 
@@ -16,7 +17,7 @@ const LightsPage = () => {
   const fetchLights = async () => {
     try {
       //trasforma in file .env chiave-valore
-      const response = await fetch(`http://192.168.1.6:3000/api/shelly/relays/all/status`);
+      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsStatusArray(data);
       //console.log(data);
@@ -33,7 +34,7 @@ const LightsPage = () => {
   //switch off all the lights
   const switchAllOffLightStatus = async () => {
     try {
-      await fetch(`http://192.168.1.6:3000/api/shelly/relays/all/off`, { method: 'POST' });
+      await fetch(`${baseURL}${urlShelly}/all/off`, { method: 'POST' });
       //switchAllOffLightStatus();
     } catch (error) {
       console.log('Error switching all the lights off:', error);
@@ -49,7 +50,7 @@ const LightsPage = () => {
         const id = light.state.id
         if (light.state.output === false) {
           console.log(light.state.output);
-          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/on`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
           //aggiorno lo stato delle luci settandolo nel setLlightsStatusArray
           setLightsStatusArray((prevState) =>
           prevState.map((light) =>
@@ -58,7 +59,6 @@ const LightsPage = () => {
           )
         );
         } else {
-          //await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
         }
 
       }
@@ -76,14 +76,13 @@ const LightsPage = () => {
         const id = light.state.id
         if (light.state.output === true) {
           console.log(light.state.output);
-          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
           setLightsStatusArray((prevState) =>
           prevState.map((light) =>
             light?.room === key ? { ...light, state: { ...light.state, output: false } } : light
           )
         );
         } else {
-          //await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
         }
 
       }

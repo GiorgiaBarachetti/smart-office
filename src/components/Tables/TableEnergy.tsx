@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Energy } from '../../utils/interfaces/Interfaces';
+import { baseURL, urlAlhpa } from '../../utils/fetch/api';
 
 interface Props {
   energy: Energy[]
 }
 
-const TablePrinter = ({ energy }: Props) => {
+const TableEnergy = ({ energy }: Props) => {
   
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
   const fetchPrinter = async () => {
     try {
-      const response = await fetch('http://192.168.1.6:3000/api/alpha/data');
+      const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
       setEnergyStatus(Array.isArray(data) ? data : [data]);
       console.log(data);
@@ -73,7 +74,7 @@ const TablePrinter = ({ energy }: Props) => {
       </TableHead>
       <TableBody>
         {energy?.map((energ) => (
-          <TableRow>
+          <TableRow key={896}>
             <TableCell>{energ.powerUsed} W</TableCell>
             <TableCell>{energ.averagePowerUsed} W</TableCell>
             <TableCell>{energ.currentHour} h</TableCell>
@@ -85,4 +86,4 @@ const TablePrinter = ({ energy }: Props) => {
   </TableContainer>
 }
 
-export default TablePrinter
+export default TableEnergy

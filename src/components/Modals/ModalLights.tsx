@@ -7,6 +7,7 @@ import { Lights } from '../../utils/interfaces/Interfaces';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
 import { ButtonGroup } from '@mui/material';
+import { baseURL, urlShelly } from '../../utils/fetch/api';
 
 interface Props {
   open: boolean;
@@ -53,7 +54,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
       if (light) {
         const id = light.state.id;
         if (light.state.output === false) {
-          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/on`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
           setLightStatus(true);
           setLightsStatusArray((prevState) =>
             prevState.map((light) =>
@@ -73,7 +74,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
       if (light) {
         const id = light.state.id;
         if (light.state.output === true) {
-          await fetch(`http://192.168.1.6:3000/api/shelly/relays/${id}/off`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
           setLightStatus(false);
           setLightsStatusArray((prevState) =>
             prevState.map((light) =>

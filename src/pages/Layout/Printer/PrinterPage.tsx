@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
 
 const PrinterPage = () => {
   const [printerStatus, setPrinterStatus] = useState<Printer[]>([]);
@@ -9,7 +10,7 @@ const PrinterPage = () => {
 
   const fetchPrinter = async () => {
     try {
-      const response = await fetch('http://192.168.1.6:3000/api/tplink/data');
+      const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       setPrinterStatus(Array.isArray(data) ? data : [data]);
       console.log(data);
@@ -20,7 +21,7 @@ const PrinterPage = () => {
 
   const switchOnPrinter = async () => {
     try {
-      await fetch('http://192.168.1.6:3000/api/tplink/on', { method: 'POST' });
+      await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
     } catch (error) {
       console.log('Error switching on the printer:', error);
@@ -29,7 +30,7 @@ const PrinterPage = () => {
 
   const switchOffPrinter = async () => {
     try {
-      await fetch('http://192.168.1.6:3000/api/tplink/off', { method: 'POST' });
+      await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
     } catch (error) {
       console.log('Error switching off the printer:', error);
@@ -38,7 +39,7 @@ const PrinterPage = () => {
 
   const fetchPrinterStatus = async () => {
     try {
-      const response = await fetch('http://192.168.1.6:3000/api/tplink/status');
+      const response = await fetch(`${baseURL}${urlTplink}/status`);
       const data: PrinterStatus = await response.json();
       const isPrinterOn = data.stato_presa;
       setStatoPresa(isPrinterOn);

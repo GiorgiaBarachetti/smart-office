@@ -15,6 +15,7 @@ import { Coffee } from '../../utils/interfaces/Interfaces';
 import ModalPrinter from '../../components/Modals/ModalPrinter';
 import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
+import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
 
 const lightStyle = {
   stroke: "#9d9d15",
@@ -30,9 +31,6 @@ const printerStyle = {
   color: "#424242",
   stroke: "#212121"
 }
-
-const baseURL = process.env.REACT_APP_BASE_API_URL
-const urlShelly = process.env.REACT_APP_SHELLY_URL
 
 const MainPage = () => {
   const [openModalLight, setOpenModalLight] = useState(false)
@@ -98,7 +96,6 @@ const MainPage = () => {
     try {
       
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
-      
       const data = await response?.json();
       setLightsStatusArray(data);
       console.log(data);
@@ -111,7 +108,7 @@ const MainPage = () => {
   const [coffeeStatus, setCoffeeStatus] = useState<Coffee[]>([]);
   const fetchCoffee = async () => {
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/coffee/data");
+      const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
       setCoffeeStatus(Array.isArray(data) ? data : [data]);
@@ -124,7 +121,7 @@ const MainPage = () => {
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
   const fetchEnergy = async () => {
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/alpha/data");
+      const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeestatus non è una function
       setEnergyStatus(Array.isArray(data) ? data : [data]);
@@ -138,7 +135,7 @@ const MainPage = () => {
 
   const fetchPrinter = async () => {
     try {
-      const response = await fetch("http://192.168.1.6:3000/api/tplink/data");
+      const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerStatus non è una function
       setPrinterStatus(Array.isArray(data) ? data : [data]);
