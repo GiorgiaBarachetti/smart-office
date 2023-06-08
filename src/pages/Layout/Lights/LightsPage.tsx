@@ -17,7 +17,7 @@ const LightsPage = () => {
   const fetchLights = async () => {
     try {
       //trasforma in file .env chiave-valore
-      const response = await fetch(`${baseURL}${urlShelly}/all/Datas`);
+      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data);
       //console.log(data);

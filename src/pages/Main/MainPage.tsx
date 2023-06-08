@@ -100,7 +100,7 @@ const MainPage = () => {
     try {
       
       setIsLoading(true);
-      const response = await fetch(`${baseURL}${urlShelly}/all/Datas`);
+      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data);
       setIsLoading(false);

@@ -29,7 +29,7 @@ const TableLights = ({lightsDatasArray}: Props) => {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>ROOM NAME</TableCell>
-                <TableCell>Datas</TableCell>
+                <TableCell>STATUS</TableCell>
                 <TableCell>ACTUAL CONSUMPTION</TableCell>
                 <TableCell>HOUR CONSUMPTION</TableCell>                        
              </TableRow>

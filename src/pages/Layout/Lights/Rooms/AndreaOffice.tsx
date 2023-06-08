@@ -13,7 +13,7 @@ const AndreaOffice = () => {
   const fetchRoom = async () => {
     try {
       //trasforma in file .env chiave-valore
-      const response = await fetch(`${baseURL}${urlShelly}/${id}/Datas`);
+      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       const data = await response?.json(); 
       console.log(data);
       setRoom(data);

@@ -19,11 +19,11 @@ const TableRooms = ({room, idRoom}: Props) => {
         //somma di partenza
         0) : [];
     //sum of hour consumption 
-    const totalAenergy = lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
+    const totalAenergy = lightsStatusArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0);
     //total count of room with light on
-    const totalLightsOn = lightsDatasArray.filter((light) => light.state.output).length;
+    const totalLightsOn = lightsStatusArray.filter((light) => light.state.output).length;
     //ordinamento per id ascendente
-    const sortedLightsDatasArray = lightsDatasArray.sort((a, b) => a.state.id - b.state.id);
+    const sortedLightsStatusArray = lightsStatusArray.sort((a, b) => a.state.id - b.state.id);
     */
    console.log(room)
 
@@ -34,7 +34,7 @@ const TableRooms = ({room, idRoom}: Props) => {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>ROOM NAME</TableCell>
-                <TableCell>Datas</TableCell>
+                <TableCell>STATUS</TableCell>
                 <TableCell>ACTUAL CONSUMPTION</TableCell>
                 <TableCell>HOUR CONSUMPTION</TableCell>                        
              </TableRow>

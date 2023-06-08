@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
-import { Printer, PrinterDatas } from '../../../utils/interfaces/Interfaces';
+import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
 
@@ -37,20 +37,20 @@ const PrinterPage = () => {
     }
   };
 
-  const fetchPrinterDatas = async () => {
+  const fetchPrinterStatus = async () => {
     try {
-      const response = await fetch(`${baseURL}${urlTplink}/Datas`);
-      const data: PrinterDatas = await response.json();
+      const response = await fetch(`${baseURL}${urlTplink}/status`);
+      const data: PrinterStatus = await response.json();
       const isPrinterOn = data.stato_presa;
       setStatoPresa(isPrinterOn);
       console.log(isPrinterOn);
     } catch (error) {
-      console.log('Error fetching printer Datas:', error);
+      console.log('Error fetching printer Status:', error);
     }
   };
 
   useEffect(() => {
-    fetchPrinterDatas();
+    fetchPrinterStatus();
     fetchPrinter();
   }, []);
 
@@ -70,7 +70,7 @@ const PrinterPage = () => {
           width: '80%',
         }}
       >
-        <Typography>SWITCH THE PRINTER Datas</Typography>
+        <Typography>SWITCH THE PRINTER STATUS</Typography>
         <ButtonGroup>
           <Button onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
           <Button onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
