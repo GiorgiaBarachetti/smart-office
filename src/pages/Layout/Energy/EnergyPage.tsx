@@ -24,7 +24,7 @@ const EnergyPage = () => {
   }, []);
 
   return (
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%', ...SHADOWSTYLE}} >
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '70%', ...SHADOWSTYLE}} >
     <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>COFFEE COUNT</Typography>
       <TableEnergy energy={energyDatas}/>
     </Box>

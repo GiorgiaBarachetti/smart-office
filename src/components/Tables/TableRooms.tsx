@@ -48,7 +48,7 @@ const TableRooms = () => {
             return (
             <TableRow key={id}>
               <TableCell>{r.state.id}</TableCell>
-              <TableCell>{r.room}</TableCell>
+              <TableCell>{r.state.room}</TableCell>
               <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>
                 {r.state.output ? 'ON' : 'OFF'}
               </TableCell>

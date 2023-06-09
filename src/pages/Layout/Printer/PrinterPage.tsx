@@ -3,7 +3,7 @@ import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
-import { SHADOWSTYLE } from '../../../utils/const/Const';
+import { BOXSTYLE, SHADOWSTYLE } from '../../../utils/const/Const';
 
 const PrinterPage = () => {
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
@@ -57,7 +57,7 @@ const PrinterPage = () => {
 
   return (
     <div>
-      <Box
+      <Box component='div'
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -68,7 +68,7 @@ const PrinterPage = () => {
           bgcolor: 'lightgrey',
           mx: 'auto',
           my: '30px',
-          width: '80%',
+          width: {xs: '80%',sm: '40%', md: '70%'},
           ...SHADOWSTYLE
         }}
       >
@@ -79,7 +79,7 @@ const PrinterPage = () => {
         </ButtonGroup>
       </Box>
 
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
+      <Box component='div' sx={BOXSTYLE}>
       <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
         <TablePrinter printer={printerDatas} />
       </Box>

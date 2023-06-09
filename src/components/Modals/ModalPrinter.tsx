@@ -39,7 +39,6 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
     navigate(PATH.printer);
   };
 
-
   const [statoPresa, setStatoPresa] = useState<boolean>(false);
 
   const switchOnPrinter = async () => {
@@ -73,7 +72,7 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : 'none'}</Typography>
+          <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : ''}</Typography>
           <ButtonGroup>
             <Button onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>
             <Button onClick={() => switchOffPrinter()} disabled={statoPresa}>OFF</Button>

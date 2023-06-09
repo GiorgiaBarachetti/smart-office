@@ -81,6 +81,7 @@ const MainPage = () => {
   const openPrinterModal = (id: number) => {
     if (id !== undefined) {
       setIdPrinterModal(id);
+      console.log('id è ', id)
     }
     setOpenModalPrinter(true);
   };
@@ -94,11 +95,11 @@ const MainPage = () => {
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
   const fetchLights = async () => {
     try {
-      
       setIsLoading(true);
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
-      setLightsDatasArray(data);
+      console.log(response, data)
+      setLightsDatasArray(data.data);
       setIsLoading(false);
       console.log(data);
     } catch (error) {
@@ -131,7 +132,6 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);
-      console.log(data);
       setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
@@ -202,8 +202,8 @@ const MainPage = () => {
     setBoltStyle(updatedBoltStyle);
   }, [energyDatas]);
 
-
-
+  
+  
   const getCoordinates = (roomId: number) => {
     let x = 0;
     let y = 0;
@@ -213,59 +213,59 @@ const MainPage = () => {
         x = 1000;
         y = -245;
         break;
-      case 1: // SALA RIUNIONI
+        case 1: // SALA RIUNIONI
         x = 810;
         y = -245;
         break;
-      case 2: // UFFICIO FLAVIO
+        case 2: // UFFICIO FLAVIO
         x = 565;
         y = -245;
         break;
 
-      // LABORATORIO
-      case 3:
-        x = 370;
+        // LABORATORIO
+        case 3:
+          x = 370;
         y = -245;
         break;
 
-      // CUCINA-RIPOSTIGLIO
-      case 4:
+        // CUCINA-RIPOSTIGLIO
+        case 4:
         x = 185;
         y = -245;
         break;
-
-      // BREAKTIME SPACE
-      case 6:
+        
+        // BREAKTIME SPACE
+        case 6:
         x = 280;
         y = -50;
         break;
 
-      // INGRESSO
+        // INGRESSO
       case 5:
         x = 585;
         y = -50;
         break;
-
+        
       // OPEN SPACE
       case 7:
         x = 850;
         y = -50;
         break;
-
-      default:
+        
+        default:
         break;
-    }
+      }
     return { x, y };
   };
-
+  
 
   return (
     <div>
       {/*MOSTRA Il loader se è true  */}
       {isLoading ? (
-      <CircularProgress /> 
-    ) : (
-      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
+      <CircularProgress/> 
+      ) : (
+        <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
         <image href={planimetry} width={'100%'}></image>
 
         {lightsDatasArray.length ? (
@@ -273,82 +273,90 @@ const MainPage = () => {
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
               return (
-                <g key={light.state.id} style={{cursor:'pointer'}}>
-                  <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
+                /*
+                {isLoading ? (
+                  <CircularProgress/>
+                  ):(
+                    )}
+                    */
+                    
+                    <g key={light.state.id} style={{cursor:'pointer'}}>
+                    <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
                     onClick={() => openModalLights(light.state.id)} />
                   <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
                   <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
-                    <tspan>{`Power: ${light.state.apower} W`}</tspan>
+                  <tspan>{`Power: ${light.state.apower} W`}</tspan>
                   </text>
                   <text x={x + 60} y={y + 340} fill="black" fontSize="15px">
-                    <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+                  <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
                   </text>
-                </g>
-              );
-            })
-        ) : (
-          'lightsDatasArray is empty'
+                  </g>
+                  );
+                })
+                ) : (
+                  'lightsDatasArray is empty'
         )}
 
         {coffeeDatas.length ? (
           coffeeDatas.map((coffee) => (
             <g key={coffee.coffes.id} style={{cursor:'pointer'}} >
-              <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={coffeeStyle} />
-              <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-              <text x={360} y={380} fill="black" fontSize="15px">
-                <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== null ? coffee.data.macchinettaCaffe?.receivedData?.watt : ''} W`}</tspan>
-              </text>
-              {/* 
-                      <text x={350} y={360} fill="black" fontSize="15px">
-                   <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
-                  </text>
+            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={coffeeStyle} />
+            <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+            <text x={360} y={380} fill="black" fontSize="15px">
+            <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : ''} W`}</tspan>
+            </text>
+            {/* 
+            <text x={350} y={360} fill="black" fontSize="15px">
+            <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+            </text>
                    */}
             </g>
 
           ))
-        ) : (
-          'CoffeeDatas array is empty'
+          ) : (
+            'CoffeeDatas array is empty'
         )}
-
+        
         {energyDatas.length ? (
           energyDatas.map((energy) => (
             <g key={energy.id} style={{...boltStyle, cursor:'pointer'}}>
               <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} style={boltStyle} />
               <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={670} y={425} fill="black" fontSize="15px">
-                <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
+              <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
               </text>
             </g>
-          ))
+            ))
         ) : (
           'energyDatas is empty'
-        )
+          )
         }
-
+        
         {printerDatas.length ? (
           printerDatas.map((printer) => (
-            <g key={printer.id} style={{cursor:'pointer'}}>
-              <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.id)} style={printerStyle} />
+            <g key={printer.tplinkStampante.id} style={{cursor:'pointer'}}>
+            <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} style={printerStyle} />
               <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={1050} y={435} fill="black" fontSize="15px">
                 <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
-              </text>
+                </text>
             </g>
           ))
-        ) : (
-          'printerDatas is empty'
-        )}
-
+          ) : (
+            'printerDatas is empty'
+            )}
+            
       </svg>
        )}
-
-      <ModalLights open={openModalLight} idRoomModal={idRoomModal} handleClose={()=>closeModalLight()} lights={lightsDatasArray} />
+       
+       <ModalLights open={openModalLight} handleClose={()=>closeModalLight()} idRoomModal={idRoomModal}lights={lightsDatasArray} />
       <ModalCoffee open={openModalCoffee} handleClose={()=>closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
       <ModalEnergy open={openModalEnergy} handleClose={()=>closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
       <ModalPrinter open={openModalPrinter} handleClose={()=>closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
 
     </div>
-  )
-}
-
-export default MainPage
+    )
+  }
+  
+  export default MainPage
+  

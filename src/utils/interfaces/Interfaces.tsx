@@ -1,26 +1,26 @@
-export interface Lights {  
-  room?: string;
-  state: {
-    id: number;
-    output?: boolean;
-    apower?: number;
-    voltage?: number;
-    current?: number;
-    aenergy?: {
-      total?: number;
-      by_minute?: [number, number, number];
-      minute_ts?: number;
-    };
-    temperature?: {
-      tC?: number;
-      tF?: number;
-    };
-  }
+export interface Lights {
+    state: {
+      id: number;
+      output?: boolean;
+      apower?: number;
+      voltage?: number;
+      current?: number;
+      aenergy?: {
+        total?: number;
+        by_minute?: [number, number, number];
+        minute_ts?: number;
+      };
+      temperature?: {
+        tC?: number;
+        tF?: number;
+      };
+      room?: string;
+    }  
 }
 
 export interface Printer {
-  id: number
   tplinkStampante: {
+        id: number
         power: {
             value: number,
             unit: "W"

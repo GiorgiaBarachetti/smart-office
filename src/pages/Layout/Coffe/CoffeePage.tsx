@@ -112,7 +112,7 @@ const CoffeePage = () => {
         </Box>
         <Typography>{message}</Typography>
       </Box>
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '70%' }} style={SHADOWSTYLE}>
       <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>COFFEE COUNT</Typography>
       <TableCoffee coffee={coffeeData}/>
       </Box>

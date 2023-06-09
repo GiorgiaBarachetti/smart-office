@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import { LinearProgress } from '@mui/material';
 
 
 const drawerWidth = '240px';
@@ -56,14 +57,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
-
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
-  const handleClick = (path: string) => {
+
+  const [pageName, setPageName] = useState('')
+  const handleClick = (path: string, name:string) => {
+    setIsLoading(true)
     if (path === '/rooms') {
       handleDropdownToggle(); // Open the dropdown menu
     } else {
+      setPageName(name)
       navigate(path);
     }
+    setIsLoading(false)
   }
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -92,7 +98,7 @@ export default function PersistentDrawerLeft() {
         <Toolbar>
           {/*HAMBURGER ICON */}
           <IconButton
-            color="default"
+            color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
@@ -100,10 +106,8 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {/*inserisci NOME PAGINA APERTA */}
-
-          </Typography>
+          <Typography variant="h6" noWrap component="div"> {pageName}</Typography>
+          <LinearProgress />
         </Toolbar>
       </AppBar>
 
@@ -159,7 +163,7 @@ export default function PersistentDrawerLeft() {
                         {Object.entries(PATHDROPDOWNROOMS).map(([roomName, roomPath]) => (
                           <ListItem
                             key={roomPath}
-                            onClick={() => handleClick(roomPath)}
+                            onClick={() => handleClick(roomPath, roomName)}
                             disablePadding
                             sx={{ pl: 4 }}
                             selected={selectedMenuItem === roomPath}
@@ -177,7 +181,7 @@ export default function PersistentDrawerLeft() {
                   return (
                     <ListItem
                       key={elem.href}
-                      onClick={() => handleClick(elem.href)}
+                      onClick={() => handleClick(elem.href, elem.name)}
                       disablePadding
                     >
                       <ListItemButton>
@@ -201,7 +205,7 @@ export default function PersistentDrawerLeft() {
 
                 <ListItem
                   key={elem.href}
-                  onClick={() => handleClick(elem.href)}
+                  onClick={() => handleClick(elem.href, elem.name)}
                   disablePadding>
                   <ListItemButton>
                     <ListItemText>RETURN TO {elem.name} PAGE</ListItemText>

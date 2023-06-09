@@ -4,5 +4,19 @@ export const SHADOWSTYLE={
 }
 
 export const TABLECOLOR={
-  backgroundColor: '#706f6f'
+  backgroundColor: '#706f6f' 
+}
+
+export const BOXSTYLE = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    p: '20px',
+    borderRadius: '6px',
+    bgcolor: 'lightgrey',
+    mx: 'auto',
+    my: '30px',
+    width: {xs: '80%',sm: '80%', md: '70%'},
+    ...SHADOWSTYLE
 }

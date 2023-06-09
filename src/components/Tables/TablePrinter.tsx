@@ -20,7 +20,7 @@ const TablePrinter = ({printer}:Props) => {
       </TableHead>
       <TableBody>
       {printer?.map((p)=>(
-                  <TableRow key={p.id}>
+                  <TableRow key={p.tplinkStampante.id}>
                       <TableCell>{p.tplinkStampante.power.value} {p.tplinkStampante.power.unit}</TableCell>
                       <TableCell>{p.tplinkStampante.voltage.value} {p.tplinkStampante.voltage.unit}</TableCell>
                       <TableCell>{p.tplinkStampante.current.value} {p.tplinkStampante.current.unit}</TableCell>

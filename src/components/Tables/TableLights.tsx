@@ -46,7 +46,7 @@ const TableLights = ({lightsDatasArray}: Props) => {
                 .map((light)=>(
                     <TableRow key={light.state.id}>
                         <TableCell>{light.state.id}</TableCell>
-                        <TableCell>{light.room}</TableCell>
+                        <TableCell>{light.state.room}</TableCell>
                         {/*if light is on color:green else if is off color red */}
                         <TableCell style={{ color: light.state.output ? 'green' : 'red' }}>{light.state.output ? 'ON' : 'OFF'}</TableCell>
                         <TableCell>{light.state.apower} Watt</TableCell>

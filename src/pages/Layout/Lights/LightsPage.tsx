@@ -13,19 +13,21 @@ import { SHADOWSTYLE } from '../../../utils/const/Const';
 const LightsPage = () => {
  // const apiUrl = process.env.LIGHTS_FETCH;
 
-  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+  
 
-  const fetchLights = async () => {
-    try {
-      //trasforma in file .env chiave-valore
-      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
-      const data = await response?.json();
-      setLightsDatasArray(data);
-      //console.log(data);
-    } catch (error) {
-      console.log('failed fetching all the lights', error);
-    }
-  };
+ const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+ const fetchLights = async () => {
+   try {
+     const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+     const data = await response?.json();
+     console.log(response, data)
+     setLightsDatasArray(data.data);
+     console.log(data);
+   } catch (error) {
+     console.log('error fetching lights', error);
+   }
+ };
+
 
   useEffect(() => {
     fetchLights();
@@ -44,8 +46,8 @@ const LightsPage = () => {
 
   const switchOnLightById = async (key: any) => {
     try {
-      const light = lightsDatasArray.find((light) => light?.room === key);
-      console.log(light?.room);
+      const light = lightsDatasArray.find((light) => light?.state.room === key);
+      console.log(light?.state.room);
       if (light) {
         console.log(light)
         const id = light.state.id
@@ -56,7 +58,7 @@ const LightsPage = () => {
           setLightsDatasArray((prevState) =>
           prevState.map((light) =>
           //constrollo che la chiave 'room' sia uguale alla chiave key data in input e in tal caso aggiorno l'output ovvero lo stato (acceso/spento)
-            light?.room === key ? { ...light, state: { ...light.state, output: true } } : light
+            light?.state.room === key ? { ...light, state: { ...light.state, output: true } } : light
           )
         );
         } else {
@@ -70,8 +72,8 @@ const LightsPage = () => {
   const switchOffLightById = async (key: any) => {
     console.log(key)
     try {
-      const light = lightsDatasArray.find((light) => light?.room === key);
-      console.log(light?.room);
+      const light = lightsDatasArray.find((light) => light?.state.room === key);
+      console.log(light?.state.room);
       if (light) {
         console.log(light)
         const id = light.state.id
@@ -80,7 +82,7 @@ const LightsPage = () => {
           await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
           setLightsDatasArray((prevState) =>
           prevState.map((light) =>
-            light?.room === key ? { ...light, state: { ...light.state, output: false } } : light
+            light?.state.room === key ? { ...light, state: { ...light.state, output: false } } : light
           )
         );
         } else {
@@ -96,15 +98,17 @@ const LightsPage = () => {
   const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
 
   return <>
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey' , mx: 'auto', my: '30px', width: '80%', ...SHADOWSTYLE}} >
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey' , mx: 'auto', my: '30px', width: '70%', ...SHADOWSTYLE}} >
       <Typography sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
       <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'center'} sx={{ p: '19px', gap: '32px' }}>
+        {/*{lightsDatasArray?.filter((light) =>*/}
+        
         {sortedLightsDatasArray?.filter((light) =>
-          light.room !== "----" &&
-          light.room !== "Punto luce non attivo"
+          light.state.room !== "----" &&
+          light.state.room !== "Punto luce non attivo"
         ).map((light) => (
-          <Card key={light.room} sx={{cursor:'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '201px', padding: '20px' }}>
+          <Card key={light.state.id} sx={{cursor:'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '201px', padding: '20px' }}>
             {/* <CardMedia
                                 component="img"
                                 height="194"
@@ -112,17 +116,17 @@ const LightsPage = () => {
                                 alt="Paella dish"
                               />*/}
             <CardContent sx={{ mx: 'auto' }}>
-              <Typography sx={{ textAlign: 'center' }}>{light?.room}</Typography>
+              <Typography sx={{ textAlign: 'center' }}>{light.state.room}</Typography>
               <ButtonGroup>
-                <Button onClick={() => switchOnLightById(light.room)} disabled={light.state.output == true} >ON</Button>
-                <Button onClick={() => switchOffLightById(light.room)} disabled={light.state.output == false}>OFF</Button>
+                <Button onClick={() => switchOnLightById(light.state.room)} disabled={light.state.output == true} >ON</Button>
+                <Button onClick={() => switchOffLightById(light.state.room)} disabled={light.state.output == false}>OFF</Button>
               </ButtonGroup>
             </CardContent>
           </Card>
         ))}
       </Box>
     </Box>
-    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '80%' }} style={SHADOWSTYLE}>
+    <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '70%' }} style={SHADOWSTYLE}>
       <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
       <TableLights lightsDatasArray={lightsDatasArray} />
     </Box>

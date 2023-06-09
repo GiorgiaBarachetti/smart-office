@@ -42,19 +42,38 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
 
   const getRoomName = (roomId: number | undefined) => {
     const roomName = lights.find((light) => light.state.id === roomId);
-    return roomName ? roomName.room : '';
+    return roomName ? roomName.state.room : '';
   };
 
+  
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+  const fetchLights = async () => {
+    try {
+      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+      const data = await response?.json();
+      console.log(response, data)
+      setLightsDatasArray(data.data);
+      console.log(data);
+    } catch (error) {
+      console.log('error fetching lights', error);
+    }
+  };
+
   const [lightDatas, setLightDatas] = useState<boolean>(false);
   
   const switchOnLightById = async (key: any) => {
     try {
-      const light = lightsDatasArray.find((light) => light.state.id === key);
+      console.log('orfdscxedsewdsp')
+      const light = lightsDatasArray.find((light) => light.state.id === idRoomModal);
+      console.log(light)
+      console.log(idRoomModal)
+
       if (light) {
+        console.log('oedsp')
         const id = light.state.id;
         if (light.state.output === false) {
           await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
+          console.log(`${baseURL}${urlShelly}/${id}/on`)
           setLightDatas(true);
           setLightsDatasArray((prevState) =>
             prevState.map((light) =>
@@ -70,7 +89,10 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
 
   const switchOffLightById = async (key: any) => {
     try {
+      console.log('oedsp')
       const light = lightsDatasArray.find((light) => light.state.id === key);
+        console.log('oedsp')
+
       if (light) {
         const id = light.state.id;
         if (light.state.output === true) {
@@ -88,47 +110,31 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
     }
   };
 
- // ...
+useEffect(()=>{
+  fetchLights()
+},[])
+
 
 useEffect(() => {
-  const light = lightsDatasArray.find((light) => light?.room === idRoomModal);
+  const light = lightsDatasArray.find((light) => light?.state.room === idRoomModal);
   if (light) {
     setLightDatas(light.state.output ?? false);
   } else {
     setLightDatas(false);
   }
 }, [lightsDatasArray, idRoomModal]);
-/*
+
 useEffect(() => {
-  setLightsDatasArray(lights);
-  const light =  lights.find((light) => light.room === idRoomModal);
-  if (light) {
-    setLightDatas(light.state.output ?? false);
-  } else {
-    setLightDatas(false);
+  if (Array.isArray(lights) && lights.length > 0) {
+    const light = lights.find((light) => light?.state.id === idRoomModal);
+    if (light) {
+      setLightDatas(light.state.output ?? false);
+    } else {
+      setLightDatas(false);
+    }
   }
 }, [lights, idRoomModal]);
 
-*/
-useEffect(() => {
-  const light = lightsDatasArray.find((light) => light?.state.id === idRoomModal);
-  if (light) {
-    setLightDatas(light.state.output ?? false);
-  } else {
-    setLightDatas(false);
-  }
-}, [lightsDatasArray, idRoomModal]);
-/*
-useEffect(() => {
-  setLightsDatasArray(lights);
-  const light = lights.find((light) => light.state.id === idRoomModal);
-  if (light) {
-    setLightDatas(light.state.output ?? false);
-  } else {
-    setLightDatas(false);
-  }
-}, [lights, idRoomModal]);
-*/
   return (
     <Box
     onClick={() => {
