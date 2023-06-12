@@ -11,8 +11,10 @@
     "@mui/material": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "devextreme": "^22.2.6",
     "react": "latest",
     "react-dom": "latest",
+    "react-is": "^18.2.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "latest",
     "typescript": "latest"

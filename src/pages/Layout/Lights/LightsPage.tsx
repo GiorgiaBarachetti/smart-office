@@ -13,22 +13,22 @@ import Laboratory from '../../../img/laboratory.jpg'
 
 
 const LightsPage = () => {
-  // const apiUrl = process.env.LIGHTS_FETCH;
+ // const apiUrl = process.env.LIGHTS_FETCH;
 
+  
 
-
-  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
-  const fetchLights = async () => {
-    try {
-      const response = await fetch(`${baseURL}${urlShelly}/all/status`);
-      const data = await response?.json();
-      console.log(response, data)
-      setLightsDatasArray(data.data);
-      console.log(data);
-    } catch (error) {
-      console.log('error fetching lights', error);
-    }
-  };
+ const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+ const fetchLights = async () => {
+   try {
+     const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+     const data = await response?.json();
+     console.log(response, data)
+     setLightsDatasArray(data.data);
+     console.log(data);
+   } catch (error) {
+     console.log('error fetching lights', error);
+   }
+ };
 
 
   useEffect(() => {
@@ -97,8 +97,8 @@ const LightsPage = () => {
     }
     
   }
-  //const mediaStyles = useCoverCardMediaStyles({ bgPosition: 'top' });
-  const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
+
+  const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
 
   return <>
     <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ p: '20px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '70%', ...SHADOWSTYLE }} >
@@ -106,10 +106,8 @@ const LightsPage = () => {
 
       <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} justifyContent={'center'} sx={{ p: '19px', gap: '32px' }}>
-        {/*
-        {lightsDatasArray?.filter((light) =>
-        */}
-
+        {/*{lightsDatasArray?.filter((light) =>*/}
+        
         {sortedLightsDatasArray?.filter((light) =>
           light.room !== "----" &&
           light.room !== "Punto luce non attivo"
