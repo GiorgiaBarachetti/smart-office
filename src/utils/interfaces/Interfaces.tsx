@@ -1,5 +1,6 @@
 export interface Lights {
-    state: {
+  room?: string;
+  state: {
       id: number;
       output?: boolean;
       apower?: number;
@@ -14,7 +15,6 @@ export interface Lights {
         tC?: number;
         tF?: number;
       };
-      room?: string;
     }  
 }
 

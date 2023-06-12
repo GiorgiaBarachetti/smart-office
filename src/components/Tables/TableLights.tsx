@@ -8,7 +8,7 @@ interface Props {
 
 const TableLights = ({lightsDatasArray}: Props) => {
     //sum of current consumption 
-    const totalApower = lightsDatasArray.length ? lightsDatasArray.reduce(
+    const totalApower = lightsDatasArray != undefined ? lightsDatasArray.reduce(
         //on= somma actual
         //light= somma da aggiungere
         (currentValueSum, light) => currentValueSum + (light.state.apower  || 0),
@@ -16,11 +16,11 @@ const TableLights = ({lightsDatasArray}: Props) => {
          0) : 0;
    
     //sum of hour consumption 
-    const totalAenergy = lightsDatasArray.length ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0): 0;
+    const totalAenergy = lightsDatasArray != undefined ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0): 0;
     //total count of room with light on
-    const totalLightsOn = lightsDatasArray.length ? lightsDatasArray.filter((light) => light.state.output).length : 0;
+    const totalLightsOn = lightsDatasArray != undefined ? lightsDatasArray.filter((light) => light.state.output).length : 0;
     //ordinamento per id ascendente
-    const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
+    const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
   return (
     <TableContainer sx={{borderRadius:'6px', mx:'auto', my: '30px', width: '95%', ...SHADOWSTYLE, ...TABLECOLOR}}>
     <Table size="small">
@@ -46,7 +46,7 @@ const TableLights = ({lightsDatasArray}: Props) => {
                 .map((light)=>(
                     <TableRow key={light.state.id}>
                         <TableCell>{light.state.id}</TableCell>
-                        <TableCell>{light.state.room}</TableCell>
+                        <TableCell>{light.room}</TableCell>
                         {/*if light is on color:green else if is off color red */}
                         <TableCell style={{ color: light.state.output ? 'green' : 'red' }}>{light.state.output ? 'ON' : 'OFF'}</TableCell>
                         <TableCell>{light.state.apower} Watt</TableCell>

@@ -21,7 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { LinearProgress } from '@mui/material';
+import { ClickAwayListener, LinearProgress } from '@mui/material';
+import Timer from '../Timer/Timer';
 
 
 const drawerWidth = '240px';
@@ -56,12 +57,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft() {
+interface Props {
+
+}
+
+const PersistentDrawerLeft = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
 
   const [pageName, setPageName] = useState('')
-  const handleClick = (path: string, name:string) => {
+  const handleClick = (path: string, name: string) => {
     setIsLoading(true)
     if (path === '/rooms') {
       handleDropdownToggle(); // Open the dropdown menu
@@ -90,133 +95,150 @@ export default function PersistentDrawerLeft() {
     setSelectedMenuItem(selectedMenuItem === '/rooms' ? null : '/rooms');
   };
 
+  const now = new Date();
+  const handleClickAway = () => {
+    setOpen(false);
+  };
 
+  //onClick={()=>handleDrawerClose()}
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar sx={{backgroundColor:'#009ee3', overflow: 'hidden', position: 'fixed', top: 0 }} open={open}>
-        <Toolbar>
-          {/*HAMBURGER ICON */}
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div"> {pageName}</Typography>
-          <LinearProgress />
-        </Toolbar>
-      </AppBar>
+    <ClickAwayListener
+      mouseEvent="onMouseDown"
+      touchEvent="onTouchStart"
+      onClickAway={handleClickAway}>
 
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+      <Box component='div' >
+        <CssBaseline />
+        <AppBar sx={{ backgroundColor: '#009ee3', overflow: 'hidden', position: 'fixed', top: 0 }} open={open}>
+          <Toolbar>
+            {/*HAMBURGER ICON */}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Box component='div' display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+              <Typography variant="h6" noWrap component="div"> {pageName}</Typography>
+              <Timer />
+            </Box>
+
+            <LinearProgress />
+          </Toolbar>
+        </AppBar>
+
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
 
-        <Divider />
+          <Divider />
 
-        <Box component='nav'>
-          <List sx={{paddingTop:'0'}}>
-            {SIDEBAR?.filter((elem) =>
-              elem.href !== PATH.main &&
-              elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
-              elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
-              elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
-              elem.href !== PATHDROPDOWNROOMS.laboratory &&
-              elem.href !== PATHDROPDOWNROOMS.kitchen &&
-              elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
-              elem.href !== PATHDROPDOWNROOMS.entrance &&
-              elem.href !== PATHDROPDOWNROOMS.openSpace
-            )
-              .map((elem) => {
-                if (elem.href === '/rooms') {
-                  return (
-                    <List key={elem.href} sx={{paddingTop:'0', paddingBottom:'0'}}>
-                      <ListItem disablePadding onClick={handleDropdownToggle}>
+          <Box component='nav'>
+            <List sx={{ paddingTop: '0' }}>
+              {SIDEBAR?.filter((elem) =>
+                elem.href !== PATH.main &&
+                elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
+                elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
+                elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
+                elem.href !== PATHDROPDOWNROOMS.laboratory &&
+                elem.href !== PATHDROPDOWNROOMS.kitchen &&
+                elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
+                elem.href !== PATHDROPDOWNROOMS.entrance &&
+                elem.href !== PATHDROPDOWNROOMS.openSpace
+              )
+                .map((elem) => {
+                  if (elem.href === '/rooms') {
+                    return (
+                      <List key={elem.href} sx={{ paddingTop: '0', paddingBottom: '0' }}>
+                        <ListItem disablePadding onClick={handleDropdownToggle}>
+                          <ListItemButton>
+                            <ListItemText sx={{ paddingLeft: '10px' }}>ROOMS</ListItemText>
+                            {dropdownOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                        </ListItem>
+                        <List
+                          component="div"
+                          disablePadding
+                          style={{ display: dropdownOpen ? 'block' : 'none' }}
+                        >
+                          {Object.entries(PATHDROPDOWNROOMS).map(([roomName, roomPath]) => (
+                            <ListItem
+                              key={roomPath}
+                              onClick={() => handleClick(roomPath, roomName)}
+                              disablePadding
+                              sx={{ pl: 4 }}
+                              selected={selectedMenuItem === roomPath}
+                            >
+                              <ListItemButton>
+                                <ListItemText>{SIDEBAR.find((elem) => elem.href === roomPath)?.name}</ListItemText>
+                              </ListItemButton>
+                            </ListItem>
+                          ))}
+                        </List>
+
+                      </List>
+                    );
+                  } else {
+                    return (
+                      <ListItem
+                        key={elem.href}
+                        onClick={() => handleClick(elem.href, elem.name)}
+                        disablePadding
+                      >
                         <ListItemButton>
-                          <ListItemText sx={{paddingLeft:'10px'}}>ROOMS</ListItemText>
-                          {dropdownOpen ? <ExpandLess /> : <ExpandMore />}
+                          <ListItemText>{elem.name}</ListItemText>
                         </ListItemButton>
                       </ListItem>
-                      <List
-                        component="div"
-                        disablePadding
-                        style={{ display: dropdownOpen ? 'block' : 'none' }}
-                      >
-                        {Object.entries(PATHDROPDOWNROOMS).map(([roomName, roomPath]) => (
-                          <ListItem
-                            key={roomPath}
-                            onClick={() => handleClick(roomPath, roomName)}
-                            disablePadding
-                            sx={{ pl: 4 }}
-                            selected={selectedMenuItem === roomPath}
-                          >
-                            <ListItemButton>
-                              <ListItemText>{SIDEBAR.find((elem) => elem.href === roomPath)?.name}</ListItemText>
-                            </ListItemButton>
-                          </ListItem>
-                        ))}
-                      </List>
+                    );
+                  }
+                })}
+            </List>
+          </Box>
 
-                    </List>
-                  );
-                } else {
-                  return (
-                    <ListItem
-                      key={elem.href}
-                      onClick={() => handleClick(elem.href, elem.name)}
-                      disablePadding
-                    >
-                      <ListItemButton>
-                        <ListItemText>{elem.name}</ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                }
-              })}
-          </List>
-        </Box>
+          <Divider />
 
-        <Divider />
+          <Box component='nav'>
+            <List>
+              {SIDEBAR?.filter((elem) =>
+                elem.href == '/'
+              )
+                .map((elem) => (
 
-        <Box component='nav'>
-          <List>
-            {SIDEBAR?.filter((elem) =>
-              elem.href == '/'
-            )
-              .map((elem) => (
-
-                <ListItem
-                  key={elem.href}
-                  onClick={() => handleClick(elem.href, elem.name)}
-                  disablePadding>
-                  <ListItemButton>
-                    <ListItemText>RETURN TO {elem.name} PAGE</ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              ))}
-          </List>
+                  <ListItem
+                    key={elem.href}
+                    onClick={() => handleClick(elem.href, elem.name)}
+                    disablePadding>
+                    <ListItemButton>
+                      <ListItemText>RETURN TO {elem.name} PAGE</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+            </List>
 
 
-        </Box>
-      </Drawer>
-    </Box>
+          </Box>
+        </Drawer>
+      </Box>
+    </ClickAwayListener>
   );
 }
+export default PersistentDrawerLeft

@@ -25,7 +25,7 @@ const TableCoffee = ({ coffee }: Props) => {
             <TableRow key={c.coffes.id}>
               <TableCell>{c.data?.totalCoffeeToday > 1 ? `${c.data?.totalCoffeeToday} coffees` : `${c.data?.totalCoffeeToday} coffee`}</TableCell>
               <TableCell>{c.data?.count1 >= 1 ? `${c.data?.count1} coffees` : `${c.data?.count1} coffee`}</TableCell>
-              <TableCell>{c.data?.count2 >= 1 ? `${c.data?.count2} coffees` : `${c.data?.count2} coffee`}</TableCell>
+              <TableCell>{c.data?.count2 >= 1 ? `${c.data?.count2} double coffees` : `${c.data?.count2} double coffee`}</TableCell>
             </TableRow>
           ))}
 

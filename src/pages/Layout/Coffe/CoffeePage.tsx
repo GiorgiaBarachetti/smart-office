@@ -74,7 +74,6 @@ const CoffeePage = () => {
       <Box>
         <Typography
           sx={{
-            bgcolor: 'black',
             bgsize: 'auto',
             fontWeight: 'bold',
             textAlign: 'center',
@@ -83,10 +82,7 @@ const CoffeePage = () => {
             mx: 'auto',
             mt: '60px',
             mb: '40px',
-            color:'white',
             fontSize: '20px',
-            borderRadius:'7px',
-            ...SHADOWSTYLE
           }}
         >
           SELECT THE QUANTITY OF COFFEE
