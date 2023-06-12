@@ -6,8 +6,7 @@ import TableRooms from '../../../../components/Tables/TableRooms';
 import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 
 const AndreaOffice = () => {
-
-
+  const id = 0;
 
   return (
     <Box component="div">
@@ -16,7 +15,7 @@ const AndreaOffice = () => {
       </Box>
 
       <Box component="div"></Box>
-    <TableRooms />
+    <TableRooms idRoom={id}/>
     </Box>
   )
 }

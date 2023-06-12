@@ -42,7 +42,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
 
   const getRoomName = (roomId: number | undefined) => {
     const roomName = lights.find((light) => light.state.id === roomId);
-    return roomName ? roomName.state.room : '';
+    return roomName ? roomName.room : '';
   };
 
   
@@ -116,7 +116,7 @@ useEffect(()=>{
 
 
 useEffect(() => {
-  const light = lightsDatasArray.find((light) => light?.state.room === idRoomModal);
+  const light = lightsDatasArray.find((light) => light?.room === idRoomModal);
   if (light) {
     setLightDatas(light.state.output ?? false);
   } else {

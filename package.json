@@ -3,6 +3,8 @@
   "version": "5.0.0",
   "private": true,
   "dependencies": {
+    "@devexpress/dx-react-chart": "^4.0.4",
+    "@devexpress/dx-react-chart-material-ui": "^4.0.4",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "^5.11.16",
