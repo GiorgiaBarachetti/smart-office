@@ -30,7 +30,7 @@ const TableRooms = ({ idRoom }: Props) => {
     fetchRoom();
   }, [idRoom]);
   return (
-    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '95%', ...SHADOWSTYLE, ...TABLECOLOR }}>
+    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '70%', ...SHADOWSTYLE, ...TABLECOLOR }}>
       <Table size="small">
         <TableHead>
           <TableRow>
