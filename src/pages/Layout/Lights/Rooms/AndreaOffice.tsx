@@ -1,22 +1,22 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
-import { Lights } from '../../../../utils/interfaces/Interfaces';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import TableRooms from '../../../../components/Tables/TableRooms';
-import { baseURL, urlShelly } from '../../../../utils/fetch/api';
+import background from '../../../../img/stanzePages/andrea.jpg'
+import { SHADOWSTYLE } from '../../../../utils/const/Const';
+import ChartPage2 from '../../../../components/Chart/ChartPage';
 
 const AndreaOffice = () => {
   const id = 0;
 
   return (
-    <Box component="div">
-       <Box component="div">
-        <Typography>xxxxxxxxxxxxx</Typography>
+    <div style={{backgroundImage: `url(${background})`,  backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop:'-27px'}} >
+      <Box paddingTop={'30px'} paddingBottom={'10px'}>
+        <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: '90%', heigth: '40%' }} style={SHADOWSTYLE}>
+          <TableRooms idRoom={id} />
+          <ChartPage2 />
+        </Box>
       </Box>
-
-      <Box component="div"></Box>
-    <TableRooms idRoom={id}/>
-    </Box>
+    </div>
   )
 }
 
