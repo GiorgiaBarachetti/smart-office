@@ -4,7 +4,6 @@ import coffee from '../../../img/Immagine_2023-06-05_090757-removebg-preview.png
 import doubleCoffee from '../../../img/Immagine_2023-06-01_175307-removebg-preview.png';
 import background from '../../../img/CoffeeBeans.jpg';
 import { Coffee } from '../../../utils/interfaces/Interfaces';
-import TableCoffee from './TableCoffee';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
 import { SHADOWSTYLE } from '../../../utils/const/Const';
 

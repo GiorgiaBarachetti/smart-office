@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -17,8 +16,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { SIDEBAR, PATHDROPDOWNROOMS, PATH } from '../../utils/routes/path';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { ClickAwayListener, LinearProgress } from '@mui/material';
@@ -57,15 +56,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-interface Props {
 
-}
-
-const PersistentDrawerLeft = () => {
+const PersistentDrawerLeft = (props: {location?: any}) => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
-
+  const location = useLocation();
   const [pageName, setPageName] = useState('')
+
   const handleClick = (path: string, name: string) => {
     setIsLoading(true)
     if (path === '/rooms') {
@@ -99,6 +96,12 @@ const PersistentDrawerLeft = () => {
   const handleClickAway = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    //get path neame
+    console.log(location)
+    handleClick(location.pathname, SIDEBAR.find((o: {name: string, href: string}) => o.href===location.pathname )?.name || "")
+}, []);
 
   //onClick={()=>handleDrawerClose()}
   return (

@@ -5,54 +5,8 @@ import Card from '@mui/material/Card';
 import { Lights } from '../../../utils/interfaces/Interfaces';
 import { useState, useEffect } from 'react'
 import { baseURL, urlShelly } from '../../../utils/fetch/api';
-import { SHADOWSTYLE } from '../../../utils/const/Const';
+import { ROOMPHOTOS, SHADOWSTYLE } from '../../../utils/const/Const';
 import CircleIcon from '@mui/icons-material/Circle';
-import Andrea from '../../../img/stanzeCard/andrea.jpg'
-import Meeting from '../../../img/stanzeCard/meeting.jpg'
-import Flavio from '../../../img/stanzeCard/flavio.jpg'
-import Laboratory from '../../../img/stanzeCard/laboratory.jpg'
-import Kitchen from '../../../img/stanzeCard/kitchen.jpg'
-import Entrance from '../../../img/stanzeCard/entrance.jpg'
-import Breaktime from '../../../img/stanzeCard/breaktime.jpg'
-//import Openspace from '../../../img/openspace.jpg'
-
-const ROOMPHOTOS = [
-  {
-    id: 0,
-    src: Andrea
-  },
-  {
-    id: 1,
-    src: Meeting
-  },
-  {
-    id: 2,
-    src: Flavio
-  },
-  {
-    id: 3,
-    src: Laboratory
-  },
-  {
-    id: 4,
-    src: Kitchen
-  },
-  {
-    id: 6,
-    src: Breaktime
-  },
-  {
-    id: 5,
-    src: Entrance
-  },
-  /*
-  {
-    id: 7,
-    src: OpenSpace
-  },
-  */
-
-]
 
 const LightsPage = () => {
 
@@ -76,7 +30,7 @@ const LightsPage = () => {
 
 
   useEffect(() => {
-    fetchLights();
+    setTimeout(() => fetchLights(), 1000);
   }, [refreshDatas]);
 
 
@@ -128,14 +82,7 @@ const LightsPage = () => {
         if (light.state.output === true) {
           console.log(light.state.output);
           await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
-          /*
-          setLightsDatasArray((prevState) =>
-            prevState.map((light) =>
-              light?.room === key ? { ...light, state: { ...light.state, output: false } } : light
-            )
-          );*/
           setRefreshDatas((prevState) => !prevState);
-
         } else {
         }
 
@@ -157,8 +104,9 @@ const LightsPage = () => {
     // Return a default image source if the id doesn't match any room photo
     return undefined;
   };
-
-
+  
+  
+  //{isLoading ? <LinearProgress /> : <></>}
   return <>
     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }} >
       <Typography sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
@@ -166,17 +114,17 @@ const LightsPage = () => {
       <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS
       </Button>
       {isLoading && (
-                      <CircularProgress
-                        size={24}
-                        sx={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          marginTop: '-12px',
-                          marginLeft: '-12px',
-                        }}
-                      />
-                    )}
+        <CircularProgress
+          size={24}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-12px',
+            marginLeft: '-12px',
+          }}
+        />
+      )}
 
       {isLoading ? <LinearProgress /> : (
         <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
@@ -204,7 +152,6 @@ const LightsPage = () => {
                       <CircularProgress
                         size={24}
                         sx={{
-
                           position: 'absolute',
                           top: '50%',
                           left: '50%',
@@ -217,7 +164,6 @@ const LightsPage = () => {
                   </ButtonGroup>
                   <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
                 </CardContent>
-                {isLoading ? <LinearProgress /> : <></>}
               </CardActionArea>
             </Card>
           ))}
@@ -225,15 +171,10 @@ const LightsPage = () => {
       )}
     </Box>
 
-    <Box component='div' sx={{ display: 'flex', flexDirection: 'row', gap: '10px', bgcolor: 'lightgrey', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '70%' }} style={SHADOWSTYLE}>
+    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: 'lightgrey', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
         <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
         <TableLights lightsDatasArray={lightsDatasArray} />
       </Box>
-
-      <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'lightgrey', mx: 'auto', my: '30px', width: '70%' }} style={SHADOWSTYLE}>
-      </Box>
-    </Box>
   </>
 }
 
