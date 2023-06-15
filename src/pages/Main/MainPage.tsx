@@ -163,7 +163,7 @@ const MainPage = () => {
 
   const [boltStyle, setBoltStyle] = useState({
     color: "rgba(113,200, 46)",
-    //stroke: "rgba(25, 104, 34,1)"
+    stroke: "rgba(25, 104, 34,1)"
   })
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
@@ -268,7 +268,7 @@ const MainPage = () => {
         <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
         <image href={planimetry} width={'100%'}></image>
 
-        {lightsDatasArray.length ? (
+        {lightsDatasArray != undefined ? (
           lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
@@ -299,11 +299,11 @@ const MainPage = () => {
 
         {coffeeDatas.length ? (
           coffeeDatas.map((coffee) => (
-            <g key={coffee.coffes.id} style={{cursor:'pointer'}} >
-            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={coffeeStyle} />
+            <g key={coffee.coffes.id} style={{...coffeeStyle, cursor:'pointer'}} >
+            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={} />
             <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-            <text x={360} y={380} fill="black" fontSize="15px">
-            <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : ''} W`}</tspan>
+            <text x={360} y={380} fontSize="15px">
+            <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
             </text>
             {/* 
             <text x={350} y={360} fill="black" fontSize="15px">
@@ -320,7 +320,7 @@ const MainPage = () => {
         {energyDatas.length ? (
           energyDatas.map((energy) => (
             <g key={energy.id} style={{...boltStyle, cursor:'pointer'}}>
-              <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} style={boltStyle} />
+              <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} />
               <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={670} y={425} fill="black" fontSize="15px">
               <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
@@ -334,8 +334,8 @@ const MainPage = () => {
         
         {printerDatas.length ? (
           printerDatas.map((printer) => (
-            <g key={printer.tplinkStampante.id} style={{cursor:'pointer'}}>
-            <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} style={printerStyle} />
+            <g key={printer.tplinkStampante.id} style={{...printerStyle, cursor:'pointer'}}>
+            <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
               <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={1050} y={435} fill="black" fontSize="15px">
                 <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
@@ -349,7 +349,7 @@ const MainPage = () => {
       </svg>
        )}
        
-       <ModalLights open={openModalLight} handleClose={()=>closeModalLight()} idRoomModal={idRoomModal}lights={lightsDatasArray} />
+      <ModalLights open={openModalLight} handleClose={()=>closeModalLight()} idRoomModal={idRoomModal}lights={lightsDatasArray} />
       <ModalCoffee open={openModalCoffee} handleClose={()=>closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
       <ModalEnergy open={openModalEnergy} handleClose={()=>closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
       <ModalPrinter open={openModalPrinter} handleClose={()=>closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
