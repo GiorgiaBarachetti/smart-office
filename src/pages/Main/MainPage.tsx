@@ -300,8 +300,8 @@ const MainPage = () => {
         {coffeeDatas.length ? (
           coffeeDatas.map((coffee) => (
             <g key={coffee.coffes.id} style={{...coffeeStyle, cursor:'pointer'}} >
-            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} style={} />
-            <rect x={350} y={360} width="125px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
+            <rect x={345} y={350} width="120px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
             <text x={360} y={380} fontSize="15px">
             <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
             </text>
@@ -336,7 +336,7 @@ const MainPage = () => {
           printerDatas.map((printer) => (
             <g key={printer.tplinkStampante.id} style={{...printerStyle, cursor:'pointer'}}>
             <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-              <rect x={1040} y={410} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+              <rect x={1040} y={410} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
               <text x={1050} y={435} fill="black" fontSize="15px">
                 <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
