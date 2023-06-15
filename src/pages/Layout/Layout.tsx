@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
-    <Box display={'flex'} flexDirection={'column'}>
+    <Box component='div' display={'flex'} flexDirection={'column'}>
       <Sidebar />
       <Box component='div' sx={{mt:'60px'}}>
         {/* allows the routes to render their element content out */}

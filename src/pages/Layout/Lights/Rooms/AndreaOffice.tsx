@@ -11,7 +11,7 @@ const AndreaOffice = () => {
   const isXsScreen = useMediaQuery('(min-width:770px)');
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
-      <Box paddingTop={'30px'} paddingBottom={'10px'}>
+      <Box component='div' paddingTop={'30px'} paddingBottom={'10px'}>
         <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: '90%', heigth: '40%', ...SHADOWSTYLE }}>
 
           {isXsScreen ? (
