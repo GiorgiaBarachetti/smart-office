@@ -196,7 +196,7 @@ const CoffeePage = () => {
           <Box component="div">
             <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
               <Typography
-                variant="h5"
+                variant="h6"
                 sx={{
                   bgsize: 'auto',
                   textAlign: 'center',
@@ -234,7 +234,7 @@ const CoffeePage = () => {
 
             <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
               <Box component='div' padding={'10px'} marginTop={'10px'}>
-              <Typography variant="h5" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
+              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
 
               <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
 
@@ -264,7 +264,7 @@ const CoffeePage = () => {
 
           <Box component="div" sx={{ pt: '10px' }}>
             <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', py: '2px', }}>
-              <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
+              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
               <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                 {coffeeData?.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
