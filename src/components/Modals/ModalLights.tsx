@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
 import { ButtonGroup } from '@mui/material';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
+import { MODALSTYLE } from '../../utils/const/Const';
 
 interface Props {
   open: boolean;
@@ -15,22 +16,6 @@ interface Props {
   lights: Lights[];
   idRoomModal: number | undefined;
 }
-
-const style = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '10px',
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 350,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 5,
-};
 
 const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
   
@@ -41,7 +26,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
   };
 
   const getRoomName = (roomId: number | undefined) => {
-    const roomName = lights.find((light) => light.state.id === roomId);
+    const roomName = lights != undefined ? (lights.find((light) => light.state.id === roomId)):('');
     return roomName ? roomName.room : '';
   };
 
@@ -64,7 +49,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
   const switchOnLightById = async (key: any) => {
     try {
       console.log('orfdscxedsewdsp')
-      const light = lightsDatasArray.find((light) => light.state.id === idRoomModal);
+      const light = lightsDatasArray!= undefined ? (lightsDatasArray.find((light) => light.state.id === idRoomModal)):'';
       console.log(light)
       console.log(idRoomModal)
 
@@ -90,7 +75,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal }: Props) => {
   const switchOffLightById = async (key: any) => {
     try {
       console.log('oedsp')
-      const light = lightsDatasArray.find((light) => light.state.id === key);
+      const light = lightsDatasArray != undefined ? (lightsDatasArray.find((light) => light.state.id === key)):'';
         console.log('oedsp')
 
       if (light) {
@@ -116,7 +101,7 @@ useEffect(()=>{
 
 
 useEffect(() => {
-  const light = lightsDatasArray.find((light) => light?.room === idRoomModal);
+  const light = lightsDatasArray != undefined ? (lightsDatasArray.find((light) => light?.room === idRoomModal)):'';
   if (light) {
     setLightDatas(light.state.output ?? false);
   } else {
@@ -126,7 +111,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (Array.isArray(lights) && lights.length > 0) {
-    const light = lights.find((light) => light?.state.id === idRoomModal);
+    const light = lights != undefined ? (lights.find((light) => light?.state.id === idRoomModal)):'';
     if (light) {
       setLightDatas(light.state.output ?? false);
     } else {
@@ -142,7 +127,7 @@ useEffect(() => {
       handleClose();}}>
 
     <Modal open={open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <Box sx={style}>
+      <Box sx={MODALSTYLE}>
         {idRoomModal !== undefined && (
           <Typography variant="h6" component="h1">
             Lights of {getRoomName(idRoomModal)}, id: {idRoomModal}

@@ -58,20 +58,17 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 const PersistentDrawerLeft = (props: {location?: any}) => {
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
   const location = useLocation();
   const [pageName, setPageName] = useState('')
 
   const handleClick = (path: string, name: string) => {
-    setIsLoading(true)
     if (path === '/rooms') {
       handleDropdownToggle(); // Open the dropdown menu
     } else {
       setPageName(name)
       navigate(path);
     }
-    setIsLoading(false)
   }
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -98,12 +95,11 @@ const PersistentDrawerLeft = (props: {location?: any}) => {
   };
 
   useEffect(() => {
-    //get path neame
+    //get path name
     console.log(location)
     handleClick(location.pathname, SIDEBAR.find((o: {name: string, href: string}) => o.href===location.pathname )?.name || "")
 }, []);
 
-  //onClick={()=>handleDrawerClose()}
   return (
     <ClickAwayListener
       mouseEvent="onMouseDown"
@@ -126,11 +122,10 @@ const PersistentDrawerLeft = (props: {location?: any}) => {
             </IconButton>
 
             <Box component='div' display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <Typography variant="h6" noWrap component="div"> {pageName}</Typography>
+              <Typography variant="h6" noWrap component="div">{pageName}</Typography>
               <Timer />
             </Box>
-
-            <LinearProgress />
+            
           </Toolbar>
         </AppBar>
 

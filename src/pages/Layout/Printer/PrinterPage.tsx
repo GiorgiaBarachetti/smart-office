@@ -4,6 +4,7 @@ import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
 import { BOXSTYLE, SHADOWSTYLE } from '../../../utils/const/Const';
+import background from '../../../img/stampante.avif'
 
 const PrinterPage = () => {
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
@@ -56,32 +57,38 @@ const PrinterPage = () => {
   }, []);
 
   return (
-    <div>
-      <Box component='div'
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: '20px',
-          borderRadius: '6px',
-          bgcolor: 'lightgrey',
-          mx: 'auto',
-          my: '30px',
-          width: {xs: '80%',sm: '40%', md: '70%'},
-          ...SHADOWSTYLE
-        }}
-      >
-        <Typography>SWITCH THE PRINTER STATUS</Typography>
-        <ButtonGroup>
-          <Button onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
-          <Button onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
-        </ButtonGroup>
-      </Box>
+    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
+      <Box paddingTop={'30px'} paddingBottom={'200px'} >
+      <Box component='div' sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: {xs: '90%',sm: '90%', md: '70%'}, heigth: '40%' }} style={SHADOWSTYLE}>
 
-      <Box component='div' sx={BOXSTYLE}>
-      <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
-        <TablePrinter printer={printerDatas} />
+          <Box component='div'
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: '20px',
+              borderRadius: '6px',
+              bgcolor: 'white',
+              mx: 'auto',
+              my: '30px',
+              width: { xs: '80%', sm: '40%', md: '30%' },
+              textAlign:'center',
+              ...SHADOWSTYLE
+            }}
+          >
+            <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
+            <ButtonGroup>
+              <Button onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
+              <Button onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
+            </ButtonGroup>
+          </Box>
+
+          <Box component='div' mt={'50px'} >
+            <Typography variant='h6' sx={{ mt: '20px', textAlign: 'center' }}>CONSUMES</Typography>
+            <TablePrinter printer={printerDatas} />
+          </Box>
+        </Box>
       </Box>
     </div>
   );

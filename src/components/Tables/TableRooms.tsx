@@ -27,10 +27,10 @@ const TableRooms = ({ idRoom }: Props) => {
     console.log(room);
   };
   useEffect(() => {
-    fetchRoom();
+    setTimeout(() => fetchRoom(), 1000);
   }, [idRoom]);
   return (
-    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '70%', ...SHADOWSTYLE, ...TABLECOLOR }}>
+    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '100%', ...SHADOWSTYLE, ...TABLECOLOR }}>
       <Table size="small">
         <TableHead>
           <TableRow>

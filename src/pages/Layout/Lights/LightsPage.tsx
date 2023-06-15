@@ -10,19 +10,20 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 const LightsPage = () => {
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
 
   const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+  
   const fetchLights = async () => {
     try {
-      setIsLoading(true)
+      setIsLoadingPage(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       console.log(response, data)
       setLightsDatasArray(data.data);
-      console.log(data);
-      setIsLoading(false)
+      setIsLoadingPage(false)
     } catch (error) {
       console.log('error fetching lights', error);
     }
@@ -44,25 +45,13 @@ const LightsPage = () => {
     }
   }
 
-  const switchOnLightById = async (key: any) => {
+  const switchOnLightById = async (key: number) => {
     try {
       setIsLoading(true)
-      const light = lightsDatasArray.find((light) => light?.room === key);
-      console.log(light?.room);
+      const light = lightsDatasArray.find((light) => light?.state.id === key);
       if (light) {
-        console.log(light)
-        const id = light.state.id
         if (light.state.output === false) {
-          console.log(light.state.output);
-          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
-          //aggiorno lo stato delle luci settandolo nel setLlightsDatasArray
-          /*
-          setLightsDatasArray((prevState) =>
-            prevState.map((light) =>
-              //constrollo che la chiave 'room' sia uguale alla chiave key data in input e in tal caso aggiorno l'output ovvero lo stato (acceso/spento)
-              light?.room === key ? { ...light, state: { ...light.state, output: true } } : light
-            )
-          );*/
+          await fetch(`${baseURL}${urlShelly}/${light.state.id}/on`, { method: 'POST' });
           setRefreshDatas((prevState) => !prevState);
         }
       }
@@ -71,30 +60,28 @@ const LightsPage = () => {
       console.log(`Error switching the light of the room:`, error);
     }
   }
-  const switchOffLightById = async (key: any) => {
-    console.log(key)
+  
+  const switchOffLightById = async (key: number) => {
     try {
-      const light = lightsDatasArray.find((light) => light?.room === key);
-      console.log(light?.room);
+      setIsLoading(true)
+      const light = lightsDatasArray.find((light) => light?.state.id === key);
       if (light) {
-        console.log(light)
-        const id = light.state.id
         if (light.state.output === true) {
           console.log(light.state.output);
-          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
+          await fetch(`${baseURL}${urlShelly}/${light.state.id}/off`, { method: 'POST' });
           setRefreshDatas((prevState) => !prevState);
         } else {
         }
-
       }
-      //switchAllOffLightDatas();
+      setIsLoading(false)
     } catch (error) {
       console.log(`Error switching the light of the room:`, error);
     }
 
   }
 
-  const sortedLightsDatasArray = lightsDatasArray.length ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
+  
+  const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
 
   const getRoomPhotoById = (id: number) => {
     const roomPhoto = ROOMPHOTOS.find((photo) => photo.id === id);
@@ -109,10 +96,9 @@ const LightsPage = () => {
   //{isLoading ? <LinearProgress /> : <></>}
   return <>
     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }} >
-      <Typography sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
+      <Typography variant='h6' sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
 
-      <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS
-      </Button>
+      <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       {isLoading && (
         <CircularProgress
           size={24}
@@ -126,7 +112,7 @@ const LightsPage = () => {
         />
       )}
 
-      {isLoading ? <LinearProgress /> : (
+      {isLoadingPage ? <LinearProgress /> : (
         <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
 
           {sortedLightsDatasArray?.filter((light) =>
@@ -147,7 +133,7 @@ const LightsPage = () => {
                 <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
                   <ButtonGroup sx={{ alignSelf: 'center' }}>
-                    <Button onClick={() => switchOnLightById(light.room)} disabled={light.state.output == true} >ON</Button>
+                    <Button onClick={() => switchOnLightById(light.state.id)} disabled={light.state.output == true} >ON</Button>
                     {isLoading && (
                       <CircularProgress
                         size={24}
@@ -160,7 +146,7 @@ const LightsPage = () => {
                         }}
                       />
                     )}
-                    <Button onClick={() => switchOffLightById(light.room)} disabled={light.state.output == false}>OFF</Button>
+                    <Button onClick={() => switchOffLightById(light.state.id)} disabled={light.state.output == false}>OFF</Button>
                   </ButtonGroup>
                   <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
                 </CardContent>
@@ -171,8 +157,8 @@ const LightsPage = () => {
       )}
     </Box>
 
-    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: 'lightgrey', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
-        <Typography sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
+    <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: '#d3d3d382', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
+        <Typography variant='h6'  sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
         <TableLights lightsDatasArray={lightsDatasArray} />
       </Box>
   </>

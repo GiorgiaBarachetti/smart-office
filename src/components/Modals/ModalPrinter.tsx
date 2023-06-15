@@ -8,29 +8,13 @@ import { PATH } from '../../utils/routes/path';
 import { ButtonGroup } from '@mui/material';
 import { Printer } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlTplink } from '../../utils/fetch/api';
+import { MODALSTYLE } from '../../utils/const/Const';
 
 interface Props {
   open: boolean;
   handleClose: () => void;
   idPrinter: number | undefined;
 }
-
-const style = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '10px',
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 350,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 5,
-};
 
 const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
   const navigate = useNavigate();
@@ -71,7 +55,7 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={MODALSTYLE}>
           <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : ''}</Typography>
           <ButtonGroup>
             <Button onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>

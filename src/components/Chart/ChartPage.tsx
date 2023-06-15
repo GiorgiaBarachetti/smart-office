@@ -4,7 +4,10 @@ import Paper from '@mui/material/Paper';
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 
-const SecondChart = () => {
+interface Props{
+    id: number
+}
+const ChartPage = ({id}:Props) => {
     interface ChartData {
         time: string;
         watt: number;
@@ -45,7 +48,7 @@ const SecondChart = () => {
                 default:
                     break;
             }
-            const response = await fetch(`http://192.168.1.6:3000/api/shelly/0/data?start=${startDate}T00:00:00&end=${endDate}`);
+            const response = await fetch(`http://192.168.1.6:3000/api/shelly/${id}/data?start=${startDate}T00:00:00&end=${endDate}`);
             const data = await response.json();
             setLightsDatasArray(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
@@ -82,7 +85,7 @@ const SecondChart = () => {
 
 
     return (
-        <Box sx={{ padding: '20px', ...SHADOWSTYLE }}>
+        <Box sx={{ padding: '20px', }}>
             <Paper>
                 <Box sx={{ display: 'flex',flexDirection:'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a range of data</Typography>
@@ -125,4 +128,4 @@ const SecondChart = () => {
     );
 };
 
-export default SecondChart;
+export default ChartPage;

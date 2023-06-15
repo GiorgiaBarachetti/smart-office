@@ -8,7 +8,7 @@ interface Props{
 }
 
 const TablePrinter = ({printer}:Props) => {
-  return <TableContainer sx={{borderRadius:'6px', bgcolor: 'lightpink', mx:'auto', my: '30px', width: '85%', ...SHADOWSTYLE, ...TABLECOLOR}}>
+  return <TableContainer sx={{borderRadius:'6px', bgcolor: 'white', mx:'auto', my: '30px', width: '85%', ...SHADOWSTYLE}}>
   <Table size="small">
       <TableHead>
           <TableRow>

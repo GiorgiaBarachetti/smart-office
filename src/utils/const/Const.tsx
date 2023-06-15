@@ -29,7 +29,7 @@ import Laboratory from '../../img/stanzeCard/laboratory.jpg'
 import Kitchen from '../../img/stanzeCard/kitchen.jpg'
 import Entrance from '../../img/stanzeCard/entrance.jpg'
 import Breaktime from '../../img/stanzeCard/breaktime.jpg'
-//import Openspace from '../../../img/openspace.jpg'
+import Openspace from '../../img/stanzeCard/openspace.jpg'
 
 export const ROOMPHOTOS = [
   {
@@ -60,11 +60,24 @@ export const ROOMPHOTOS = [
     id: 5,
     src: Entrance
   },
-  /*
   {
     id: 7,
-    src: OpenSpace
-  },
-  */
-
+    src: Openspace
+  }
 ]
+export const MODALSTYLE = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '10px',
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border:'none',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
