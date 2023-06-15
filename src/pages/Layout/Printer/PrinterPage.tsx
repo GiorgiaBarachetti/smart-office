@@ -58,7 +58,7 @@ const PrinterPage = () => {
 
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
-      <Box paddingTop={'30px'} paddingBottom={'200px'} >
+      <Box paddingTop={'30px'} paddingBottom={'230px'} >
       <Box component='div' sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: {xs: '90%',sm: '90%', md: '70%'}, heigth: '40%' }} style={SHADOWSTYLE}>
 
           <Box component='div'
@@ -79,8 +79,8 @@ const PrinterPage = () => {
           >
             <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
             <ButtonGroup>
-              <Button onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
-              <Button onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
+              <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
+              <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
             </ButtonGroup>
           </Box>
 

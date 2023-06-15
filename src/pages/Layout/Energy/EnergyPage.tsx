@@ -26,7 +26,7 @@ const EnergyPage = () => {
 
   return (
     <div style={{backgroundImage: `url(${background})`,  backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop:'-27px'}}>
-      <Box paddingTop={'30px'} paddingBottom={'350px'}>
+      <Box paddingTop={'30px'} paddingBottom={'430px'}>
 
       <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: {xs: '80%',sm: '80%', md: '70%'}, ...SHADOWSTYLE }} >
         <Typography variant='h6'  sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
