@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
@@ -9,11 +9,13 @@ interface Props {
 }
 
 const TableRooms = ({ idRoom }: Props) => {
-
+  
+  const[loading, setLoading] = useState(false)
   const [room, setRoom] = useState<Lights[]>([]);
 
   const fetchRoom = async () => {
     try {
+      setLoading(true)
       const response = await fetch(`${baseURL}${urlShelly}/${idRoom}/status`);
       if (response.ok) {
         const data = await response.json();
@@ -21,6 +23,7 @@ const TableRooms = ({ idRoom }: Props) => {
       } else {
         console.log('Error fetching room:', response.status);
       }
+      setLoading(false)
     } catch (error) {
       console.log('Error fetching room:', error);
     }
@@ -41,6 +44,14 @@ const TableRooms = ({ idRoom }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
+        {loading && (
+          <TableRow>
+            <TableCell colSpan={4}>
+              <LinearProgress />
+            </TableCell>
+          </TableRow>
+        )}
+
           {room.length ? ( room.map((r) => (
             <TableRow key={r.state.id}>
               <TableCell>{r.state.id}</TableCell>

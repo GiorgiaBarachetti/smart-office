@@ -263,7 +263,13 @@ const MainPage = () => {
     <div>
       {/*MOSTRA Il loader se è true  */}
       {isLoading ? (
-      <CircularProgress/> 
+      <CircularProgress
+      sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%'
+      }}
+      /> 
       ) : (
         <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
         <image href={planimetry} width={'100%'}></image>
@@ -272,14 +278,7 @@ const MainPage = () => {
           lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
             .map((light) => {
               const { x, y } = getCoordinates(light.state.id);
-              return (
-                /*
-                {isLoading ? (
-                  <CircularProgress/>
-                  ):(
-                    )}
-                    */
-                    
+              return (                    
                     <g key={light.state.id} style={{cursor:'pointer'}}>
                     <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
                     onClick={() => openModalLights(light.state.id)} />

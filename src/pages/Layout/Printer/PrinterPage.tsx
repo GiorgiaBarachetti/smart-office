@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
-import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Typography, LinearProgress } from '@mui/material';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
 import { BOXSTYLE, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/stampante.avif'
 
 const PrinterPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingButton, setIsLoadingButton] = useState(false)
+  const [isLoadingButtonOff, setIsLoadingButtonOff] = useState(false)
+
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
   const [statoPresa, setStatoPresa] = useState<boolean>(false);
 
   const fetchPrinter = async () => {
     try {
+      setIsLoading(true)
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       setPrinterDatas(Array.isArray(data) ? data : [data]);
       console.log(data);
+      setIsLoading(false)
     } catch (error) {
       console.log('not found datas of printer');
     }
@@ -23,8 +29,10 @@ const PrinterPage = () => {
 
   const switchOnPrinter = async () => {
     try {
+      setIsLoadingButton(true)
       await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
+      setIsLoadingButton(false)
     } catch (error) {
       console.log('Error switching on the printer:', error);
     }
@@ -32,8 +40,10 @@ const PrinterPage = () => {
 
   const switchOffPrinter = async () => {
     try {
+      setIsLoadingButtonOff(true)
       await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
+      setIsLoadingButtonOff(false)
     } catch (error) {
       console.log('Error switching off the printer:', error);
     }
@@ -80,13 +90,17 @@ const PrinterPage = () => {
             <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
             <ButtonGroup>
               <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
+              {isLoadingButton && (
+                  <LinearProgress/>
+                )}
+              
               <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
             </ButtonGroup>
           </Box>
 
           <Box component='div' mt={'50px'} >
             <Typography variant='h6' sx={{ mt: '20px', textAlign: 'center' }}>CONSUMES</Typography>
-            <TablePrinter printer={printerDatas} />
+            <TablePrinter loading={isLoading} printer={printerDatas} />
           </Box>
         </Box>
       </Box>

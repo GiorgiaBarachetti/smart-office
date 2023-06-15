@@ -1,12 +1,13 @@
 import React from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 interface Props {
     lightsDatasArray : Lights[]
+    loading: boolean
 }
 
-const TableLights = ({lightsDatasArray}: Props) => {
+const TableLights = ({loading, lightsDatasArray}: Props) => {
     //sum of current consumption 
     const totalApower = lightsDatasArray != undefined ? lightsDatasArray.reduce(
         //on= somma actual
@@ -34,6 +35,13 @@ const TableLights = ({lightsDatasArray}: Props) => {
              </TableRow>
         </TableHead>
         <TableBody>
+        {loading && (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <LinearProgress />
+              </TableCell>
+            </TableRow>
+          )}
             {/*elimino le due stanze che sono in piu*/}
         {sortedLightsDatasArray?.filter((light) =>
                         light.state.id !== 8 &&
