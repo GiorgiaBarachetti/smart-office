@@ -90,7 +90,7 @@ const SwitchComponent = ({ id }: Props) => {
                 <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
                   <ButtonGroup sx={{ alignSelf: 'center' }}>
-                    <Button onClick={() => switchOnLightById(light.room)} disabled={light.state.output == true}>ON</Button>
+                    <Button sx={{cursor:'pointer'}} onClick={() => switchOnLightById(light.room)} disabled={light.state.output == true}>ON</Button>
                     {isLoading && (
                       <CircularProgress
                         size={24}
@@ -103,7 +103,7 @@ const SwitchComponent = ({ id }: Props) => {
                         }}
                       />
                     )}
-                    <Button onClick={() => switchOffLightById(light.room)} disabled={light.state.output == false}>OFF</Button>
+                    <Button sx={{cursor:'pointer'}} onClick={() => switchOffLightById(light.room)} disabled={light.state.output == false}>OFF</Button>
                   </ButtonGroup>
                 </CardContent>
               </CardActionArea>

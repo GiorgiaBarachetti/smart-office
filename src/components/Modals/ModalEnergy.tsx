@@ -37,8 +37,8 @@ const ModalEnergy = ({ open, handleClose, idEnergy }: Props) => {
           <Typography variant="h6" component="h1">Bolt, id {idEnergy}</Typography>
 
           <Box>
-            <Button onClick={gotoPage}>GO TO ENERGY PAGE</Button>
-            <Button onClick={handleClose}>CLOSE</Button>
+            <Button sx={{cursor:'pointer'}} onClick={gotoPage}>GO TO ENERGY PAGE</Button>
+            <Button sx={{cursor:'pointer'}} onClick={handleClose}>CLOSE</Button>
           </Box>
 
         </Box>

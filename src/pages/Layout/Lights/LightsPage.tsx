@@ -98,7 +98,7 @@ const LightsPage = () => {
     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }} >
       <Typography variant='h6' sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
 
-      <Button onClick={() => switchAllOffLightDatas()} sx={{ width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
+      <Button onClick={() => switchAllOffLightDatas()} sx={{cursor:'pointer', width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
       {isLoading && (
         <CircularProgress
           size={24}
@@ -133,7 +133,7 @@ const LightsPage = () => {
                 <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
                   <ButtonGroup sx={{ alignSelf: 'center' }}>
-                    <Button onClick={() => switchOnLightById(light.state.id)} disabled={light.state.output == true} >ON</Button>
+                    <Button sx={{cursor:'pointer'}} onClick={() => switchOnLightById(light.state.id)} disabled={light.state.output == true} >ON</Button>
                     {isLoading && (
                       <CircularProgress
                         size={24}
@@ -146,7 +146,7 @@ const LightsPage = () => {
                         }}
                       />
                     )}
-                    <Button onClick={() => switchOffLightById(light.state.id)} disabled={light.state.output == false}>OFF</Button>
+                    <Button sx={{cursor:'pointer'}} onClick={() => switchOffLightById(light.state.id)} disabled={light.state.output == false}>OFF</Button>
                   </ButtonGroup>
                   <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
                 </CardContent>

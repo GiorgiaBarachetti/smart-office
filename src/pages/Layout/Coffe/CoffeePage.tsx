@@ -90,7 +90,7 @@ const CoffeePage = () => {
   }, []);
 
   return (
-    <Box padding={5}>
+    <Box component='div' padding={5}>
       {/**DESKTOP */}
       {isXsScreen ? (
         <Grid container spacing={2}>
@@ -109,7 +109,7 @@ const CoffeePage = () => {
               </Typography>
 
               <Box component='div' sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
-                <Button onClick={handleCoffeeClick}>
+                <Button sx={{cursor:'pointer'}} onClick={handleCoffeeClick}>
                   <Box
                     component="img" src={coffee}
                     sx={{
@@ -118,7 +118,7 @@ const CoffeePage = () => {
                     }} />
                 </Button>
 
-                <Button
+                <Button sx={{cursor:'pointer'}}
                   onClick={handleDoubleCoffeeClick}
                 >
                   <Box component="img" src={doubleCoffee}
@@ -209,7 +209,7 @@ const CoffeePage = () => {
               </Typography>
 
               <Box component="div" sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
-                <Button onClick={handleCoffeeClick}>
+                <Button sx={{cursor:'pointer'}} onClick={handleCoffeeClick}>
                   <Box
                     component="img" src={coffee}
                     sx={{
@@ -219,6 +219,7 @@ const CoffeePage = () => {
                 </Button>
 
                 <Button
+                sx={{cursor:'pointer'}}
                   onClick={handleDoubleCoffeeClick}
                 >
                   <Box sx={{

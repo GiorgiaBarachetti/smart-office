@@ -127,27 +127,27 @@ useEffect(() => {
       handleClose();}}>
 
     <Modal open={open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <Box sx={MODALSTYLE}>
+      <Box component='div' sx={MODALSTYLE}>
         {idRoomModal !== undefined && (
           <Typography variant="h6" component="h1">
             Lights of {getRoomName(idRoomModal)}, id: {idRoomModal}
           </Typography>
         )}
-        <Box sx={{textAlign: 'center'}}>
-          <Box>
+        <Box component='div' sx={{textAlign: 'center'}}>
+          <Box component='div'>
           <ButtonGroup>
-              <Button onClick={() => switchOnLightById(idRoomModal)} disabled={lightDatas}>
+              <Button sx={{cursor:'pointer'}} onClick={() => switchOnLightById(idRoomModal)} disabled={lightDatas}>
                 ON
               </Button>
-              <Button onClick={() => switchOffLightById(idRoomModal)} disabled={!lightDatas}>
+              <Button sx={{cursor:'pointer'}} onClick={() => switchOffLightById(idRoomModal)} disabled={!lightDatas}>
                 OFF
               </Button>
             </ButtonGroup>
 
           </Box>
-          <Box sx={{display:'flex', }}>
-            <Button onClick={gotoPage}>GO TO LIGHTS PAGE</Button>
-            <Button onClick={handleClose}>CLOSE</Button>
+          <Box component='div' sx={{display:'flex', }}>
+            <Button sx={{cursor:'pointer'}} onClick={gotoPage}>GO TO LIGHTS PAGE</Button>
+            <Button sx={{cursor:'pointer'}} onClick={handleClose}>CLOSE</Button>
           </Box>
         </Box>
       </Box>

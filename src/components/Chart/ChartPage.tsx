@@ -85,11 +85,11 @@ const ChartPage = ({id}:Props) => {
 
 
     return (
-        <Box sx={{ padding: '20px', }}>
+        <Box component='div' sx={{ padding: '20px', }}>
             <Paper>
-                <Box sx={{ display: 'flex',flexDirection:'column', justifyContent: 'center', pt: '20px' }}>
+                <Box component='div' sx={{ display: 'flex',flexDirection:'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a range of data</Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+                    <Box component='div' sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
                         <Button sx={{cursor:'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('today')}>
                             Today
                         </Button>

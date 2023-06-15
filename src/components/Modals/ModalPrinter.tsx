@@ -55,15 +55,15 @@ const ModalPrinter = ({ open, handleClose, idPrinter }: Props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={MODALSTYLE}>
+        <Box component='div' sx={MODALSTYLE}>
           <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : ''}</Typography>
           <ButtonGroup>
-            <Button onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>
-            <Button onClick={() => switchOffPrinter()} disabled={statoPresa}>OFF</Button>
+            <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={!statoPresa}>ON</Button>
+            <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={statoPresa}>OFF</Button>
           </ButtonGroup>
-          <Box>
-            <Button onClick={gotoPage}>GO TO PRINTER PAGE</Button>
-            <Button onClick={handleClose}>CLOSE</Button>
+          <Box component='div'>
+            <Button sx={{cursor:'pointer'}} onClick={gotoPage}>GO TO PRINTER PAGE</Button>
+            <Button sx={{cursor:'pointer'}} onClick={handleClose}>CLOSE</Button>
           </Box>
 
         </Box>
