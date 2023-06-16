@@ -13,7 +13,7 @@ import ModalPrinter from '../../components/Modals/ModalPrinter';
 import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
-import CircularProgress from '@mui/material/CircularProgress';
+import {LinearProgress, CircularProgress} from '@mui/material';
 
 const lightStyle = {
   stroke: "#9d9d15",
@@ -31,7 +31,6 @@ const printerStyle = {
 }
 
 const MainPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
 
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
@@ -89,19 +88,24 @@ const MainPage = () => {
     setOpenModalPrinter(false)
   }
 
-
-
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingLights, setIsLoadingLights] = useState(true);
+  const [isLoadingCoffee, setIsLoadingCoffee] = useState(true);
+  const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
+  const [isLoadingPrinter, setIsLoadingPrinter] = useState(true);
 
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+
+
   const fetchLights = async () => {
     try {
       setIsLoading(true);
+      setIsLoadingLights(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
-      console.log(response, data)
-      setLightsDatasArray(data.data);
+      setLightsDatasArray(Array.isArray(data) ? data : [data]);
       setIsLoading(false);
-      console.log(data);
+      setIsLoadingLights(false)
     } catch (error) {
       console.log('error fetching lights', error);
     }
@@ -112,13 +116,13 @@ const MainPage = () => {
   const fetchCoffee = async () => {
     try {
       setIsLoading(true);
+      setIsLoadingCoffee(true)
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
-      console.log(response)
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeDatas(Array.isArray(data) ? data : [data]);
-      console.log(data);
       setIsLoading(false);
+      setIsLoadingCoffee(false)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -128,11 +132,13 @@ const MainPage = () => {
   const fetchEnergy = async () => {
     try {
       setIsLoading(true);
+      setIsLoadingEnergy(true)
       const response = await fetch(`${baseURL}${urlAlhpa}`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);
       setIsLoading(false);
+      setIsLoadingEnergy(false)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -143,22 +149,23 @@ const MainPage = () => {
   const fetchPrinter = async () => {
     try {
       setIsLoading(true);
+      setIsLoadingPrinter(true)
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterDatas(Array.isArray(data) ? data : [data]);
-      console.log(data);
       setIsLoading(false);
+      setIsLoadingPrinter(false)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
   };
 
   useEffect(() => {
-    fetchLights();
+    setTimeout(() => fetchLights(), 100)
     fetchCoffee();
     fetchEnergy();
-    fetchPrinter();
+    setTimeout(() => fetchPrinter(), 1000)
   }, []);
 
   const [boltStyle, setBoltStyle] = useState({
@@ -178,7 +185,7 @@ const MainPage = () => {
       return {
         ...boltStyle,
         color: "rgba(244,245,27)",
-        stroke:"rgba(136,135,46,1)"
+        stroke: "rgba(136,135,46,1)"
       };
     } else if (energyDatas[0]?.powerUsed >= 2760) {
       return {
@@ -202,8 +209,8 @@ const MainPage = () => {
     setBoltStyle(updatedBoltStyle);
   }, [energyDatas]);
 
-  
-  
+
+
   const getCoordinates = (roomId: number) => {
     let x = 0;
     let y = 0;
@@ -213,149 +220,156 @@ const MainPage = () => {
         x = 1000;
         y = -245;
         break;
-        case 1: // SALA RIUNIONI
+      case 1: // SALA RIUNIONI
         x = 810;
         y = -245;
         break;
-        case 2: // UFFICIO FLAVIO
+      case 2: // UFFICIO FLAVIO
         x = 565;
         y = -245;
         break;
 
-        // LABORATORIO
-        case 3:
-          x = 370;
+      // LABORATORIO
+      case 3:
+        x = 370;
         y = -245;
         break;
 
-        // CUCINA-RIPOSTIGLIO
-        case 4:
+      // CUCINA-RIPOSTIGLIO
+      case 4:
         x = 185;
         y = -245;
         break;
-        
-        // BREAKTIME SPACE
-        case 6:
+
+      // BREAKTIME SPACE
+      case 6:
         x = 280;
         y = -50;
         break;
 
-        // INGRESSO
+      // INGRESSO
       case 5:
         x = 585;
         y = -50;
         break;
-        
+
       // OPEN SPACE
       case 7:
         x = 850;
         y = -50;
         break;
-        
-        default:
+
+      default:
         break;
-      }
+    }
     return { x, y };
   };
-  
+
 
   return (
     <div>
       {/*MOSTRA Il loader se è true  */}
-      {isLoading ? (
-      <CircularProgress
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%'
-      }}
-      /> 
-      ) : (
-        <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
-        <image href={planimetry} width={'100%'}></image>
 
-        {lightsDatasArray != undefined ? (
-          lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
-            .map((light) => {
-              const { x, y } = getCoordinates(light.state.id);
-              return (                    
-                    <g key={light.state.id} style={{cursor:'pointer'}}>
+      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
+        <image href={planimetry} width={'100%'}></image>
+        {isLoadingLights ? (
+          <LinearProgress />
+        ) : (
+          lightsDatasArray != undefined ? (
+            lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
+              .map((light) => {
+                const { x, y } = getCoordinates(light.state.id);
+                return (
+                  <g key={light.state.id} style={{ cursor: 'pointer' }}>
                     <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
-                    onClick={() => openModalLights(light.state.id)} />
-                  <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
-                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${light.state.apower} W`}</tspan>
-                  </text>
-                  <text x={x + 60} y={y + 340} fill="black" fontSize="15px">
-                  <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
-                  </text>
+                      onClick={() => openModalLights(light.state.id)} />
+                    <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
+                    <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                      <tspan>{`Power: ${light.state.apower} W`}</tspan>
+                    </text>
+                    <text x={x + 60} y={y + 340} fill="black" fontSize="15px">
+                      <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+                    </text>
                   </g>
-                  );
-                })
-                ) : (
-                  'lightsDatasArray is empty'
+                );
+              })
+          ) : (
+            'lightsDatasArray is empty'
+          )
         )}
 
-        {coffeeDatas.length ? (
-          coffeeDatas.map((coffee) => (
-            <g key={coffee.coffes.id} style={{...coffeeStyle, cursor:'pointer'}} >
-            <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
-            <rect x={345} y={350} width="120px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-            <text x={360} y={380} fontSize="15px">
-            <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
-            </text>
-            {/* 
+        {isLoadingCoffee ? (<LinearProgress />) : (
+          coffeeDatas.length ? (
+            coffeeDatas.map((coffee) => (
+              <g key={coffee.coffes.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
+                <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
+                <rect x={345} y={350} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={360} y={380} fontSize="15px">
+                  <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
+                </text>
+                {/* 
             <text x={350} y={360} fill="black" fontSize="15px">
             <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
             </text>
                    */}
-            </g>
-
-          ))
+              </g>
+            ))
           ) : (
             'CoffeeDatas array is empty'
-        )}
-        
-        {energyDatas.length ? (
-          energyDatas.map((energy) => (
-            <g key={energy.id} style={{...boltStyle, cursor:'pointer'}}>
-              <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} />
-              <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-              <text x={670} y={425} fill="black" fontSize="15px">
-              <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
-              </text>
-            </g>
-            ))
-        ) : (
-          'energyDatas is empty'
           )
-        }
-        
-        {printerDatas.length ? (
-          printerDatas.map((printer) => (
-            <g key={printer.tplinkStampante.id} style={{...printerStyle, cursor:'pointer'}}>
-            <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-              <rect x={1040} y={410} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-              <text x={1050} y={435} fill="black" fontSize="15px">
-                <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
+        )}
+
+        {isLoadingEnergy ? (<LinearProgress />) : (
+          energyDatas.length ? (
+            energyDatas.map((energy) => (
+              <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
+                <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} />
+                <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={670} y={425} fill="black" fontSize="15px">
+                  <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
                 </text>
-            </g>
-          ))
+              </g>
+            ))
+          ) : (
+            'energyDatas is empty'
+          )
+        )}
+
+        {isLoadingPrinter ? (<CircularProgress 
+                                size={24}
+                                sx={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: '50%',
+                                  marginTop: '-12px',
+                                  marginLeft: '-12px',
+                                }}/>
+        ) : (
+          printerDatas.length ? (
+            printerDatas.map((printer) => (
+              <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
+                <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
+                <rect x={1040} y={410} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={1050} y={435} fill="black" fontSize="15px">
+                  <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
+                </text>
+              </g>
+            ))
           ) : (
             'printerDatas is empty'
-            )}
-            
+          )
+        )}
+
       </svg>
-       )}
-       
-      <ModalLights open={openModalLight} handleClose={()=>closeModalLight()} idRoomModal={idRoomModal}lights={lightsDatasArray} />
-      <ModalCoffee open={openModalCoffee} handleClose={()=>closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
-      <ModalEnergy open={openModalEnergy} handleClose={()=>closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
-      <ModalPrinter open={openModalPrinter} handleClose={()=>closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
+
+
+      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={() => fetchLights()} />
+      <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
+      <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
+      <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
 
     </div>
-    )
-  }
-  
-  export default MainPage
-  
+  )
+}
+
+export default MainPage

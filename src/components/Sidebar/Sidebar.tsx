@@ -57,7 +57,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-const PersistentDrawerLeft = (props: {location?: any}) => {
+const PersistentDrawerLeft = (props: { location?: any }) => {
   const navigate = useNavigate()
   const location = useLocation();
   const [pageName, setPageName] = useState('')
@@ -97,8 +97,8 @@ const PersistentDrawerLeft = (props: {location?: any}) => {
   useEffect(() => {
     //get path name
     console.log(location)
-    handleClick(location.pathname, SIDEBAR.find((o: {name: string, href: string}) => o.href===location.pathname )?.name || "")
-}, []);
+    handleClick(location.pathname, SIDEBAR.find((o: { name: string, href: string }) => o.href === location.pathname)?.name || "")
+  }, []);
 
   return (
     <ClickAwayListener
@@ -125,7 +125,7 @@ const PersistentDrawerLeft = (props: {location?: any}) => {
               <Typography variant="h6" noWrap component="div">{pageName}</Typography>
               <Timer />
             </Box>
-            
+
           </Toolbar>
         </AppBar>
 

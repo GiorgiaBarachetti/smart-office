@@ -63,7 +63,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
 
 
   const handleClick = (path: string, name: string) => {
-    if (location.pathname === '/lights') {
+    if (location.pathname === PATH.lightsPage) {
       setIsOpen(true);
     } else {
       setIsOpen(false);
@@ -145,54 +145,56 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
 
           <Box component="nav">
             <List sx={{ paddingTop: '0' }}>
-              {SIDEBAR?.filter(
-                (elem) =>
-                  elem.href !== PATH.main &&
-                  elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
-                  elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
-                  elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
-                  elem.href !== PATHDROPDOWNROOMS.laboratory &&
-                  elem.href !== PATHDROPDOWNROOMS.kitchen &&
-                  elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
-                  elem.href !== PATHDROPDOWNROOMS.entrance &&
-                  elem.href !== PATHDROPDOWNROOMS.openSpace
-              ).map((elem) => {
+            {SIDEBAR?.filter((elem) =>
+                elem.href !== PATH.main &&
+                elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
+                elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
+                elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
+                elem.href !== PATHDROPDOWNROOMS.laboratory &&
+                elem.href !== PATHDROPDOWNROOMS.kitchen &&
+                elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
+                elem.href !== PATHDROPDOWNROOMS.entrance &&
+                elem.href !== PATHDROPDOWNROOMS.openSpace
+              )
+                .map((elem) => {
                 
                   return (
-                    <ListItem key={elem.href} onClick={() => handleClick(elem.href, elem.name)} disablePadding>
-                      <ListItemButton>
-                        <ListItemText>{elem.name}</ListItemText>
-                      </ListItemButton>
-                    </ListItem>
+                    <ListItem
+                        key={elem.href}
+                        onClick={() => handleClick(elem.href, elem.name)}
+                        disablePadding
+                      >
+                        <ListItemButton>
+                          <ListItemText>{elem.name}</ListItemText>
+                        </ListItemButton>
+                      </ListItem>
                   );
                 
               })}
+              {/**
+               * 
+              <List>
+
+              
               {isOpen ? (
-                  SIDEBAR?.filter(
-                      (elem) =>
-                        elem.href === PATHDROPDOWNROOMS.andreaOffice &&
-                        elem.href === PATHDROPDOWNROOMS.meetingRoom &&
-                        elem.href === PATHDROPDOWNROOMS.flavioOffice &&
-                        elem.href === PATHDROPDOWNROOMS.laboratory &&
-                        elem.href === PATHDROPDOWNROOMS.kitchen &&
-                        elem.href === PATHDROPDOWNROOMS.breaktimeSpace &&
-                        elem.href === PATHDROPDOWNROOMS.entrance &&
-                        elem.href === PATHDROPDOWNROOMS.openSpace
-                    ).map((drop: any) => (
-                      <List key={drop.href} sx={{ paddingTop: '0', paddingBottom: '0' }}>
-                        <ListItem
-                          key={drop.href}
-                          onClick={() => handleClick(drop.href, drop.name)}
-                          disablePadding
-                        >
+                        <ListItem key={12} onClick={() => handleClick(PATH.coffee, 'aula')} disablePadding>
                           <ListItemButton>
-                            <ListItemText>{drop.name}</ListItemText>
+                            <ListItemText>aula</ListItemText>
                           </ListItemButton>
                         </ListItem>
-                      </List>
-                    ))
-                  ):('')
-                }
+                      ):(
+                      <List>
+                        {SIDEBAR?.filter((elem) => elem.href == '/').map((elem) => (
+                          <ListItem key={elem.href} onClick={() => handleClick(elem.href, elem.name)} disablePadding>
+                            <ListItemButton>
+                              <ListItemText>RETURN TO {elem.name} PAGE</ListItemText>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>)
+                      }
+                  </List>
+                */}
             </List>
           </Box>
 
