@@ -3,33 +3,36 @@ import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
-import { baseURL } from "../../utils/fetch/api";
+import { baseURL, urlAlhpa } from "../../utils/fetch/api";
 
 interface Props {
     id: number
 }
-const ChartPage = ({ id }: Props) => {
-    interface ChartData {
-        time: string;
-        watt: number;
-    }
+interface ChartData {
+    power: {
+        timestamp: string;
+        power: number;
+    }[];
+}
 
-    const [lightsDatasArray, setLightsDatasArray] = useState<ChartData[]>([]);
+const ChartEnergy = ({ id }: Props) => {
+
+    const [EnergyDatas, setEnergyDatas] = useState<ChartData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     let [selectedDateRange, setSelectedDateRange] = useState('today');
 
     const handleDateRangeClick = (dateRange: string) => {
         setSelectedDateRange(dateRange);
-        fetchLightsData(dateRange)
+        fetchEnergyData(dateRange)
     }
 
-    const fetchLightsData = async (range: string) => {
+    const fetchEnergyData = async (range: string) => {
         try {
             setIsLoading(true);
             const currentDate = new Date();
             let startDate = '';
             let endDate = currentDate;
-
+            console.log(endDate)
             switch (range) {
                 case 'today':
                     startDate = currentDate.toISOString().split('T')[0];
@@ -49,10 +52,10 @@ const ChartPage = ({ id }: Props) => {
                 default:
                     break;
             }
-            const response = await fetch(`${baseURL}/api/shelly/${id}/data?start=${startDate}T00:00:00&end=${endDate}`);
+            const response = await fetch(`${baseURL}${urlAlhpa}/data/instant?start=${startDate}T00:00:00&end=${endDate}`);
             console.log(response)
             const data = await response.json();
-            setLightsDatasArray(data.data);
+            setEnergyDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
         } catch (error) {
             console.log('Error fetching lights data', error);
@@ -60,7 +63,7 @@ const ChartPage = ({ id }: Props) => {
     };
 
     useEffect(() => {
-        fetchLightsData('today')
+        fetchEnergyData('today')
     }, []);
 
     const options = {
@@ -107,29 +110,25 @@ const ChartPage = ({ id }: Props) => {
                     </Box>
                 </Box>
                 <Box sx={{ height: '400px' }}>
-                {isLoading ? (
-                    <LinearProgress />
-                ) : (
-                    <Chart
-                        width={'100%'}
-                        height={250}
-                        chartType="LineChart"
-                        data={[
-                            ['time', 'watt'],
-                            ...lightsDatasArray.map(({ time, watt }) => {
-                                const date = new Date(time);
-                                return [date, watt];
-                            }),
-                        ]}
-                        options={options}
-                    />
-                )}
+                    {isLoading ? (
+                        <LinearProgress />
+                    ) : (
+                        <Chart
+                            width={'100%'}
+                            height={250}
+                            chartType="LineChart"
+                            data={[
+                                ['time', 'watt'],
+                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => [new Date(timestamp), power]),
+                            ]}
+                            options={options}
+                        />
+                    )}
+                </Box>
+
+            </Paper>
         </Box>
-
-
-            </Paper >
-        </Box >
     );
 };
 
-export default ChartPage;
+export default ChartEnergy;

@@ -17,11 +17,18 @@ const AndreaOffice = () => {
           {isXsScreen ? (
             <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
               <TableRooms idRoom={id} />
+              {/**
+               * 
               <SwitchComponent id={id} />
+               */}
             </Stack>
           ) : (
             <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
+               {/** 
+                * 
               <SwitchComponent id={id} />
+               */}
+              
               <TableRooms idRoom={id} />
             </Stack>
           )

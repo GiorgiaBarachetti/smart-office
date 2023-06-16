@@ -5,6 +5,7 @@ import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
+import ChartPage from '../../../components/Chart/ChartEnergy';
 const EnergyPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
@@ -71,6 +72,7 @@ const EnergyPage = () => {
           <Box component='div' sx={{ padding: '1px', borderRadius: '11px', bgcolor: {...boltStyle}, mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
             <TableEnergy loading={isLoading} energy={energyStatus} />
           </Box>
+            <ChartPage id={200}/>
         </Box>
       </Box>
     </div>

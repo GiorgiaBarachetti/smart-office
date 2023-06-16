@@ -102,7 +102,7 @@ const MainPage = () => {
       setIsLoadingLights(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
-      setLightsDatasArray(Array.isArray(data) ? data : [data]);
+      setLightsDatasArray(data.data);
       setIsLoading(false);
       setIsLoadingLights(false)
     } catch (error) {
@@ -167,7 +167,7 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlTplink}/status`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
-      setPrinterStatus(Array.isArray(data) ? data : [data]);
+      setPrinterStatus(data.data);
       console.log(data)
     } catch (error) {
       console.log('Error fetching coffee:', error);
@@ -176,8 +176,8 @@ const MainPage = () => {
 
   useEffect(() => {
     const timeoutLights = setTimeout(() => fetchLights(), 100)
-    const intervalCoffee = setInterval(()=>fetchCoffee(), 10000)
-    const intervalEnergy = setInterval(()=>fetchEnergy(),10000)
+    const intervalCoffee = setInterval(()=>fetchCoffee(), 1000)
+    const intervalEnergy = setInterval(()=>fetchEnergy(),1000)
     const timeoutPrinter = setTimeout(() => fetchPrinter(), 100)
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
 

@@ -52,7 +52,8 @@ const TableRooms = ({ idRoom }: Props) => {
           </TableRow>
         )}
 
-          {room.length ? ( room.map((r) => (
+          {room.length ? ( 
+            room.map((r) => (
             <TableRow key={r.state.id}>
               <TableCell>{r.state.id}</TableCell>
               <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>

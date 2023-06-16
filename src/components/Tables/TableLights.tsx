@@ -12,15 +12,16 @@ const TableLights = ({loading, lightsDatasArray}: Props) => {
     const totalApower = lightsDatasArray != undefined ? lightsDatasArray.reduce(
         //on= somma actual
         //light= somma da aggiungere
-        (currentValueSum, light) => currentValueSum + (light.state.apower  || 0),
+        (currentValueSum, light) => currentValueSum + (light?.state?.apower  || 0),
         //somma di partenza
          0) : 0;
    
     //sum of hour consumption 
-    const totalAenergy = lightsDatasArray != undefined ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy?.total || 0), 0): 0;
+    const totalAenergy = lightsDatasArray != undefined ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy != undefined ? (light.state.aenergy.total ||0) : 0), 0): 0;
     //total count of room with light on
-    const totalLightsOn = lightsDatasArray != undefined ? lightsDatasArray.filter((light) => light.state.output).length : 0;
-    //ordinamento per id ascendente
+    const totalLightsOn = lightsDatasArray != undefined ? (lightsDatasArray.filter((light) => (light.state !=undefined ? light.state.output: 0)).length ): 0;
+    console.log(totalLightsOn)
+    //ordinamento per id ascendentez
     const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
   return (
     <TableContainer sx={{borderRadius:'6px', mx:'auto', my: '30px', width: '95%', ...SHADOWSTYLE, ...TABLECOLOR}}>
@@ -44,22 +45,17 @@ const TableLights = ({loading, lightsDatasArray}: Props) => {
           )}
             {/*elimino le due stanze che sono in piu*/}
         {sortedLightsDatasArray?.filter((light) =>
-                        light.state.id !== 8 &&
-                        light.state.id !== 9
-                        /*
-                        light.room !== "----" &&
-                        light.room !== "Punto luce non attivo"
-                         */
-                    )
-                .map((light)=>(
-                    <TableRow key={light.state.id}>
-                        <TableCell>{light.state.id}</TableCell>
-                        <TableCell>{light.room}</TableCell>
-                        {/*if light is on color:green else if is off color red */}
-                        <TableCell style={{ color: light.state.output ? 'green' : 'red' }}>{light.state.output ? 'ON' : 'OFF'}</TableCell>
-                        <TableCell>{light.state.apower} Watt</TableCell>
-                        <TableCell>{light.state.aenergy?.total} Watt/h</TableCell>
-                        </TableRow>
+          light.state.id !== 8 &&
+          light.state.id !== 9
+          ).map((light)=>(
+              <TableRow key={light.state.id}>
+                  <TableCell>{light.state.id}</TableCell>
+                  <TableCell>{light.room}</TableCell>
+                  {/*if light is on color:green else if is off color red */}
+                  <TableCell style={{ color: light.state.output ? 'green' : 'red' }}>{light.state.output ? 'ON' : 'OFF'}</TableCell>
+                  <TableCell>{light.state.apower} Watt</TableCell>
+                  <TableCell>{light.state.aenergy?.total} Watt/h</TableCell>
+                  </TableRow>
                 ))}
             <TableRow>
                 <TableCell colSpan={2}></TableCell>

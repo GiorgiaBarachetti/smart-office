@@ -20,9 +20,10 @@ const LightsPage = () => {
     try {
       setIsLoadingPage(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
+      console.log(response)
       const data = await response?.json();
-      console.log(response, data)
-      setLightsDatasArray(Array.isArray(data) ? data : [data]);
+      console.log(response, 'data',data)
+      setLightsDatasArray(data.data);
       setIsLoadingPage(false)
     } catch (error) {
       console.log('error fetching lights', error);
@@ -81,7 +82,8 @@ const LightsPage = () => {
 
 
   const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
-
+console.log('gyufrhdcn', lightsDatasArray)
+console.log('jhgfdfghjgfhjkjhdfghkgfhjkhgf',sortedLightsDatasArray)
   const getRoomPhotoById = (id: number) => {
     const roomPhoto = ROOMPHOTOS.find((photo) => photo.id === id);
     if (roomPhoto) {
@@ -158,9 +160,9 @@ const LightsPage = () => {
 
     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: '#d3d3d382', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
       <Typography variant='h6' sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
-      <TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />
     </Box>
   </>
 }
 
 export default LightsPage
+//<TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />

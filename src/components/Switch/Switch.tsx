@@ -21,7 +21,7 @@ const SwitchComponent = ({ id }: Props) => {
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       console.log(response, data)
-      setLightsDatasArray(Array.isArray(data) ? data : [data]);
+      setLightsDatasArray(data.data);
       console.log(data);
       setIsLoadingComponent(false)
     } catch (error) {

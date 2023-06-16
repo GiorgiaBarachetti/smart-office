@@ -52,7 +52,7 @@ const CoffeePage = () => {
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
-      setCoffeeData(Array.isArray(data) ? data : [data]);
+      setCoffeeData(data.data);
       console.log(data);
     } catch (error) {
       console.log('Error fetching coffee:', error);
