@@ -53,7 +53,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   };
 
   useEffect(() => {
-    setTimeout(() => fetchLights(), 1000);
+    setTimeout(() => {()=> fetchLights()}, 1000);
   }, [lightDatas])
 
 

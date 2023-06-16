@@ -17,7 +17,7 @@ const ModalEnergy = ({ open, handleClose, idEnergy }: Props) => {
   const navigate = useNavigate();
 
   const gotoPage = () => {
-    navigate(PATH.printer);
+    navigate(PATH.energy);
   };
 
 

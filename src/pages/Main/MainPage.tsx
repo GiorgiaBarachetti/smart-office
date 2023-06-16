@@ -7,13 +7,13 @@ import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
 import planimetry from '../../img/Immagine 2023-05-31 093913.jpg';
 
-import { Energy, Lights, Printer, Coffee } from '../../utils/interfaces/Interfaces';
+import { Energy, Lights, Printer, Coffee, PrinterStatus } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/Modals/ModalLights';
 import ModalPrinter from '../../components/Modals/ModalPrinter';
 import ModalCoffee from '../../components/Modals/ModalCoffee';
 import ModalEnergy from '../../components/Modals/ModalEnergy';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
-import {LinearProgress, CircularProgress} from '@mui/material';
+import { LinearProgress, CircularProgress } from '@mui/material';
 
 const lightStyle = {
   stroke: "#9d9d15",
@@ -80,7 +80,6 @@ const MainPage = () => {
   const openPrinterModal = (id: number) => {
     if (id !== undefined) {
       setIdPrinterModal(id);
-      console.log('id è ', id)
     }
     setOpenModalPrinter(true);
   };
@@ -161,11 +160,34 @@ const MainPage = () => {
     }
   };
 
+  const [printerStatus, setPrinterStatus] = useState<PrinterStatus[]>([]);
+
+  const fetchPrinterStatus = async () => {
+    try {
+      const response = await fetch(`${baseURL}${urlTplink}/status`);
+      const data = await response?.json();
+      //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
+      setPrinterStatus(Array.isArray(data) ? data : [data]);
+      console.log(data)
+    } catch (error) {
+      console.log('Error fetching coffee:', error);
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => fetchLights(), 100)
-    fetchCoffee();
-    fetchEnergy();
-    setTimeout(() => fetchPrinter(), 1000)
+    const timeoutLights = setTimeout(() => fetchLights(), 100)
+    const intervalCoffee = setInterval(()=>fetchCoffee(), 10000)
+    const intervalEnergy = setInterval(()=>fetchEnergy(),10000)
+    const timeoutPrinter = setTimeout(() => fetchPrinter(), 100)
+    const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
+
+    return () => {
+      clearTimeout(timeoutLights)
+      clearInterval(intervalCoffee)
+      clearInterval(intervalEnergy)
+      clearTimeout(timeoutPrinter)
+      clearTimeout(timeoutPrinterStatus)
+    }
   }, []);
 
   const [boltStyle, setBoltStyle] = useState({
@@ -175,7 +197,6 @@ const MainPage = () => {
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
     if (energyDatas[0]?.powerUsed >= 1308) {
-      console.log(energyDatas[0]?.powerUsed);
       return {
         ...boltStyle,
         color: "rgba(202,232,76)",
@@ -275,14 +296,14 @@ const MainPage = () => {
         {isLoadingLights ? (
           <LinearProgress />
         ) : (
-          lightsDatasArray != undefined ? (
-            lightsDatasArray.filter((light) => light.state.id !== 8 && light.state.id !== 9)
+          lightsDatasArray && lightsDatasArray.length > 0 ? (
+            lightsDatasArray
+              .filter((light) => light.state && light.state.id !== 8 && light.state.id !== 9)
               .map((light) => {
                 const { x, y } = getCoordinates(light.state.id);
                 return (
                   <g key={light.state.id} style={{ cursor: 'pointer' }}>
-                    <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle}
-                      onClick={() => openModalLights(light.state.id)} />
+                    <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle} onClick={() => openModalLights(light.state.id)} />
                     <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
                     <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
                       <tspan>{`Power: ${light.state.apower} W`}</tspan>
@@ -297,6 +318,7 @@ const MainPage = () => {
             'lightsDatasArray is empty'
           )
         )}
+
 
         {isLoadingCoffee ? (<LinearProgress />) : (
           coffeeDatas.length ? (
@@ -335,15 +357,15 @@ const MainPage = () => {
           )
         )}
 
-        {isLoadingPrinter ? (<CircularProgress 
-                                size={24}
-                                sx={{
-                                  position: 'absolute',
-                                  top: '50%',
-                                  left: '50%',
-                                  marginTop: '-12px',
-                                  marginLeft: '-12px',
-                                }}/>
+        {isLoadingPrinter ? (<CircularProgress
+          size={24}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-12px',
+            marginLeft: '-12px',
+          }} />
         ) : (
           printerDatas.length ? (
             printerDatas.map((printer) => (
@@ -359,15 +381,12 @@ const MainPage = () => {
             'printerDatas is empty'
           )
         )}
-
       </svg>
 
-
       <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={() => fetchLights()} />
-      <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal}></ModalCoffee>
-      <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal}></ModalEnergy>
-      <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal}></ModalPrinter>
-
+      <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal} />
+      <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal} />
+      <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal} printerStatus={printerStatus} fetchPrinterStatus={()=>fetchPrinterStatus()}/>
     </div>
   )
 }

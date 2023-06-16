@@ -16,9 +16,8 @@ const TableEnergy = ({ loading, energy }: Props) => {
     <Table size="small">
       <TableHead>
         <TableRow>
-          <TableCell>POWER CURRENTLY USED ..until this moment..</TableCell>
+          <TableCell>POWER CURRENTLY USED</TableCell>
           <TableCell>POWER USED EVERY 15 min</TableCell>
-          <TableCell>CURRENT HOUR</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -34,7 +33,6 @@ const TableEnergy = ({ loading, energy }: Props) => {
         <TableRow key={energ.id}>
           <TableCell>{energ.powerUsed} W</TableCell>
           <TableCell>{energ.averagePowerUsed} W</TableCell>
-          <TableCell>{energ.currentHour} h</TableCell>
         </TableRow>
         ))}
 
