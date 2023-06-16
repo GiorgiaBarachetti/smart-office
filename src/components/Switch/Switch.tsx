@@ -21,7 +21,7 @@ const SwitchComponent = ({ id }: Props) => {
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       console.log(response, data)
-      setLightsDatasArray(data.data);
+      setLightsDatasArray(Array.isArray(data) ? data : [data]);
       console.log(data);
       setIsLoadingComponent(false)
     } catch (error) {
@@ -41,14 +41,9 @@ const SwitchComponent = ({ id }: Props) => {
       setIsLoading(true)
       const light = lightsDatasArray.find((light) => light?.room === key);
       console.log(light?.room);
-      if (light) {
-        console.log(light)
-        const id = light.state.id
-        if (light.state.output === false) {
-          console.log(light.state.output);
-          await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
-          setRefreshDatas((prevState) => !prevState);
-        }
+      if (light && !light.state.output) {
+        await fetch(`${baseURL}${urlShelly}/${light.state.id}/on`, { method: 'POST' });
+        setRefreshDatas((prevState) => !prevState);
       }
       setIsLoading(false)
     } catch (error) {
@@ -60,18 +55,10 @@ const SwitchComponent = ({ id }: Props) => {
     try {
       const light = lightsDatasArray.find((light) => light?.room === key);
       console.log(light?.room);
-      if (light) {
-        console.log(light)
-        const id = light.state.id
-        if (light.state.output === true) {
-          console.log(light.state.output);
-          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
+      if (light && light.state.output) {
+          await fetch(`${baseURL}${urlShelly}/${light.state.id}/off`, { method: 'POST' });
           setRefreshDatas((prevState) => !prevState);
-        } else {
-        }
-
       }
-      //switchAllOffLightDatas();
     } catch (error) {
       console.log(`Error switching the light of the room:`, error);
     }
