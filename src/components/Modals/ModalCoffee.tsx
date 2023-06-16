@@ -1,8 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import {Button, Typography, Modal, Box, ClickAwayListener} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
 import { MODALSTYLE } from '../../utils/const/Const';
@@ -20,10 +17,7 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
     navigate(PATH.coffee);
   };
 
-  return (<Box
-            // chiude modalquando clicchi di fuori
-            onClick={() => { handleClose() }}>
-
+  return (<Box>
             <Modal
               open={open}
               aria-labelledby="modal-modal-title"
@@ -32,8 +26,8 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
               <Box component='div' sx={MODALSTYLE}>
                 <Typography variant="h6" component="h1">Coffee, id {idCoffee}</Typography>
                 <Box component='div'>
-                  <Button sx={{cursor:'pointer'}}  onClick={gotoPage}>GO TO COFFEE PAGE</Button>
-                  <Button sx={{cursor:'pointer'}} onClick={handleClose}>CLOSE</Button>
+                  <Button sx={{cursor:'pointer'}} onClick={()=>gotoPage()}>GO TO COFFEE PAGE</Button>
+                  <Button sx={{cursor:'pointer'}} onClick={()=>handleClose()}>CLOSE</Button>
                 </Box>
               </Box>
             </Modal>
