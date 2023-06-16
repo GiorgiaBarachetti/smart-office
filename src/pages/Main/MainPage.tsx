@@ -132,7 +132,7 @@ const MainPage = () => {
     try {
       setIsLoading(true);
       setIsLoadingEnergy(true)
-      const response = await fetch(`${baseURL}${urlAlhpa}`);
+      const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);

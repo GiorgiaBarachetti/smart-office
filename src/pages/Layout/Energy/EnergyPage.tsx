@@ -12,7 +12,7 @@ const EnergyPage = () => {
   const fetchPrinter = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch(`${baseURL}${urlAlhpa}`);
+      const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
       const data = await response?.json();
       setEnergyStatus(Array.isArray(data) ? data : [data]);
       console.log(data);
