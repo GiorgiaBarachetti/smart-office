@@ -13,15 +13,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { SIDEBAR, PATHDROPDOWNROOMS, PATH } from '../../utils/routes/path';
+import { SIDEBAR, PATHDROPDOWNROOMS, PATH, SIDEBARROOMS } from '../../utils/routes/path';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import { ClickAwayListener, LinearProgress } from '@mui/material';
 import Timer from '../Timer/Timer';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 
 const drawerWidth = '240px';
@@ -58,16 +57,27 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 const PersistentDrawerLeft = (props: { location?: any }) => {
+
   const navigate = useNavigate()
   const location = useLocation();
   const [pageName, setPageName] = useState('')
+  const [isOpenLights, setIsOpenLights] = useState(false)
 
+  //constrollo che il path inizi con /lights
+  function isLightsPage(path: string): boolean {
+    return path.startsWith('/lights');
+  }
   const handleClick = (path: string, name: string) => {
-    if (path === '/rooms') {
-      handleDropdownToggle(); // Open the dropdown menu
+    if (isLightsPage(path)) {
+      console.log(path)
+      setIsOpenLights(true)
+      navigate(path);
     } else {
+      setIsOpenLights(false)
+      console.log('no im not')
       setPageName(name)
       navigate(path);
+      //}
     }
   }
   const theme = useTheme();
@@ -84,11 +94,6 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
 
-  const handleDropdownToggle = () => {
-    setDropdownOpen(!dropdownOpen);
-    setSelectedMenuItem(selectedMenuItem === '/rooms' ? null : '/rooms');
-  };
-
   const now = new Date();
   const handleClickAway = () => {
     setOpen(false);
@@ -99,6 +104,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
     console.log(location)
     handleClick(location.pathname, SIDEBAR.find((o: { name: string, href: string }) => o.href === location.pathname)?.name || "")
   }, []);
+
 
   return (
     <ClickAwayListener
@@ -151,71 +157,47 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
           <Divider />
 
           <Box component='nav'>
-            <List sx={{ paddingTop: '0' }}>
+            <List sx={{ py: '0' }}>
               {SIDEBAR?.filter((elem) =>
-                elem.href !== PATH.main &&
-                elem.href !== PATHDROPDOWNROOMS.andreaOffice &&
-                elem.href !== PATHDROPDOWNROOMS.meetingRoom &&
-                elem.href !== PATHDROPDOWNROOMS.flavioOffice &&
-                elem.href !== PATHDROPDOWNROOMS.laboratory &&
-                elem.href !== PATHDROPDOWNROOMS.kitchen &&
-                elem.href !== PATHDROPDOWNROOMS.breaktimeSpace &&
-                elem.href !== PATHDROPDOWNROOMS.entrance &&
-                elem.href !== PATHDROPDOWNROOMS.openSpace
+                elem.href !== PATH.main
               )
                 .map((elem) => {
-                  if (elem.href === '/rooms') {
-                    return (
-                      <List key={elem.href} sx={{ paddingTop: '0', paddingBottom: '0' }}>
-                        <ListItem disablePadding onClick={handleDropdownToggle}>
-                          <ListItemButton>
-                            <ListItemText sx={{ paddingLeft: '10px' }}>ROOMS</ListItemText>
-                            {dropdownOpen ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                        </ListItem>
-                        <List
-                          component="div"
-                          disablePadding
-                          style={{ display: dropdownOpen ? 'block' : 'none' }}
-                        >
-                          {Object.entries(PATHDROPDOWNROOMS).map(([roomName, roomPath]) => (
-                            <ListItem
-                              key={roomPath}
-                              onClick={() => handleClick(roomPath, roomName)}
-                              disablePadding
-                              sx={{ pl: 4 }}
-                              selected={selectedMenuItem === roomPath}
-                            >
-                              <ListItemButton>
-                                <ListItemText>{SIDEBAR.find((elem) => elem.href === roomPath)?.name}</ListItemText>
-                              </ListItemButton>
-                            </ListItem>
-                          ))}
-                        </List>
+                  return (<>
+                    <ListItem
+                      key={elem.href}
+                      onClick={() => handleClick(elem.href, elem.name)}
+                      disablePadding
+                    >
+                      <ListItemButton>
+                        <ListItemText>{elem.name}</ListItemText>
+                      </ListItemButton>
+                    </ListItem>
+                    {elem.href === PATH.lightsPage && isLightsPage(location.pathname) ?
+                      <List component="div">
+                        {SIDEBARROOMS?.map((elem) => (
+                          <ListItem
+                            key={elem.href}
+                            onClick={() => handleClick(elem.href, elem.name)}
+                            sx={{ padding: '0px', margin: '0px' }}
 
-                      </List>
-                    );
-                  } else {
-                    return (
-                      <ListItem
-                        key={elem.href}
-                        onClick={() => handleClick(elem.href, elem.name)}
-                        disablePadding
-                      >
-                        <ListItemButton>
-                          <ListItemText>{elem.name}</ListItemText>
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  }
+                          >
+                            <ListItemButton  sx={{py:'0px' }}>
+                              <ListItemText sx={{ fontSize: '5px', pl: '15px', py:'0' }}>{elem.name}</ListItemText>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List> : ""}</>
+                  )
                 })}
             </List>
+
           </Box>
+
 
           <Divider />
 
           <Box component='nav'>
-            <List>
+            <List sx={{ py: '0' }}>
               {SIDEBAR?.filter((elem) =>
                 elem.href == '/'
               )
@@ -239,4 +221,5 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
     </ClickAwayListener>
   );
 }
+
 export default PersistentDrawerLeft
