@@ -84,10 +84,18 @@ const LightsPage = () => {
   const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
   console.log('gyufrhdcn', lightsDatasArray)
   console.log('jhgfdfghjgfhjkjhdfghkgfhjkhgf', sortedLightsDatasArray)
-  const getRoomPhotoById = (id: number) => {
+  const getRoomOFFPhotoById = (id: number) => {
     const roomPhoto = ROOMPHOTOS.find((photo) => photo.id === id);
     if (roomPhoto) {
-      return roomPhoto.src;
+      return roomPhoto.src?.off;
+    }
+    // Return a default image source if the id doesn't match any room photo
+    return undefined;
+  };
+  const getRoomONPhotoById = (id: number) => {
+    const roomPhoto = ROOMPHOTOS.find((photo) => photo.id === id);
+    if (roomPhoto) {
+      return roomPhoto.src?.on;
     }
     // Return a default image source if the id doesn't match any room photo
     return undefined;
@@ -122,14 +130,24 @@ const LightsPage = () => {
           ).map((light) => (
             <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
               <CardActionArea>
-                {getRoomPhotoById(light.state.id) ? (
+                {light.state.output === false ? (
+                getRoomOFFPhotoById(light.state.id) ? (
                   <CardMedia
                     component="img"
                     height="140"
-                    image={getRoomPhotoById(light.state.id)}
+                    image={getRoomOFFPhotoById(light.state.id)}
                     sx={{ padding: '0' }}
                   />
-                ) : null}
+                ) : null
+                ):(
+                  getRoomONPhotoById(light.state.id) ? (
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={getRoomONPhotoById(light.state.id)}
+                      sx={{ padding: '0' }}
+                    />
+                ):null)}
                 <CircleIcon style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }} />
                 <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>

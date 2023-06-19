@@ -23,46 +23,76 @@ export const BOXSTYLE = {
 
 
 import Andrea from '../../img/stanzeCard/andrea.jpg'
+//import AndreaOn from '../../img/stanzeCard/andreaacc.jpg'
 import Meeting from '../../img/stanzeCard/meeting.jpg'
+import MeetingOn from '../../img/stanzeCard/meetingacc.jpg'
 import Flavio from '../../img/stanzeCard/flavio.jpg'
+import FlavioOn from '../../img/stanzeCard/flavioacc.jpg'
 import Laboratory from '../../img/stanzeCard/laboratory.jpg'
+import LaboratoryOn from '../../img/stanzeCard/laboratoryacc.jpg'
 import Kitchen from '../../img/stanzeCard/kitchen.jpg'
+import KitchenOn from '../../img/stanzeCard/kitchenacc.jpg'
 import Entrance from '../../img/stanzeCard/entrance.jpg'
+import EntranceOn from '../../img/stanzeCard/entranceacc.jpg'
 import Breaktime from '../../img/stanzeCard/breaktime.jpg'
+import BreaktimeOn from '../../img/stanzeCard/breaktimeacc.jpg'
 import Openspace from '../../img/stanzeCard/openspace.jpg'
+import OpenspaceOn from '../../img/stanzeCard/openspaceacc.jpg'
+
 
 export const ROOMPHOTOS = [
   {
     id: 0,
-    src: Andrea
+    //src: Andrea
   },
   {
     id: 1,
-    src: Meeting
+    src: {
+      off: Meeting,
+      on: MeetingOn
+    }
   },
   {
-    id: 2,
-    src: Flavio
+    id: 2,src: {
+      off: Flavio,
+      on: FlavioOn
+    }
   },
   {
     id: 3,
-    src: Laboratory
+    src: {
+      off: Laboratory,
+      on: LaboratoryOn
+    }
   },
   {
     id: 4,
-    src: Kitchen
-  },
-  {
-    id: 6,
-    src: Breaktime
+    src: {
+      off: Kitchen,
+      on: KitchenOn
+    }
   },
   {
     id: 5,
-    src: Entrance
+    src: {
+      off: Entrance,
+      on: EntranceOn
+    }
+  }
+  ,
+  {
+    id: 6,
+    src: {
+      off: Breaktime,
+      on: BreaktimeOn
+    }
   },
   {
     id: 7,
-    src: Openspace
+    src: {
+      off: Openspace,
+      on: OpenspaceOn
+    }
   }
 ]
 export const MODALSTYLE = {
