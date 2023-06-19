@@ -61,7 +61,6 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
   const navigate = useNavigate()
   const location = useLocation();
   const [pageName, setPageName] = useState('')
-  const [isOpenLights, setIsOpenLights] = useState(false)
 
   //constrollo che il path inizi con /lights
   function isLightsPage(path: string): boolean {
@@ -69,15 +68,10 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
   }
   const handleClick = (path: string, name: string) => {
     if (isLightsPage(path)) {
-      console.log(path)
-      setIsOpenLights(true)
       navigate(path);
     } else {
-      setIsOpenLights(false)
-      console.log('no im not')
       setPageName(name)
       navigate(path);
-      //}
     }
   }
   const theme = useTheme();
@@ -186,7 +180,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                             </ListItemButton>
                           </ListItem>
                         ))}
-                      </List> : ""}</>
+                      </List> : null}</>
                   )
                 })}
             </List>

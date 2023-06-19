@@ -12,6 +12,7 @@ const ChartPage = ({ id }: Props) => {
     interface ChartData {
         time: string;
         watt: number;
+        id:string
     }
 
     const [lightsDatasArray, setLightsDatasArray] = useState<ChartData[]>([]);
@@ -52,7 +53,7 @@ const ChartPage = ({ id }: Props) => {
             const response = await fetch(`${baseURL}/api/shelly/${id}/data?start=${startDate}T00:00:00&end=${endDate}`);
             console.log(response)
             const data = await response.json();
-            setLightsDatasArray(data.data);
+            setLightsDatasArray(data);
             setIsLoading(false);
         } catch (error) {
             console.log('Error fetching lights data', error);
@@ -83,8 +84,6 @@ const ChartPage = ({ id }: Props) => {
         //backgroundColor:'rgba(255, 255, 255, 0.8)',
         chartArea: { width: "50%", height: "60%" },
     };
-
-
 
     return (
         <Box component='div' sx={{ padding: '20px' }}>
@@ -117,8 +116,7 @@ const ChartPage = ({ id }: Props) => {
                         data={[
                             ['time', 'watt'],
                             ...lightsDatasArray.map(({ time, watt }) => {
-                                const date = new Date(time);
-                                return [date, watt];
+                                return [new Date(time), watt];
                             }),
                         ]}
                         options={options}

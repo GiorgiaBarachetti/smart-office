@@ -30,8 +30,12 @@ const TableRooms = ({ idRoom }: Props) => {
     console.log(room);
   };
   useEffect(() => {
-    setTimeout(() => fetchRoom(), 1000);
+    const timeout =setTimeout(() => fetchRoom(), 1000);
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [idRoom]);
+  
   return (
     <TableContainer sx={{ borderRadius: '6px', bgcolor: 'lightpink', mx: 'auto', my: '30px', width: '100%', ...SHADOWSTYLE, ...TABLECOLOR }}>
       <Table size="small">
@@ -52,13 +56,11 @@ const TableRooms = ({ idRoom }: Props) => {
           </TableRow>
         )}
 
-          {room.length ? ( 
+          {room.length && room != undefined ? ( 
             room.map((r) => (
             <TableRow key={r.state.id}>
               <TableCell>{r.state.id}</TableCell>
-              <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>
-                {r.state.output ? 'ON' : 'OFF'}
-              </TableCell>
+              <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>{r.state.output ? 'ON' : 'OFF'}</TableCell>
               <TableCell>{r.state.apower ?? '0'} Watt</TableCell>
               <TableCell>{r.state.aenergy?.total ?? '0'} Watt/h</TableCell>
             </TableRow>

@@ -19,21 +19,23 @@ const AndreaOffice = () => {
               <TableRooms idRoom={id} />
               {/**
                * 
+              */}
               <SwitchComponent id={id} />
-               */}
             </Stack>
           ) : (
             <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
                {/** 
                 * 
+              */}
               <SwitchComponent id={id} />
-               */}
               
               <TableRooms idRoom={id} />
             </Stack>
           )
           }
-          <ChartPage id={id} />
+          {/*
+        */}
+        <ChartPage id={id} />
         </Box>
       </Box>
     </div>

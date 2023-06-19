@@ -119,7 +119,7 @@ const ChartEnergy = ({ id }: Props) => {
                             chartType="LineChart"
                             data={[
                                 ['time', 'watt'],
-                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => [new Date(timestamp), power]),
+                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => {return [new Date(timestamp), power]}),
                             ]}
                             options={options}
                         />

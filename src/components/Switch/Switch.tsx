@@ -29,9 +29,11 @@ const SwitchComponent = ({ id }: Props) => {
     }
   };
 
-
   useEffect(() => {
-    setTimeout(() => fetchLights(), 1000);
+    const timeout =setTimeout(() => fetchLights(), 1000);
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [refreshDatas]);
 
 
@@ -76,8 +78,9 @@ const SwitchComponent = ({ id }: Props) => {
               <CardActionArea>
                 <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
-                  <ButtonGroup sx={{ alignSelf: 'center' }}>
+                  <ButtonGroup style={{ alignSelf: 'center' }} aria-label="button group">
                     <Button sx={{cursor:'pointer'}} onClick={() => switchOnLightById(light.room)} disabled={light.state.output == true}>ON</Button>
+                    
                     {isLoading && (
                       <CircularProgress
                         size={24}
