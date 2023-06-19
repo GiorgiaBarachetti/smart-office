@@ -52,8 +52,7 @@ const CoffeePage = () => {
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
-      setCoffeeData(data.data);
-      console.log(data);
+      setCoffeeData(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -138,20 +137,20 @@ const CoffeePage = () => {
 
                 <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
 
-                  {coffeeData?.map((c) => (
+                  {coffeeData.map((c) => (
                     <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                       <Typography sx={{ textAlign: 'center' }}>TOTAL COFFEES MADE TODAY</Typography>
                       <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.totalCoffeeToday > 1 ? `${c.data?.totalCoffeeToday} coffees` : `${c.data?.totalCoffeeToday} coffee`}</Typography>
                     </Box>
                   ))}
-                  {coffeeData?.map((c) => (
+                  {coffeeData.map((c) => (
                     <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                       <Typography sx={{ textAlign: 'center' }}>TOTAL SINGLE COFFEES</Typography>
                       <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count1 >= 1 ? `${c.data?.count1} coffees` : `${c.data?.count1} coffee`}</Typography>
                       {/*<CountUp delay={1} end={c.data?.count1}/>*/}
                     </Box>
-                  ))}
-                  {coffeeData?.map((c) => (
+                  )) }
+                  {coffeeData.map((c) => (
                     <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                       <Typography sx={{ textAlign: 'center' }}>TOTAL DOUBLE COFFES</Typography>
                       <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count2 >= 1 ? `${c.data?.count2} double coffees` : `${c.data?.count2} double coffee`}</Typography>
@@ -167,19 +166,19 @@ const CoffeePage = () => {
             <Box component="div" sx={{ paddingBottom: '0', backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', pt: '30px', }}>
               <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
               <Box component="div" sx={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                {coffeeData?.map((c) => (
+                {coffeeData.map((c) => (
                   <Box key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>POWER</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.watt !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.watt}` : '0'} W</Typography>
                   </Box>
                 ))}
-                {coffeeData?.map((c) => (
+                {coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>VOLTAGE</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.volts !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.volts}` : '0'} V</Typography>
                   </Box>
                 ))}
-                {coffeeData?.map((c) => (
+                {coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>AMPERE</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.ampere !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.ampere}` : '0'} A</Typography>
@@ -238,25 +237,25 @@ const CoffeePage = () => {
 
               <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
 
-                {coffeeData?.map((c) => (
+                {coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>TOTAL COFFEES MADE TODAY</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.totalCoffeeToday > 1 ? `${c.data?.totalCoffeeToday} coffees` : `${c.data?.totalCoffeeToday} coffee`}</Typography>
                   </Box>
-                ))}
-                {coffeeData?.map((c) => (
+                ))):null}
+                {coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>TOTAL SINGLE COFFEES</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count1 >= 1 ? `${c.data?.count1} coffees` : `${c.data?.count1} coffee`}</Typography>
                     {/*<CountUp delay={1} end={c.data?.count1}/>*/}
                   </Box>
-                ))}
-                {coffeeData?.map((c) => (
+                ))):null}
+                {coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>TOTAL DOUBLE COFFES</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count2 >= 1 ? `${c.data?.count2} double coffees` : `${c.data?.count2} double coffee`}</Typography>
                   </Box>
-                ))}
+                ))):null}
                     </Box>
               </Box>
             </Box>
@@ -266,24 +265,24 @@ const CoffeePage = () => {
             <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', py: '2px', }}>
               <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
               <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                {coffeeData?.map((c) => (
+                {coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
                     <Typography sx={{ textAlign: 'center' }}>POWER</Typography>
                     <Typography sx={{ textAlign: 'center' , fontWeight:'bold'}}>{c.data?.macchinettaCaffe?.receivedData?.watt !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.watt}` : '0'} W</Typography>
                   </Box>
-                ))}
-                {coffeeData?.map((c) => (
+                ))):null }
+                { coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
                     <Typography sx={{ textAlign: 'center' }}>VOLTAGE</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.volts !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.volts}` : '0'} V</Typography>
                   </Box>
-                ))}
-                {coffeeData?.map((c) => (
+                ))):null }
+                { coffeeData != undefined ? (coffeeData.map((c) => (
                   <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
                     <Typography sx={{ textAlign: 'center' }}>AMPERE</Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.ampere !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.ampere}` : '0'} A</Typography>
                   </Box>
-                ))}
+                ))):null }
               </Box>
             </Box>
           </Box>
