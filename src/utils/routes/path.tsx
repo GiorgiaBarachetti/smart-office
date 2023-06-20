@@ -16,8 +16,8 @@ export const PATHDROPDOWNROOMS  = {
     flavioOffice: '/lights/ufficioFlavio',
     laboratory: '/lights/laboratory',
     kitchen: '/lights/kitchen',
-    breaktimeSpace: '/lights/breaktimeSpace',
     entrance: '/lights/entrance',
+    breaktimeSpace: '/lights/breaktimeSpace',
     openSpace: '/lights/openSpace',
 }
 
@@ -37,7 +37,7 @@ export const SIDEBARROOMS = [
     { name: "FLAVIO'S OFFICE", href: PATHDROPDOWNROOMS.flavioOffice},
     { name: "LABORATORY", href: PATHDROPDOWNROOMS.laboratory},
     { name: "KITCHEN", href: PATHDROPDOWNROOMS.kitchen},
-    { name: "BREAKTIME SPACE", href: PATHDROPDOWNROOMS.breaktimeSpace},
     { name: "ENTRANCE", href: PATHDROPDOWNROOMS.entrance},
+    { name: "BREAKTIME SPACE", href: PATHDROPDOWNROOMS.breaktimeSpace},
     { name: "OPEN SPACE", href: PATHDROPDOWNROOMS.openSpace},
 ]

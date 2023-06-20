@@ -30,9 +30,10 @@ const TableRooms = ({ idRoom }: Props) => {
     console.log(room);
   };
   useEffect(() => {
-    const timeout =setTimeout(() => fetchRoom(), 1000);
+    const interval = setTimeout(()=>fetchRoom(),1000)
+
     return () => {
-      clearTimeout(timeout)
+      clearTimeout(interval)
     }
   }, [idRoom]);
   

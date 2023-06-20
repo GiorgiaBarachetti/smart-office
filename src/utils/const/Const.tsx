@@ -23,7 +23,7 @@ export const BOXSTYLE = {
 
 
 import Andrea from '../../img/stanzeCard/andrea.jpg'
-//import AndreaOn from '../../img/stanzeCard/andreaacc.jpg'
+import AndreaOn from '../../img/stanzeCard/andreaacc.jpg'
 import Meeting from '../../img/stanzeCard/meeting.jpg'
 import MeetingOn from '../../img/stanzeCard/meetingacc.jpg'
 import Flavio from '../../img/stanzeCard/flavio.jpg'
@@ -43,7 +43,10 @@ import OpenspaceOn from '../../img/stanzeCard/openspaceacc.jpg'
 export const ROOMPHOTOS = [
   {
     id: 0,
-    //src: Andrea
+    src: {
+      off: Andrea,
+      on: AndreaOn
+    }
   },
   {
     id: 1,

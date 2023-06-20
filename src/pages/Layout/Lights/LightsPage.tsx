@@ -7,6 +7,10 @@ import { useState, useEffect } from 'react'
 import { baseURL, urlShelly } from '../../../utils/fetch/api';
 import { ROOMPHOTOS, SHADOWSTYLE } from '../../../utils/const/Const';
 import CircleIcon from '@mui/icons-material/Circle';
+import ModalLights from '../../../components/ModalsLigthsPage/ModalLights';
+import ClickAwayListener from '@mui/base/ClickAwayListener';
+import { useNavigate } from 'react-router-dom';
+import { PATHDROPDOWNROOMS, SIDEBARROOMS } from '../../../utils/routes/path';
 
 const LightsPage = () => {
 
@@ -75,21 +79,19 @@ const LightsPage = () => {
 
   }
 
-
   useEffect(() => {
     setTimeout(() => fetchLights(), 1000);
   }, [refreshDatas]);
 
 
   const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
-  console.log('gyufrhdcn', lightsDatasArray)
-  console.log('jhgfdfghjgfhjkjhdfghkgfhjkhgf', sortedLightsDatasArray)
+
   const getRoomOFFPhotoById = (id: number) => {
     const roomPhoto = ROOMPHOTOS.find((photo) => photo.id === id);
     if (roomPhoto) {
       return roomPhoto.src?.off;
     }
-    // Return a default image source if the id doesn't match any room photo
+    //return to default imge
     return undefined;
   };
   const getRoomONPhotoById = (id: number) => {
@@ -97,11 +99,29 @@ const LightsPage = () => {
     if (roomPhoto) {
       return roomPhoto.src?.on;
     }
-    // Return a default image source if the id doesn't match any room photo
+    //return to default imge
     return undefined;
   };
 
+/*
+  const [openModalLight, setOpenModalLight] = useState(false)
+  const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
 
+  const openModalLights = (id: number) => {
+    if (id !== undefined) {
+      setIdRoomModal(id);
+    }
+    setOpenModalLight(true);
+  };
+  const closeModalLight = () => {
+    setOpenModalLight(false)
+  }
+  */
+
+  const navigate = useNavigate()
+  const goToPage =(key: number)=>{
+    navigate(SIDEBARROOMS[key].href);
+  }
   //{isLoading ? <LinearProgress /> : <></>}
   return <>
     <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }} >
@@ -122,37 +142,38 @@ const LightsPage = () => {
       )}
 
       {/*{isLoadingPage ? <LinearProgress /> : (*/}
-        <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
+      <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
 
-          {sortedLightsDatasArray?.filter((light) =>
-            light.room !== "----" &&
-            light.room !== "Punto luce non attivo"
-          ).map((light) => (
-            <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
-              <CardActionArea>
-                {light.state.output === false ? (
+        {sortedLightsDatasArray?.filter((light) =>
+          light.room !== "----" &&
+          light.room !== "Punto luce non attivo"
+        ).map((light) => (
+          <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
+            <CardActionArea>
+              {light.state.output === false ? (
                 getRoomOFFPhotoById(light.state.id) ? (
                   <CardMedia
                     component="img"
                     height="140"
                     image={getRoomOFFPhotoById(light.state.id)}
                     sx={{ padding: '0' }}
+                    onClick={() => goToPage(light.state.id)}
                   />
                 ) : null
-                ):(
-                  getRoomONPhotoById(light.state.id) ? (
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={getRoomONPhotoById(light.state.id)}
-                      sx={{ padding: '0' }}
-                    />
-                ):null)}
-                <CircleIcon style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }} />
-                <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
-                  {isLoading ? (<LinearProgress/>):(
-                  <ButtonGroup sx={{position:'relative', alignSelf: 'center' }}>
+              ) : (
+                getRoomONPhotoById(light.state.id) ? (
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={getRoomONPhotoById(light.state.id)}
+                    sx={{ padding: '0' }}
+                  />
+                ) : null)}
+              <CircleIcon style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }} />
+              <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
+                {isLoading ? (<LinearProgress />) : (
+                  <ButtonGroup sx={{ position: 'relative', alignSelf: 'center' }}>
 
                     <Button
                       sx={{ cursor: 'pointer' }}
@@ -161,7 +182,7 @@ const LightsPage = () => {
                     >
                       ON
                     </Button>
-                    
+
                     <Button
                       sx={{ cursor: 'pointer' }}
                       onClick={() => switchOffLightById(light.state.id)}
@@ -171,14 +192,14 @@ const LightsPage = () => {
                     </Button>
 
                   </ButtonGroup>
-                  )}
+                )}
 
-                  <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
-        </Box>
+                <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))}
+      </Box>
       {/*)}*/}
     </Box>
 
@@ -186,6 +207,12 @@ const LightsPage = () => {
       <Typography variant='h6' sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
       <TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />
     </Box>
+
+{/*
+    <ClickAwayListener mouseEvent="onMouseDown"touchEvent="onTouchStart" onClickAway={closeModalLight}>
+      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} lights={lightsDatasArray} fetchLights={fetchLights} idRoomModal={idRoomModal} />
+    </ClickAwayListener>
+    */}
   </>
 }
 
