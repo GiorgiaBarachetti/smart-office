@@ -279,13 +279,17 @@ const MainPage = () => {
     switch (roomId) {
       case 0: // UFFICIO ANDREA
         x = 1000;
-        y = -245;
+        y = -100;
         break;
-      case 1: // SALA RIUNIONI
+      
+        // SALA RIUNIONI
+      case 1: 
         x = 810;
-        y = -245;
+        y = -170;
         break;
-      case 2: // UFFICIO FLAVIO
+
+      // UFFICIO FLAVIO
+      case 2: 
         x = 565;
         y = -245;
         break;
@@ -305,19 +309,43 @@ const MainPage = () => {
       // BREAKTIME SPACE
       case 6:
         x = 280;
-        y = -50;
+        y = -100;
         break;
 
       // INGRESSO
       case 5:
         x = 585;
-        y = -50;
+        y = 10;
         break;
 
       // OPEN SPACE
       case 7:
-        x = 850;
-        y = -50;
+        x = 900;
+        y = 120;
+        break;
+
+      //COFFEE
+        case 100:
+        x = 350;
+        y = -20;
+        break;
+
+      //ENERGY
+        case 200:
+        x = 480;
+        y = 120;
+        break;
+
+      //PRINTER
+        case 300:
+        x = 950;
+        y = 250;
+        break;
+
+      //NIVEUS
+        case 400:
+        x = 730;
+        y = 50;
         break;
 
       default:
@@ -363,11 +391,13 @@ const MainPage = () => {
 
         {isLoadingCoffee ? (<LinearProgress />) : (
           coffeeDatas.length ? (
-            coffeeDatas.map((coffee) => (
+            coffeeDatas.map((coffee) => {
+              const { x, y } = getCoordinates(coffee.coffes.id);
+                return (
               <g key={coffee.coffes.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
-                <SvgIcon component={CoffeeMakerIcon} x='300' y='60' width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
-                <rect x={345} y={350} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={360} y={380} fontSize="15px">
+                <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
+                <rect x={x+50} y={y+300} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x+60} y={y+320} fontSize="15px">
                   <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
                 </text>
                 {/* 
@@ -376,7 +406,7 @@ const MainPage = () => {
             </text>
                    */}
               </g>
-            ))
+            )})
           ) : (
             'CoffeeDatas array is empty'
           )
@@ -384,31 +414,33 @@ const MainPage = () => {
 
         {isLoadingNiveus ? (<LinearProgress />) : (
           niveusData.length ? (
-            niveusData.map((niveus) => (
+            niveusData.map((niveus) => {
+              const { x, y } = getCoordinates(niveus.id);
+                return (
               <g key={niveus.id} style={{...niveusStyle, cursor: 'pointer' }}>
-                <SvgIcon component={AirIcon} x='700' y='50' width="80px" onClick={() => openNiveusModal(niveus.id)} />
-                <rect x={750} y={350} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={770} y={375} fill="black" fontSize="15px">
+                <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
+                <rect x={x+50} y={y+300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x+60} y={y+320} fill="black" fontSize="15px">
                   <tspan>{`Power: ${niveus.data.receivedData.watt !== undefined ? niveus.data.receivedData.watt : ''} W`}</tspan>
                 </text>
               </g>
-            ))
-          ) : (
-            'niveusData is empty'
-          )
+            )})
+          ) : ('niveusData is empty')
         )}
 
         {isLoadingEnergy ? (<LinearProgress />) : (
           energyDatas.length ? (
-            energyDatas.map((energy) => (
+            energyDatas.map((energy) => {
+              const { x, y } = getCoordinates(energy.id);
+                return (
               <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
-                <SvgIcon component={BoltIcon} x='610' y='200' width="80px" onClick={() => openEnergyModal(energy.id)} />
-                <rect x={660} y={500} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={670} y={525} fill="black" fontSize="15px">
+                <SvgIcon component={BoltIcon} x={x} y={y} width="80px" onClick={() => openEnergyModal(energy.id)} />
+                <rect x={x+50} y={y+300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x+60} y={y+320} fill="black" fontSize="15px">
                   <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
                 </text>
               </g>
-            ))
+            )})
           ) : (
             'energyDatas is empty'
           )
@@ -425,15 +457,17 @@ const MainPage = () => {
           }} />
         ) : (
           printerDatas.length ? (
-            printerDatas.map((printer) => (
+            printerDatas.map((printer) => {
+              const { x, y } = getCoordinates(printer.tplinkStampante.id);
+                return (
               <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
-                <SvgIcon component={PrintIcon} x='990' y='110' width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-                <rect x={1040} y={410} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={1050} y={435} fill="black" fontSize="15px">
+                <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
+                <rect x={x+50} y={y+300} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x+60} y={y+320} fill="black" fontSize="15px">
                   <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
               </g>
-            ))
+            )})
           ) : (
             'printerDatas is empty'
           )
