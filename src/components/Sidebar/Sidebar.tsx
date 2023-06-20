@@ -84,20 +84,27 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
-
+  
   const now = new Date();
   const handleClickAway = () => {
     setOpen(false);
   };
 
   useEffect(() => {
-    //get path name
-    console.log(location)
-    handleClick(location.pathname, SIDEBAR.find((o: { name: string, href: string }) => o.href === location.pathname)?.name || "")
-  }, []);
+    // Get the sidebar item and sidebar dropdown item
+    const sidebarItem = SIDEBAR.find((o) => o.href === location.pathname);
+    const sidebarDropdownItem = SIDEBARROOMS.find((o) => o.href === location.pathname);
+  
+    // Set the page name and dropdown item name accordingly
+    if (sidebarItem) {
+      setPageName(sidebarItem.name);
+    } else if (sidebarDropdownItem) {
+      
+        setPageName(sidebarDropdownItem.name);
+      
+    }
+  }, [location.pathname]);
+
 
 
   return (

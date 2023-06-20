@@ -5,19 +5,23 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import PrintIcon from '@mui/icons-material/Print';
 import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
-import planimetry from '../../img/Immagine 2023-05-31 093913.jpg';
+import AirIcon from '@mui/icons-material/Air';
+import planimetry from '../../img/background.png';
 
-import { Energy, Lights, Printer, Coffee, PrinterStatus } from '../../utils/interfaces/Interfaces';
-import ModalLights from '../../components/Modals/ModalLights';
-import ModalPrinter from '../../components/Modals/ModalPrinter';
-import ModalCoffee from '../../components/Modals/ModalCoffee';
-import ModalEnergy from '../../components/Modals/ModalEnergy';
-import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../utils/fetch/api';
+import { Energy, Lights, Printer, Coffee, PrinterStatus, Niveus } from '../../utils/interfaces/Interfaces';
+import ModalLights from '../../components/ModalsMain/ModalLights';
+import ModalPrinter from '../../components/ModalsMain/ModalPrinter';
+import ModalCoffee from '../../components/ModalsMain/ModalCoffee';
+import ModalEnergy from '../../components/ModalsMain/ModalEnergy';
+import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus } from '../../utils/fetch/api';
 import { LinearProgress, CircularProgress } from '@mui/material';
+import ModalNiveus from '../../components/ModalsMain/ModalNiveus';
 
 const lightStyle = {
-  stroke: "#9d9d15",
-  color: "#ffef3c66",
+  color: '#fff25fc7',
+  stroke: 'rgb(255 255 0)'
+  //stroke: "#9d9d15",
+  //color: "#ffef3c66",
   //color:"#ffea00",
   //stroke:"#FFFF07"
 }
@@ -28,6 +32,10 @@ const coffeeStyle = {
 const printerStyle = {
   color: "#424242",
   stroke: "#212121"
+}
+const niveusStyle = {
+  color: "#66e0dc",
+  stroke: "#0f4389"
 }
 
 const MainPage = () => {
@@ -44,7 +52,7 @@ const MainPage = () => {
   const closeModalLight = () => {
     setOpenModalLight(false)
   }
-
+      
   const [openModalCoffee, setOpenModalCoffee] = useState(false)
   const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
 
@@ -73,10 +81,23 @@ const MainPage = () => {
   }
 
 
+  const [openModalNiveus, setOpenModalNiveus] = useState(false)
+  const [idNiveusModal, setIdNiveusModal] = useState<number | undefined>();
+
+  const openNiveusModal = (id: number) => {
+    if (id !== undefined) {
+      setIdNiveusModal(id);
+    }
+    setOpenModalNiveus(true);
+  };
+  const closeNiveusModal = () => {
+    setOpenModalNiveus(false)
+  }
+
+
 
   const [openModalPrinter, setOpenModalPrinter] = useState(false)
   const [idPrinterModal, setIdPrinterModal] = useState<number | undefined>();
-
   const openPrinterModal = (id: number) => {
     if (id !== undefined) {
       setIdPrinterModal(id);
@@ -87,24 +108,26 @@ const MainPage = () => {
     setOpenModalPrinter(false)
   }
 
+
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingLights, setIsLoadingLights] = useState(true);
-  const [isLoadingCoffee, setIsLoadingCoffee] = useState(true);
-  const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
-  const [isLoadingPrinter, setIsLoadingPrinter] = useState(true);
+  const [isLoadingLights, setIsLoadingLights] = useState(false);
+  const [isLoadingCoffee, setIsLoadingCoffee] = useState(false);
+  const [isLoadingEnergy, setIsLoadingEnergy] = useState(false);
+  const [isLoadingNiveus, setIsLoadingNiveus] = useState(false);
+  const [isLoadingPrinter, setIsLoadingPrinter] = useState(false);
 
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
 
 
   const fetchLights = async () => {
     try {
-      setIsLoading(true);
-      setIsLoadingLights(true)
+      //setIsLoading(true);
+      //setIsLoadingLights(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data.data);
-      setIsLoading(false);
-      setIsLoadingLights(false)
+      //setIsLoading(false);
+      //setIsLoadingLights(false)
     } catch (error) {
       console.log('error fetching lights', error);
     }
@@ -143,6 +166,21 @@ const MainPage = () => {
     }
   };
 
+  const [niveusData, setNiveusData] = useState<Niveus[]>([]);
+
+  const fetchNiveus = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch(`${baseURL}${urlNiveus}/registers`);
+      const data = await response?.json();
+      setNiveusData(Array.isArray(data) ? data : [data]);
+      console.log(data)
+      setIsLoading(false)
+    } catch (error) {
+      console.log('not found datas of niveus');
+    }
+  };
+
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
 
   const fetchPrinter = async () => {
@@ -167,7 +205,7 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlTplink}/status`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
-      setPrinterStatus(data.data);
+      setPrinterStatus(Array.isArray(data) ? data : [data]);
       console.log(data)
     } catch (error) {
       console.log('Error fetching coffee:', error);
@@ -175,16 +213,18 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const timeoutLights = setTimeout(() => fetchLights(), 100)
-    const intervalCoffee = setInterval(()=>fetchCoffee(), 1000)
-    const intervalEnergy = setInterval(()=>fetchEnergy(),1000)
+    const timeoutLights = setInterval(() => fetchLights(), 5000)
+    const intervalCoffee = setInterval(() => fetchCoffee(), 10000)
+    const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
+    const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
     const timeoutPrinter = setTimeout(() => fetchPrinter(), 100)
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
 
     return () => {
-      clearTimeout(timeoutLights)
+      clearInterval(timeoutLights)
       clearInterval(intervalCoffee)
       clearInterval(intervalEnergy)
+      clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
       clearTimeout(timeoutPrinterStatus)
     }
@@ -319,6 +359,7 @@ const MainPage = () => {
           )
         )}
 
+        {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
 
         {isLoadingCoffee ? (<LinearProgress />) : (
           coffeeDatas.length ? (
@@ -341,13 +382,29 @@ const MainPage = () => {
           )
         )}
 
+        {isLoadingNiveus ? (<LinearProgress />) : (
+          niveusData.length ? (
+            niveusData.map((niveus) => (
+              <g key={niveus.id} style={{...niveusStyle, cursor: 'pointer' }}>
+                <SvgIcon component={AirIcon} x='700' y='50' width="80px" onClick={() => openNiveusModal(niveus.id)} />
+                <rect x={750} y={350} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={770} y={375} fill="black" fontSize="15px">
+                  <tspan>{`Power: ${niveus.data.receivedData.watt !== undefined ? niveus.data.receivedData.watt : ''} W`}</tspan>
+                </text>
+              </g>
+            ))
+          ) : (
+            'niveusData is empty'
+          )
+        )}
+
         {isLoadingEnergy ? (<LinearProgress />) : (
           energyDatas.length ? (
             energyDatas.map((energy) => (
               <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
-                <SvgIcon component={BoltIcon} x='610' y='100' width="80px" onClick={() => openEnergyModal(energy.id)} />
-                <rect x={660} y={400} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={670} y={425} fill="black" fontSize="15px">
+                <SvgIcon component={BoltIcon} x='610' y='200' width="80px" onClick={() => openEnergyModal(energy.id)} />
+                <rect x={660} y={500} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={670} y={525} fill="black" fontSize="15px">
                   <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
                 </text>
               </g>
@@ -383,10 +440,11 @@ const MainPage = () => {
         )}
       </svg>
 
-      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={() => fetchLights()} />
+      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={fetchLights} />
       <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal} />
       <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal} />
-      <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal} printerStatus={printerStatus} fetchPrinterStatus={()=>fetchPrinterStatus()}/>
+      <ModalNiveus open={openModalNiveus} handleClose={() => closeNiveusModal()} idNiveus={idNiveusModal} />
+      <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal} printerStatus={printerStatus} fetchPrinterStatus={() => fetchPrinterStatus()} />
     </div>
   )
 }

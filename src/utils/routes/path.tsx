@@ -5,6 +5,7 @@ export const PATH = {
     lightsPage: '/lights',
     //rooms: '/rooms',    
     coffee: '/coffee',
+    niveus: '/niveus',
     printer: '/printer',
     energy: '/energy'
 };
@@ -25,6 +26,7 @@ export const SIDEBAR = [
     { name: "LIGHTS", href: PATH.lightsPage},
    // { name: "ROOMS", href: PATH.rooms},
     { name: "COFFEE", href: PATH.coffee},
+    { name: "NIVEUS", href: PATH.niveus},
     { name: "PRINTER", href: PATH.printer},
     { name: "ENERGY", href: PATH.energy}
 ]

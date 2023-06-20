@@ -111,3 +111,25 @@ export const MODALSTYLE = {
   p: 4,
   borderRadius: 5,
 };
+
+export const CONSUMESSTYLE = {
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  backgroundColor: 'white',
+  padding: '20px',
+  m: '20px',
+  alignItems: 'center',
+  color: 'black',
+  borderRadius: '50%',
+  width: '105px',
+  height: '105px',
+  ...SHADOWSTYLE
+}
+
+export const TYTLESTYLE = {
+  color: 'black',
+  mt: '10px',
+  variant: 'h1',
+  textAlign: 'center'
+}

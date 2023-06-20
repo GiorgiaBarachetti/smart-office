@@ -34,6 +34,7 @@ import Coffe from '../../pages/Layout/Coffe/CoffeePage';
 import Coffee from '../../pages/Layout/Coffe/CoffeePage';
 import Printer from '../../pages/Layout/Printer/PrinterPage';
 import Energy from '../../pages/Layout/Energy/EnergyPage';
+import Niveus from '../../pages/Layout/Niveus/Niveus';
 
 interface ListItemLinkProps extends ListItemProps {
   to: string;
@@ -57,6 +58,7 @@ const AppRoutes = () => {
             <Route path={PATHDROPDOWNROOMS.entrance} element={<Entrance />} />
             <Route path={PATHDROPDOWNROOMS.openSpace} element={<OpenSpace />} />
             <Route path={PATH.coffee} element={<Coffee />} />
+            <Route path={PATH.niveus} element={<Niveus />} />
             <Route path={PATH.printer} element={<Printer />} />
             <Route path={PATH.energy} element={<Energy />} />
           </Route>

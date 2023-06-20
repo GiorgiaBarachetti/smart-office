@@ -74,3 +74,28 @@ export interface Coffee {
       count2: number
   }
 }
+
+export interface Niveus {
+    id: number,
+    data: {
+      receivedData: {
+        volts: number,
+        ampere: number,
+        watt: number
+      },
+      timestamp: string
+    }
+}
+
+export interface ChartData {
+  power: {
+      timestamp: string;
+      power: number
+  }[];
+}
+export interface ChartDataNiveus {
+      data:{
+        timestamp: string,
+        watt: number
+      }[];
+}
