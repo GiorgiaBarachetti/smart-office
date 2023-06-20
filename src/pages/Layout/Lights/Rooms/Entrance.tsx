@@ -1,15 +1,46 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Stack, useMediaQuery } from '@mui/material';
 import TableRooms from '../../../../components/Tables/TableRooms';
-import background from '../../../../img/stanzePages/entrance.jpg'
+import background from '../../../../img/stanzePages/andrea.jpg'
 import { SHADOWSTYLE } from '../../../../utils/const/Const';
-import ChartPage from '../../../../components/Chart/ChartPage';
 import SwitchComponent from '../../../../components/Switch/Switch';
-
+import ChartPage from '../../../../components/Chart/ChartPage';
+import { Lights } from '../../../../utils/interfaces/Interfaces';
+import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 
 const Entrance = () => {
   const id = 5;
   const isXsScreen = useMediaQuery('(min-width:770px)');
+  
+  //const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
+  const [room, setRoom] = useState<Lights[]>([]);
+
+  const fetchRoom = async () => {
+    try {
+      //setLoading(true)
+      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
+      if (response.ok) {
+        const data = await response.json();
+        setRoom(Array.isArray(data) ? data : [data]);
+      } else {
+        console.log('Error fetching room:', response.status);
+      }
+      //setLoading(false)
+    } catch (error) {
+      console.log('Error fetching room:', error);
+    }
+    console.log(room);
+  };
+
+
+  useEffect(() => {
+    const interval = setTimeout(() => fetchRoom(), 1000)
+
+    return () => {
+      clearTimeout(interval)
+    }
+  }, []);
+
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
       <Box component='div' paddingTop={'30px'} paddingBottom={'10px'}>
@@ -17,13 +48,13 @@ const Entrance = () => {
 
           {isXsScreen ? (
             <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
-              <TableRooms idRoom={id} />
-              <SwitchComponent id={id} />
+              <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
             </Stack>
           ) : (
             <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
-              <SwitchComponent id={id} />
-              <TableRooms idRoom={id} />
+              <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
             </Stack>
           )
           }

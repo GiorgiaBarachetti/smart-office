@@ -26,16 +26,14 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
     return roomName ? roomName.room : '';
   };
 
-  const [lightDatas, setLightDatas] = useState<boolean>(false);
+  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
   const switchOnLightById = async (key: number | undefined) => {
     try {
       const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
       if (light && !light.state.output) {
         await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
-        setLightDatas((prevState) => !prevState);
-        console.log('state after on ', lightDatas)
-
+        setRefreshDatas((prevState) => !prevState);
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
@@ -47,8 +45,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
       const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
       if (light && light.state.output) {
         await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
-        setLightDatas((prevState) => !prevState);
-        console.log('state after off ', lightDatas)
+        setRefreshDatas((prevState) => !prevState);
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
@@ -60,7 +57,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
     return () => {
       clearTimeout(timeout)
     }
-  }, [lightDatas])
+  }, [refreshDatas])
 
 
   return (
@@ -78,10 +75,12 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
                 <Button
                   sx={{ cursor: 'pointer' }}
                   onClick={() => switchOnLightById(idRoomModal)}
+                  disabled={idRoomModal != undefined && lights[idRoomModal].state.output == true}
                   >ON</Button>
                 <Button
                   sx={{ cursor: 'pointer' }}
                   onClick={() => switchOffLightById(idRoomModal)}
+                  disabled={idRoomModal != undefined && lights[idRoomModal].state.output == false}
                   >OFF</Button>
               </ButtonGroup>
             </Box>

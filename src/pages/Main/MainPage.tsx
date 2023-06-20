@@ -52,7 +52,7 @@ const MainPage = () => {
   const closeModalLight = () => {
     setOpenModalLight(false)
   }
-      
+
   const [openModalCoffee, setOpenModalCoffee] = useState(false)
   const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
 
@@ -213,7 +213,6 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const timeoutLights = setInterval(() => fetchLights(), 5000)
     const intervalCoffee = setInterval(() => fetchCoffee(), 10000)
     const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
     const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
@@ -221,12 +220,21 @@ const MainPage = () => {
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
 
     return () => {
-      clearInterval(timeoutLights)
       clearInterval(intervalCoffee)
       clearInterval(intervalEnergy)
       clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
       clearTimeout(timeoutPrinterStatus)
+    }
+  }, []);
+
+  //const [lightDatas, setLightDatas] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    const timeoutLights = setInterval(() => fetchLights(), 1000)
+    return () => {
+      clearInterval(timeoutLights)
     }
   }, []);
 
@@ -281,15 +289,15 @@ const MainPage = () => {
         x = 1000;
         y = -100;
         break;
-      
-        // SALA RIUNIONI
-      case 1: 
+
+      // SALA RIUNIONI
+      case 1:
         x = 810;
         y = -170;
         break;
 
       // UFFICIO FLAVIO
-      case 2: 
+      case 2:
         x = 565;
         y = -245;
         break;
@@ -325,25 +333,25 @@ const MainPage = () => {
         break;
 
       //COFFEE
-        case 100:
+      case 100:
         x = 350;
         y = -20;
         break;
 
       //ENERGY
-        case 200:
+      case 200:
         x = 480;
         y = 120;
         break;
 
       //PRINTER
-        case 300:
+      case 300:
         x = 950;
         y = 250;
         break;
 
       //NIVEUS
-        case 400:
+      case 400:
         x = 730;
         y = 50;
         break;
@@ -393,20 +401,21 @@ const MainPage = () => {
           coffeeDatas.length ? (
             coffeeDatas.map((coffee) => {
               const { x, y } = getCoordinates(coffee.coffes.id);
-                return (
-              <g key={coffee.coffes.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
-                <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
-                <rect x={x+50} y={y+300} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x+60} y={y+320} fontSize="15px">
-                  <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
-                </text>
-                {/* 
+              return (
+                <g key={coffee.coffes.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
+                  <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
+                  <rect x={x + 50} y={y + 300} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 320} fontSize="15px">
+                    <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
+                  </text>
+                  {/* 
             <text x={350} y={360} fill="black" fontSize="15px">
             <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
             </text>
                    */}
-              </g>
-            )})
+                </g>
+              )
+            })
           ) : (
             'CoffeeDatas array is empty'
           )
@@ -416,15 +425,16 @@ const MainPage = () => {
           niveusData.length ? (
             niveusData.map((niveus) => {
               const { x, y } = getCoordinates(niveus.id);
-                return (
-              <g key={niveus.id} style={{...niveusStyle, cursor: 'pointer' }}>
-                <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
-                <rect x={x+50} y={y+300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x+60} y={y+320} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${niveus.data.receivedData.watt !== undefined ? niveus.data.receivedData.watt : ''} W`}</tspan>
-                </text>
-              </g>
-            )})
+              return (
+                <g key={niveus.id} style={{ ...niveusStyle, cursor: 'pointer' }}>
+                  <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
+                  <rect x={x + 50} y={y + 300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                    <tspan>{`Power: ${niveus.data.receivedData.watt !== undefined ? niveus.data.receivedData.watt : ''} W`}</tspan>
+                  </text>
+                </g>
+              )
+            })
           ) : ('niveusData is empty')
         )}
 
@@ -432,15 +442,16 @@ const MainPage = () => {
           energyDatas.length ? (
             energyDatas.map((energy) => {
               const { x, y } = getCoordinates(energy.id);
-                return (
-              <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
-                <SvgIcon component={BoltIcon} x={x} y={y} width="80px" onClick={() => openEnergyModal(energy.id)} />
-                <rect x={x+50} y={y+300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x+60} y={y+320} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
-                </text>
-              </g>
-            )})
+              return (
+                <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
+                  <SvgIcon component={BoltIcon} x={x} y={y} width="80px" onClick={() => openEnergyModal(energy.id)} />
+                  <rect x={x + 50} y={y + 300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                    <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
+                  </text>
+                </g>
+              )
+            })
           ) : (
             'energyDatas is empty'
           )
@@ -459,15 +470,16 @@ const MainPage = () => {
           printerDatas.length ? (
             printerDatas.map((printer) => {
               const { x, y } = getCoordinates(printer.tplinkStampante.id);
-                return (
-              <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
-                <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-                <rect x={x+50} y={y+300} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x+60} y={y+320} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
-                </text>
-              </g>
-            )})
+              return (
+                <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
+                  <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
+                  <rect x={x + 50} y={y + 300} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                    <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
+                  </text>
+                </g>
+              )
+            })
           ) : (
             'printerDatas is empty'
           )

@@ -6,29 +6,14 @@ import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props {
   idRoom: number;
+  light: Lights[]
+  fetchRoom: ()=>void
 }
 
-const TableRooms = ({ idRoom }: Props) => {
+const TableRooms = ({ idRoom, light, fetchRoom }: Props) => {
   
   const[loading, setLoading] = useState(false)
-  const [room, setRoom] = useState<Lights[]>([]);
 
-  const fetchRoom = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`${baseURL}${urlShelly}/${idRoom}/status`);
-      if (response.ok) {
-        const data = await response.json();
-        setRoom(Array.isArray(data) ? data : [data]);
-      } else {
-        console.log('Error fetching room:', response.status);
-      }
-      setLoading(false)
-    } catch (error) {
-      console.log('Error fetching room:', error);
-    }
-    console.log(room);
-  };
   useEffect(() => {
     const interval = setTimeout(()=>fetchRoom(),1000)
 
@@ -57,8 +42,8 @@ const TableRooms = ({ idRoom }: Props) => {
           </TableRow>
         )}
 
-          {room.length && room != undefined ? ( 
-            room.map((r) => (
+          {light.length && light != undefined ? ( 
+            light.map((r) => (
             <TableRow key={r.state.id}>
               <TableCell>{r.state.id}</TableCell>
               <TableCell style={{ color: r.state.output ? 'green' : 'red' }}>{r.state.output ? 'ON' : 'OFF'}</TableCell>
