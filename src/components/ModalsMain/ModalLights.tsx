@@ -34,6 +34,8 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
       if (light && !light.state.output) {
         await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
         setLightDatas((prevState) => !prevState);
+        console.log('state after on ', lightDatas)
+
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
@@ -46,6 +48,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
       if (light && light.state.output) {
         await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
         setLightDatas((prevState) => !prevState);
+        console.log('state after off ', lightDatas)
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
@@ -53,13 +56,15 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   };
 
   useEffect(() => {
-    setTimeout(() => {()=> fetchLights()}, 1000);
+    const timeout = setTimeout(() => {()=> fetchLights()}, 1000);
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [lightDatas])
 
 
   return (
-    <ClickAwayListener mouseEvent="onMouseDown"
-      touchEvent="onTouchStart" onClickAway={handleClose}>
+    <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
       <Modal open={open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box component='div' sx={MODALSTYLE}>
           {idRoomModal !== undefined && (
@@ -73,11 +78,11 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
                 <Button
                   sx={{ cursor: 'pointer' }}
                   onClick={() => switchOnLightById(idRoomModal)}
-                  disabled={idRoomModal !== undefined && lights[idRoomModal]?.state?.output === true}>ON</Button>
+                  >ON</Button>
                 <Button
                   sx={{ cursor: 'pointer' }}
                   onClick={() => switchOffLightById(idRoomModal)}
-                  disabled={idRoomModal !== undefined && lights[idRoomModal]?.state?.output === false}>OFF</Button>
+                  >OFF</Button>
               </ButtonGroup>
             </Box>
             <Box component='div' sx={{ display: 'flex', }}>
