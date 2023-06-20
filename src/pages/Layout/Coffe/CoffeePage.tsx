@@ -1,8 +1,7 @@
-import { Box, Button, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Box, Button, Grid, Typography, useMediaQuery, LinearProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import coffee from '../../../img/Immagine_2023-06-05_090757-removebg-preview.png';
 import doubleCoffee from '../../../img/Immagine_2023-06-01_175307-removebg-preview.png';
-import background from '../../../img/CoffeeBeans.jpg';
 import { Coffee } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
 import { CONSUMESSTYLE, SHADOWSTYLE, TYTLESTYLE } from '../../../utils/const/Const';
@@ -23,15 +22,19 @@ const BOXSTYLE = {
 }
 const CoffeePage = () => {
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [coffeeData, setCoffeeData] = useState<Coffee[]>([]);
   const isXsScreen = useMediaQuery('(min-width:900px)');
 
   const fetchCoffee = async () => {
     try {
+      setLoading(true)
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeData(Array.isArray(data) ? data : [data]);
+      setLoading(false)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -52,20 +55,18 @@ const CoffeePage = () => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
-
     await fetch(`${baseURL}${urlCoffee}/${number}`, {
       method: 'POST',
       headers,
     });
-    console.log('made')
     await fetchCoffee();
     return setMessage('Coffee number has been saved')
   };
 
   useEffect(() => {
-    const interval = setInterval(()=>fetchCoffee(),5000)
-    return() => {
-      clearInterval(interval)
+    const interval = setTimeout(() => fetchCoffee(), 1000)
+    return () => {
+      clearTimeout(interval)
     }
   }, []);
 
@@ -113,9 +114,14 @@ const CoffeePage = () => {
 
 
             <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '40%' }}>
-              <Box component="div" p={'5px'}>
-                <Typography variant="h5" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
 
+              
+
+<Box component="div" p={'5px'}>
+                <Typography variant="h5" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
+                {loading ? (
+                  <LinearProgress />
+                ) : (
                 <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
 
                   {coffeeData.map((c) => (
@@ -139,6 +145,7 @@ const CoffeePage = () => {
                   ))}
 
                 </Box>
+                )}
               </Box>
             </Box>
           </Grid>
@@ -146,6 +153,9 @@ const CoffeePage = () => {
           <Grid item xs={3}>
             <Box component="div" sx={{ paddingBottom: '0', backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', pt: '30px', }}>
               <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
+              {loading ? (
+                    <LinearProgress />
+                  ) : (
               <Box component="div" sx={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                 {coffeeData.map((c) => (
                   <Box key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
@@ -166,110 +176,119 @@ const CoffeePage = () => {
                   </Box>
                 ))}
               </Box>
+                  )}
             </Box>
           </Grid>
         </Grid>
 
-      ) : (
+  ) : (
 
-        <Box component="div">
-          <Box component="div">
-            <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
-              <Typography
-                variant="h6"
+    <Box component="div">
+      <Box component="div">
+        <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              bgsize: 'auto',
+              textAlign: 'center',
+              pt: '20px',
+              mx: 'auto',
+
+              color: 'black'
+            }}>
+            SELECT THE QUANTITY OF COFFEE
+          </Typography>
+
+          <Box component="div" sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
+            <Button sx={{ cursor: 'pointer' }} onClick={handleCoffeeClick}>
+              <Box
+                component="img" src={coffee}
                 sx={{
-                  bgsize: 'auto',
-                  textAlign: 'center',
-                  pt: '20px',
-                  mx: 'auto',
+                  maxHeight: { xs: 120, md: 189, border: 'white' },
+                  pt: { xs: '10px', md: '20px' },
+                }} />
+            </Button>
 
-                  color: 'black'
-                }}>
-                SELECT THE QUANTITY OF COFFEE
-              </Typography>
-
-              <Box component="div" sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
-                <Button sx={{cursor:'pointer'}} onClick={handleCoffeeClick}>
-                  <Box
-                    component="img" src={coffee}
-                    sx={{
-                      maxHeight: { xs: 120, md: 189, border: 'white' },
-                      pt: { xs: '10px', md: '20px' },
-                    }} />
-                </Button>
-
-                <Button
-                sx={{cursor:'pointer'}}
-                  onClick={handleDoubleCoffeeClick}
-                >
-                  <Box sx={{
-                    maxHeight: { xs: 140, md: 220 },
-                  }} component="img" src={doubleCoffee} />
-                </Button>
-              </Box>
-              <Typography sx={{ textAlign: 'center', color: '#d3d3d382' }}>{message}</Typography>
-            </Box>
-
-
-
-            <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
-              <Box component='div' padding={'10px'} marginTop={'10px'}>
-              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
-
-              <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-
-                {coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
-                    <Typography sx={{ textAlign: 'center' }}>TOTAL COFFEES MADE TODAY</Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.totalCoffeeToday > 1 ? `${c.data?.totalCoffeeToday} coffees` : `${c.data?.totalCoffeeToday} coffee`}</Typography>
-                  </Box>
-                ))):null}
-                {coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
-                    <Typography sx={{ textAlign: 'center' }}>TOTAL SINGLE COFFEES</Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count1 >= 1 ? `${c.data?.count1} coffees` : `${c.data?.count1} coffee`}</Typography>
-                    {/*<CountUp delay={1} end={c.data?.count1}/>*/}
-                  </Box>
-                ))):null}
-                {coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
-                    <Typography sx={{ textAlign: 'center' }}>TOTAL DOUBLE COFFES</Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.count2 >= 1 ? `${c.data?.count2} double coffees` : `${c.data?.count2} double coffee`}</Typography>
-                  </Box>
-                ))):null}
-                    </Box>
-              </Box>
-            </Box>
+            <Button
+              sx={{ cursor: 'pointer' }}
+              onClick={handleDoubleCoffeeClick}
+            >
+              <Box sx={{
+                maxHeight: { xs: 140, md: 220 },
+              }} component="img" src={doubleCoffee} />
+            </Button>
           </Box>
+          <Typography sx={{ textAlign: 'center', color: '#d3d3d382' }}>{message}</Typography>
+        </Box>
 
-          <Box component="div" sx={{ pt: '10px' }}>
-            <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', py: '2px', }}>
-              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
-              <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                {coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
-                    <Typography sx={{ textAlign: 'center' }}>POWER</Typography>
-                    <Typography sx={{ textAlign: 'center' , fontWeight:'bold'}}>{c.data?.macchinettaCaffe?.receivedData?.watt !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.watt}` : '0'} W</Typography>
-                  </Box>
-                ))):null }
-                { coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
-                    <Typography sx={{ textAlign: 'center' }}>VOLTAGE</Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.volts !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.volts}` : '0'} V</Typography>
-                  </Box>
-                ))):null }
-                { coffeeData != undefined ? (coffeeData.map((c) => (
-                  <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
-                    <Typography sx={{ textAlign: 'center' }}>AMPERE</Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight:'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.ampere !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.ampere}` : '0'} A</Typography>
-                  </Box>
-                ))):null }
-              </Box>
+
+
+        <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '50%' }}>
+          <Box component='div' padding={'10px'} marginTop={'10px'}>
+            <Typography variant="h6" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
+            {loading ? (
+                    <LinearProgress />
+                  ) : (
+            <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+
+              {coffeeData != undefined ? (coffeeData.map((c) => (
+                <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
+                  <Typography sx={{ textAlign: 'center' }}>TOTAL COFFEES MADE TODAY</Typography>
+                  <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.totalCoffeeToday > 1 ? `${c.data?.totalCoffeeToday} coffees` : `${c.data?.totalCoffeeToday} coffee`}</Typography>
+                </Box>
+              ))) : null}
+              {coffeeData != undefined ? (coffeeData.map((c) => (
+                <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
+                  <Typography sx={{ textAlign: 'center' }}>TOTAL SINGLE COFFEES</Typography>
+                  <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.count1 >= 1 ? `${c.data?.count1} coffees` : `${c.data?.count1} coffee`}</Typography>
+                  {/*<CountUp delay={1} end={c.data?.count1}/>*/}
+                </Box>
+              ))) : null}
+              {coffeeData != undefined ? (coffeeData.map((c) => (
+                <Box component="div" key={c.coffes.id} sx={{ ...BOXSTYLE }}>
+                  <Typography sx={{ textAlign: 'center' }}>TOTAL DOUBLE COFFES</Typography>
+                  <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.count2 >= 1 ? `${c.data?.count2} double coffees` : `${c.data?.count2} double coffee`}</Typography>
+                </Box>
+              ))) : null}
             </Box>
+              )}
           </Box>
         </Box>
-      )}
+      </Box>
+
+      <Box component="div" sx={{ pt: '10px' }}>
+        <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', py: '2px', }}>
+          <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
+          {loading ? (
+                    <LinearProgress />
+                  ) : (
+          <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+            {coffeeData != undefined ? (coffeeData.map((c) => (
+              <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
+                <Typography sx={{ textAlign: 'center' }}>POWER</Typography>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.watt !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.watt}` : '0'} W</Typography>
+              </Box>
+            ))) : null}
+            {coffeeData != undefined ? (coffeeData.map((c) => (
+              <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE, borderRadius: '50%' }}>
+                <Typography sx={{ textAlign: 'center' }}>VOLTAGE</Typography>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.volts !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.volts}` : '0'} V</Typography>
+              </Box>
+            ))) : null}
+            {coffeeData != undefined ? (coffeeData.map((c) => (
+              <Box component="div" key={c.coffes.id} sx={{ ...CONSUMESSTYLE }}>
+                <Typography sx={{ textAlign: 'center' }}>AMPERE</Typography>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.macchinettaCaffe?.receivedData?.ampere !== undefined ? `${c.data?.macchinettaCaffe?.receivedData?.ampere}` : '0'} A</Typography>
+              </Box>
+            ))) : null}
+          </Box>
+                  )}
+        </Box>
+      </Box>
     </Box>
+  )
+}
+    </Box >
   );
 };
 

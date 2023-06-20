@@ -12,10 +12,10 @@ const Laboratory = () => {
   const id = 3;
   const isXsScreen = useMediaQuery('(min-width:770px)');
   const [room, setRoom] = useState<Lights[]>([]);
-
+  const[loading, setLoading] = useState<boolean>(false)
   const fetchRoom = async () => {
     try {
-      //setLoading(true)
+      setLoading(true)
       const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       if (response.ok) {
         const data = await response.json();
@@ -23,14 +23,13 @@ const Laboratory = () => {
       } else {
         console.log('Error fetching room:', response.status);
       }
-      //setLoading(false)
+      setLoading(false)
     } catch (error) {
       console.log('Error fetching room:', error);
     }
     console.log(room);
   };
 
-  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setTimeout(() => fetchRoom(), 1000)
@@ -38,8 +37,7 @@ const Laboratory = () => {
     return () => {
       clearTimeout(interval)
     }
-  }, [refreshDatas]);
-
+  }, []);
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
       <Box component='div' paddingTop={'30px'} paddingBottom={'10px'}>
@@ -48,12 +46,12 @@ const Laboratory = () => {
           {isXsScreen ? (
             <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
               <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
             </Stack>
           ) : (
             <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
               <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
             </Stack>
           )
           }

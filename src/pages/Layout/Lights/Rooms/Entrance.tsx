@@ -12,12 +12,13 @@ const Entrance = () => {
   const id = 5;
   const isXsScreen = useMediaQuery('(min-width:770px)');
   
-  //const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
+  
   const [room, setRoom] = useState<Lights[]>([]);
-
+  
+  const[loading, setLoading] = useState<boolean>(false)
   const fetchRoom = async () => {
     try {
-      //setLoading(true)
+      setLoading(true)
       const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       if (response.ok) {
         const data = await response.json();
@@ -25,7 +26,7 @@ const Entrance = () => {
       } else {
         console.log('Error fetching room:', response.status);
       }
-      //setLoading(false)
+      setLoading(false)
     } catch (error) {
       console.log('Error fetching room:', error);
     }
@@ -49,12 +50,12 @@ const Entrance = () => {
           {isXsScreen ? (
             <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
               <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
             </Stack>
           ) : (
             <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
               <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
+              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
             </Stack>
           )
           }

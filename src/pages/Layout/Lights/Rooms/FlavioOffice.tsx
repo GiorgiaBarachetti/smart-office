@@ -13,9 +13,10 @@ const FlavioOffice = () => {
   const isXsScreen = useMediaQuery('(min-width:770px)');
   const [room, setRoom] = useState<Lights[]>([]);
 
+  const[loading, setLoading] = useState<boolean>(false)
   const fetchRoom = async () => {
     try {
-      //setLoading(true)
+      setLoading(true)
       const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       if (response.ok) {
         const data = await response.json();
@@ -23,14 +24,13 @@ const FlavioOffice = () => {
       } else {
         console.log('Error fetching room:', response.status);
       }
-      //setLoading(false)
+      setLoading(false)
     } catch (error) {
       console.log('Error fetching room:', error);
     }
     console.log(room);
   };
 
-  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setTimeout(() => fetchRoom(), 1000)
@@ -38,29 +38,28 @@ const FlavioOffice = () => {
     return () => {
       clearTimeout(interval)
     }
-  }, [refreshDatas]);
-
+  }, []);
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
-      <Box component='div' paddingTop={'30px'} paddingBottom={'10px'}>
-        <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: '90%', heigth: '40%', ...SHADOWSTYLE }}>
+    <Box component='div' paddingTop={'30px'} paddingBottom={'10px'}>
+      <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: 'rgba(211, 211, 211,0.4)', mx: 'auto', my: '30px', width: '90%', heigth: '40%', ...SHADOWSTYLE }}>
 
-          {isXsScreen ? (
-            <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
-              <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
-            </Stack>
-          ) : (
-            <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
-              <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
-              <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
-            </Stack>
-          )
-          }
-          <ChartPage id={id} />
-        </Box>
+        {isXsScreen ? (
+          <Stack direction="row" spacing={2} alignItems={'center'} padding={'20px'} >
+            <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
+            <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
+          </Stack>
+        ) : (
+          <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'100px'}>
+            <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom()} />
+            <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading}/>
+          </Stack>
+        )
+        }
+        <ChartPage id={id} />
       </Box>
-    </div>
+    </Box>
+  </div>
   )
 }
 
