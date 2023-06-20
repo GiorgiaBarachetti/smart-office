@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
-import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props {
   idRoom: number;
   light: Lights[]
+  loading: boolean
   fetchRoom: ()=>void
 }
 
-const TableRooms = ({ idRoom, light, fetchRoom }: Props) => {
+const TableRooms = ({ idRoom, light, loading, fetchRoom }: Props) => {
   
-  const[loading, setLoading] = useState(false)
-
   useEffect(() => {
     const interval = setTimeout(()=>fetchRoom(),1000)
 
