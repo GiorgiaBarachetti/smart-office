@@ -5,7 +5,7 @@ import doubleCoffee from '../../../img/Immagine_2023-06-01_175307-removebg-previ
 import background from '../../../img/CoffeeBeans.jpg';
 import { Coffee } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
-import { SHADOWSTYLE } from '../../../utils/const/Const';
+import { CONSUMESSTYLE, SHADOWSTYLE, TYTLESTYLE } from '../../../utils/const/Const';
 
 const BOXSTYLE = {
   display: 'flex',
@@ -20,27 +20,6 @@ const BOXSTYLE = {
   borderRadius: '7px',
   color: 'black',
   ...SHADOWSTYLE
-}
-const CONSUMESSTYLE = {
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'column',
-  backgroundColor: 'white',
-  padding: '20px',
-  m: '20px',
-  alignItems: 'center',
-  color: 'black',
-  borderRadius: '50%',
-  width: '105px',
-  height: '105px',
-  ...SHADOWSTYLE
-}
-
-const TYTLESTYLE = {
-  color: 'black',
-  mt: '10px',
-  variant: 'h1',
-  textAlign: 'center'
 }
 const CoffeePage = () => {
 
@@ -84,8 +63,10 @@ const CoffeePage = () => {
   };
 
   useEffect(() => {
-
-    fetchCoffee()
+    const interval = setInterval(()=>fetchCoffee(),5000)
+    return() => {
+      clearInterval(interval)
+    }
   }, []);
 
   return (
@@ -108,7 +89,7 @@ const CoffeePage = () => {
               </Typography>
 
               <Box component='div' sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
-                <Button sx={{cursor:'pointer'}} onClick={handleCoffeeClick}>
+                <Button sx={{cursor:'pointer'}} onClick={()=>handleCoffeeClick()}>
                   <Box
                     component="img" src={coffee}
                     sx={{
@@ -118,7 +99,7 @@ const CoffeePage = () => {
                 </Button>
 
                 <Button sx={{cursor:'pointer'}}
-                  onClick={handleDoubleCoffeeClick}
+                  onClick={()=>handleDoubleCoffeeClick()}
                 >
                   <Box component="img" src={doubleCoffee}
                     sx={{

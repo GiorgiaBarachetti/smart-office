@@ -62,9 +62,13 @@ const PrinterPage = () => {
   };
 
   useEffect(() => {
-    fetchPrinterStatus();
-    fetchPrinter();
-  }, []);
+    const timeoutStato = setTimeout(()=>fetchPrinterStatus(), 1000)
+    const timeoutDati = setTimeout(()=>fetchPrinter(),1000)
+    return () => {
+      clearTimeout(timeoutStato)
+      clearTimeout(timeoutDati)
+    }
+  }, [statoPresa]);
 
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }} >
