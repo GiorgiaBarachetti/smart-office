@@ -3,24 +3,21 @@ import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
-import { baseURL, urlAlhpa } from "../../utils/fetch/api";
-import { ChartData } from "../../utils/interfaces/Interfaces";
-interface Props {
-    id: number
-}
+import { baseURL, urlAlhpa, urlNiveus } from "../../utils/fetch/api";
+import { ChartDataNiveus } from "../../utils/interfaces/Interfaces";
 
-const ChartEnergy = ({ id }: Props) => {
+const ChartNiveus = () => {
 
-    const [EnergyDatas, setEnergyDatas] = useState<ChartData[]>([]);
+    const [NiveusDatas, setNiveusDatas] = useState<ChartDataNiveus[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     let [selectedDateRange, setSelectedDateRange] = useState('today');
 
     const handleDateRangeClick = (dateRange: string) => {
         setSelectedDateRange(dateRange);
-        fetchEnergyData(dateRange)
+        fetchNiveusData(dateRange)
     }
 
-    const fetchEnergyData = async (range: string) => {
+    const fetchNiveusData = async (range: string) => {
         try {
             setIsLoading(true);
             const currentDate = new Date();
@@ -34,6 +31,7 @@ const ChartEnergy = ({ id }: Props) => {
                 case 'yesterday':
                     const yesterday = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
+                    console.log('oggi',endDate,'ieri', startDate)
                     break;
                 case 'lastWeek':
                     const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -46,18 +44,18 @@ const ChartEnergy = ({ id }: Props) => {
                 default:
                     break;
             }
-            const response = await fetch(`${baseURL}${urlAlhpa}/data/instant?start=${startDate}T00:00:00&end=${endDate}`);
+            const response = await fetch(`${baseURL}${urlNiveus}/data?start=${startDate}T00:00:00&end=${endDate}`);
             console.log(response)
             const data = await response.json();
-            setEnergyDatas(Array.isArray(data) ? data : [data]);
+            setNiveusDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
         } catch (error) {
-            console.log('Error fetching lights data', error);
+            console.log('Error fetching niveus data', error);
         }
     };
 
     useEffect(() => {
-        fetchEnergyData('today')
+        fetchNiveusData('today')
     }, []);
 
     const options = {
@@ -112,8 +110,8 @@ const ChartEnergy = ({ id }: Props) => {
                             height={250}
                             chartType="LineChart"
                             data={[
-                                ['time', 'watt'],
-                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => {return [new Date(timestamp), power]}),
+                                ['timestamp', 'watt'],
+                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => {return [new Date(timestamp), watt]}),
                             ]}
                             options={options}
                         />
@@ -125,4 +123,4 @@ const ChartEnergy = ({ id }: Props) => {
     );
 };
 
-export default ChartEnergy;
+export default ChartNiveus;

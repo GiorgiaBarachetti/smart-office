@@ -105,7 +105,7 @@ const ChartPage = ({ id }: Props) => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ height: '400px' }}>
+                <Box sx={{height: '260px'}}>
                 {isLoading ? (
                     <LinearProgress />
                 ) : (
