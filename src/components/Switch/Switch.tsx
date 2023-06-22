@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
-import { Box, Button, ButtonGroup, CardActionArea, CardContent, CardMedia, CircularProgress, LinearProgress, Stack, Switch, Typography } from '@mui/material'
-import Card from '@mui/material/Card';
-
+import { Card, Box, Button, ButtonGroup, CardActionArea, CardContent, LinearProgress, Typography } from '@mui/material'
 interface Props {
   id: number
   room: Lights[]

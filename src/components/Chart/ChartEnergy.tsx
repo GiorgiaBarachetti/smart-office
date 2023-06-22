@@ -1,7 +1,6 @@
 import { Chart } from "react-google-charts";
 import React, { useEffect, useState } from 'react';
-import Paper from '@mui/material/Paper';
-import { Box, Button, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, LinearProgress, Typography, Paper } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlAlhpa } from "../../utils/fetch/api";
 import { ChartData } from "../../utils/interfaces/Interfaces";

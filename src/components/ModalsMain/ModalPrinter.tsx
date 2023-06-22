@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
-import { ButtonGroup } from '@mui/material';
+import { ButtonGroup, Button, Box, Modal, Typography } from '@mui/material';
 import { PrinterStatus } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlTplink } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
@@ -15,28 +11,25 @@ interface Props {
   idPrinter: number | undefined;
   printerStatus: PrinterStatus[]
   handleClose: () => void;
+  fetchPrinter: () => void;
   fetchPrinterStatus: () => void
 }
 
-const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinterStatus}: Props) => {
-  const navigate = useNavigate();
+const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinter, fetchPrinterStatus }: Props) => {
 
+  const navigate = useNavigate();
   const gotoPage = () => {
     navigate(PATH.printer);
   };
 
-  const [printerStatu, setPrinterStatu] = useState<boolean>(false);
-  
-
-  useEffect(() => {
-    setTimeout(() => {()=> fetchPrinterStatus()}, 1000)
-  }, [printerStatu]);
-
+  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
   const switchOnPrinter = async () => {
     try {
-      await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
-      setPrinterStatu((prevState)=>!prevState);
+      if (printerStatus) {
+        await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
+        setRefreshDatas((prevState) => !prevState);
+      }
     } catch (error) {
       console.log('Error switching on the printer:', error);
     }
@@ -44,40 +37,42 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
 
   const switchOffPrinter = async () => {
     try {
-      await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
-      setPrinterStatu((prevState)=>!prevState);
-
+      if (printerStatus) {
+        await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
+        setRefreshDatas((prevState) => !prevState);
+      }
     } catch (error) {
       console.log('Error switching off the printer:', error);
     }
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => fetchPrinter(), 1000)
+    const timeoutStatus = setTimeout(() => fetchPrinterStatus(), 1000)
+    return () => {
+      clearTimeout(timeout)
+      clearTimeout(timeoutStatus)
+    }
+  }, [refreshDatas]);
+
   return (
-    <Box
-      onClick={() => {
-        // chiude modalquando clicchi di fuori
-        handleClose();
-      }}>
-
-      <Modal
-        open={open}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box component='div' sx={MODALSTYLE}>
-          <Typography variant="h6" component="h1">Printer, id {idPrinter !=undefined ? idPrinter : ''}</Typography>
-          <ButtonGroup>
-            <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={idPrinter !== undefined && printerStatus[idPrinter]?.stato_presa === true}>ON</Button>
-            <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={idPrinter !== undefined && printerStatus[idPrinter]?.stato_presa === false}>OFF</Button>
-          </ButtonGroup>
-          <Box component='div'>
-            <Button sx={{cursor:'pointer'}} onClick={()=>gotoPage()}>GO TO PRINTER PAGE</Button>
-            <Button sx={{cursor:'pointer'}} onClick={()=>handleClose()}>CLOSE</Button>
-          </Box>
-
+    <Modal
+      open={open}
+      onClose={() => handleClose()}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description">
+      <Box component='div' sx={MODALSTYLE}>
+        <Typography variant="h6" component="h1">Printer, id {idPrinter != undefined ? idPrinter : ''}</Typography>
+        <ButtonGroup>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnPrinter()} disabled={printerStatus != undefined && printerStatus[0]?.stato_presa === true}>ON</Button>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => switchOffPrinter()} disabled={printerStatus != undefined && printerStatus[0]?.stato_presa === false}>OFF</Button>
+        </ButtonGroup>
+        <Box component='div'>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO PRINTER PAGE</Button>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
         </Box>
-      </Modal>
-    </Box>
+      </Box>
+    </Modal>
   );
 };
 

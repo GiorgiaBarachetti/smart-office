@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Energy } from '../../../utils/interfaces/Interfaces';
 import TableEnergy from '../../../components/Tables/TableEnergy'
 import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
 import ChartPage from '../../../components/Chart/ChartEnergy';

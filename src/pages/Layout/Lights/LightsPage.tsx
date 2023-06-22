@@ -1,16 +1,12 @@
-import React from 'react';
-import { Box, Button, ButtonGroup, CardActionArea, CardContent, CardHeader, CardMedia, CircularProgress, LinearProgress, Stack, Switch, Typography } from '@mui/material'
+import React, { useState, useEffect }  from 'react';
+import { Box, Button, ButtonGroup, CardActionArea, CardContent, Card, CardMedia, CircularProgress, LinearProgress, Stack, Switch, Typography } from '@mui/material'
 import TableLights from '../../../components/Tables/TableLights'
-import Card from '@mui/material/Card';
 import { Lights } from '../../../utils/interfaces/Interfaces';
-import { useState, useEffect } from 'react'
 import { baseURL, urlShelly } from '../../../utils/fetch/api';
 import { ROOMPHOTOS, SHADOWSTYLE } from '../../../utils/const/Const';
 import CircleIcon from '@mui/icons-material/Circle';
-import ModalLights from '../../../components/ModalsLigthsPage/ModalLights';
-import ClickAwayListener from '@mui/base/ClickAwayListener';
 import { useNavigate } from 'react-router-dom';
-import { PATHDROPDOWNROOMS, SIDEBARROOMS } from '../../../utils/routes/path';
+import { SIDEBARROOMS } from '../../../utils/routes/path';
 
 const LightsPage = () => {
 

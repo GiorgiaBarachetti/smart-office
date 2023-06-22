@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { Printer } from '../../utils/interfaces/Interfaces';
-import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
+import { SHADOWSTYLE } from '../../utils/const/Const';
 
 interface Props {
   printer: Printer[];

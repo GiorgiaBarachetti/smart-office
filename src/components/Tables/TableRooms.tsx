@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';

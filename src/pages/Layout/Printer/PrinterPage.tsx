@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography, LinearProgress } from '@mui/material';
-import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink } from '../../../utils/fetch/api'
-import { BOXSTYLE, SHADOWSTYLE } from '../../../utils/const/Const';
+import { baseURL, urlTplink } from '../../../utils/fetch/api'
+import { SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/stampante.avif'
 
 const PrinterPage = () => {

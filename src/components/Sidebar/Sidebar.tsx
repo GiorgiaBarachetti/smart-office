@@ -1,30 +1,16 @@
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
+import {Box, Drawer, CssBaseline, Toolbar, Typography, List, Divider, IconButton, ListItem, ListItemButton, ListItemText, ClickAwayListener, LinearProgress } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { SIDEBAR, PATHDROPDOWNROOMS, PATH, SIDEBARROOMS } from '../../utils/routes/path';
+import { SIDEBAR, PATH, SIDEBARROOMS } from '../../utils/routes/path';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { ClickAwayListener, LinearProgress } from '@mui/material';
 import Timer from '../Timer/Timer';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-
 
 const drawerWidth = '240px';
-
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }

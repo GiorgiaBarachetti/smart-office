@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Energy, Niveus } from '../../../utils/interfaces/Interfaces';
-import TableEnergy from '../../../components/Tables/TableEnergy'
-import { baseURL, urlAlhpa, urlNiveus } from '../../../utils/fetch/api';
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Niveus } from '../../../utils/interfaces/Interfaces';
+import { baseURL, urlNiveus } from '../../../utils/fetch/api';
+import { Box, Typography } from '@mui/material';
 import { SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/niveus.png'
 import TableNiveus from '../../../components/Tables/TableNiveus';
