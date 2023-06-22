@@ -110,11 +110,6 @@ const MainPage = () => {
 
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingLights, setIsLoadingLights] = useState(false);
-  const [isLoadingCoffee, setIsLoadingCoffee] = useState(false);
-  const [isLoadingEnergy, setIsLoadingEnergy] = useState(false);
-  const [isLoadingNiveus, setIsLoadingNiveus] = useState(false);
-  const [isLoadingPrinter, setIsLoadingPrinter] = useState(false);
 
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
 
@@ -122,12 +117,10 @@ const MainPage = () => {
   const fetchLights = async () => {
     try {
       //setIsLoading(true);
-      //setIsLoadingLights(true)
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data.data);
-      //setIsLoading(false);
-      //setIsLoadingLights(false)
+      setIsLoading(false);
     } catch (error) {
       console.log('error fetching lights', error);
     }
@@ -137,14 +130,12 @@ const MainPage = () => {
   const [coffeeDatas, setCoffeeDatas] = useState<Coffee[]>([]);
   const fetchCoffee = async () => {
     try {
-      setIsLoading(true);
-      setIsLoadingCoffee(true)
+      //setIsLoading(true);
       const response = await fetch(`${baseURL}${urlCoffee}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeDatas(Array.isArray(data) ? data : [data]);
-      setIsLoading(false);
-      setIsLoadingCoffee(false)
+      //setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -153,14 +144,12 @@ const MainPage = () => {
   const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
   const fetchEnergy = async () => {
     try {
-      setIsLoading(true);
-      setIsLoadingEnergy(true)
+      //setIsLoading(true);
       const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);
-      setIsLoading(false);
-      setIsLoadingEnergy(false)
+      //setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -170,12 +159,12 @@ const MainPage = () => {
 
   const fetchNiveus = async () => {
     try {
-      setIsLoading(true)
+      //setIsLoading(true)
       const response = await fetch(`${baseURL}${urlNiveus}/registers`);
       const data = await response?.json();
       setNiveusData(Array.isArray(data) ? data : [data]);
       console.log(data)
-      setIsLoading(false)
+      //setIsLoading(false)
     } catch (error) {
       console.log('not found datas of niveus');
     }
@@ -185,14 +174,12 @@ const MainPage = () => {
 
   const fetchPrinter = async () => {
     try {
-      setIsLoading(true);
-      setIsLoadingPrinter(true)
+      //setIsLoading(true);
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterDatas(Array.isArray(data) ? data : [data]);
-      setIsLoading(false);
-      setIsLoadingPrinter(false)
+      //setIsLoading(false);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -212,27 +199,54 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const intervalCoffee = setInterval(() => fetchCoffee(), 10000)
-    const intervalEnergy = setInterval(() => fetchEnergy(), 1000)
+    setIsLoading(true)
+    const intervalCoffee = setTimeout(() => fetchCoffee(), 1000)
+    const intervalEnergy = setTimeout(() => fetchEnergy(), 1000)
     const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
     const timeoutPrinter = setTimeout(() => fetchPrinter(), 1000)
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
-
-    return () => {
-      clearInterval(intervalCoffee)
-      clearInterval(intervalEnergy)
+   
+   return () => {
+      clearTimeout(intervalCoffee)
+      clearTimeout(intervalEnergy)
       clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
       clearTimeout(timeoutPrinterStatus)
+   
     }
   }, []);
 
   useEffect(() => {
-    const timeoutLights = setInterval(() => fetchLights(), 1000)
+    setIsLoading(true)
+
+    const timeoutLights = setTimeout(() => fetchLights(), 10000)
     return () => {
-      clearInterval(timeoutLights)
+      clearTimeout(timeoutLights)
+    }
+
+  }, []);
+
+//useeffect per fare interval 
+  useEffect(() => {
+    const intervalCoffee = setInterval(() => fetchCoffee(), 10000)
+    const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
+    const intervalNiveus = setInterval(() => fetchNiveus(), 10000)
+    const intervalPrinter = setInterval(() => fetchPrinter(), 10000)
+    const intervalPrinterStatus = setInterval(() => fetchPrinterStatus(), 10000)
+    const intervalLights = setTimeout(() => fetchLights(), 10000)
+   
+   return () => {
+      //setIsLoading(true)
+      clearInterval(intervalCoffee)
+      clearInterval(intervalEnergy)
+      clearInterval(intervalNiveus)
+      clearInterval(intervalPrinter)
+      clearInterval(intervalPrinterStatus)
+      clearInterval(intervalLights)
+    
     }
   }, []);
+
 
   const [boltStyle, setBoltStyle] = useState({
     color: "rgba(113,200, 46)",
@@ -358,17 +372,15 @@ const MainPage = () => {
     return { x, y };
   };
 
-
+  
   return (
     <div>
       {/*MOSTRA Il loader se è true  */}
+      {isLoading && (<CircularProgress sx={{position: 'absolute', top:10, right:10}}/>)}
 
-      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" /*style={{ paddingLeft: { sm: '80px', md: '150px' } }} */>
-        <image href={planimetry} width={'100%'}></image>
-        {isLoadingLights ? (
-          <LinearProgress />
-        ) : (
-          lightsDatasArray && lightsDatasArray.length > 0 ? (
+      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" >
+        <image href={planimetry} width={'100%'} style={{ position: 'relative' }}/>
+        {lightsDatasArray && lightsDatasArray.length > 0 ? (
             lightsDatasArray
               .filter((light) => light.state && light.state.id !== 8 && light.state.id !== 9)
               .map((light) => {
@@ -388,13 +400,11 @@ const MainPage = () => {
               })
           ) : (
             'lightsDatasArray is empty'
-          )
-        )}
+          )}
 
         {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
 
-        {isLoadingCoffee ? (<LinearProgress />) : (
-          coffeeDatas.length ? (
+        {coffeeDatas.length ? (
             coffeeDatas.map((coffee) => {
               const { x, y } = getCoordinates(coffee.coffes.id);
               return (
@@ -414,11 +424,9 @@ const MainPage = () => {
             })
           ) : (
             'CoffeeDatas array is empty'
-          )
-        )}
+          )}
 
-        {isLoadingNiveus ? (<LinearProgress />) : (
-          niveusData.length ? (
+        {niveusData.length ? (
             niveusData.map((niveus) => {
               const { x, y } = getCoordinates(niveus.id);
               return (
@@ -431,11 +439,9 @@ const MainPage = () => {
                 </g>
               )
             })
-          ) : ('niveusData is empty')
-        )}
+          ) : ('niveusData is empty')}
 
-        {isLoadingEnergy ? (<LinearProgress />) : (
-          energyDatas.length ? (
+        {energyDatas.length ? (
             energyDatas.map((energy) => {
               const { x, y } = getCoordinates(energy.id);
               return (
@@ -451,19 +457,9 @@ const MainPage = () => {
           ) : (
             'energyDatas is empty'
           )
-        )}
+        }
 
-        {isLoadingPrinter ? (<CircularProgress
-          size={24}
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: '-12px',
-            marginLeft: '-12px',
-          }} />
-        ) : (
-          printerDatas.length ? (
+        {printerDatas.length ? (
             printerDatas.map((printer) => {
               const { x, y } = getCoordinates(printer.tplinkStampante.id);
               return (
@@ -479,7 +475,7 @@ const MainPage = () => {
           ) : (
             'printerDatas is empty'
           )
-        )}
+        }
       </svg>
 
       <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={fetchLights} />
