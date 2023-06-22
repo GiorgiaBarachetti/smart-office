@@ -7,7 +7,7 @@ import { baseURL } from "../../utils/fetch/api";
 interface Props {
     id: number
 }
-const ChartPage = ({ id }: Props) => {
+const ChartLights = ({ id }: Props) => {
     interface ChartData {
         time: string;
         watt: number;
@@ -49,8 +49,9 @@ const ChartPage = ({ id }: Props) => {
                 default:
                     break;
             }
+            console.log(startDate, endDate)
+
             const response = await fetch(`${baseURL}/api/shelly/${id}/data?start=${startDate}T00:00:00&end=${endDate}`);
-            console.log(response)
             const data = await response.json();
             setLightsDatasArray(data);
             setIsLoading(false);
@@ -129,4 +130,4 @@ const ChartPage = ({ id }: Props) => {
     );
 };
 
-export default ChartPage;
+export default ChartLights;

@@ -25,7 +25,6 @@ const ChartEnergy = ({ id }: Props) => {
             const currentDate = new Date();
             let startDate = '';
             let endDate = currentDate;
-            console.log(endDate)
             switch (range) {
                 case 'today':
                     startDate = currentDate.toISOString().split('T')[0];
@@ -45,10 +44,11 @@ const ChartEnergy = ({ id }: Props) => {
                 default:
                     break;
             }
+            console.log(startDate, endDate)
             const response = await fetch(`${baseURL}${urlAlhpa}/data/instant?start=${startDate}T00:00:00&end=${endDate}`);
-            console.log(response)
             const data = await response.json();
             setEnergyDatas(Array.isArray(data) ? data : [data]);
+            console.log(data)
             setIsLoading(false);
         } catch (error) {
             console.log('Error fetching lights data', error);
@@ -69,6 +69,8 @@ const ChartEnergy = ({ id }: Props) => {
             }
         },
         minorGridlines: {
+            count: -1,
+
             units: {
                 days: { format: ['dd/MM/YY'] },
                 hours: { format: ['HH'] },
@@ -111,7 +113,7 @@ const ChartEnergy = ({ id }: Props) => {
                             height={250}
                             chartType="LineChart"
                             data={[
-                                ['time', 'watt'],
+                                ['timestamp', 'watt'],
                                 ...EnergyDatas[0]?.power.map(({ timestamp, power }) => {return [new Date(timestamp), power]}),
                             ]}
                             options={options}

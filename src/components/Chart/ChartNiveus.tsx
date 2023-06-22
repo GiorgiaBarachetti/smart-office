@@ -22,7 +22,6 @@ const ChartNiveus = () => {
             const currentDate = new Date();
             let startDate = '';
             let endDate = currentDate;
-            console.log(endDate)
             switch (range) {
                 case 'today':
                     startDate = currentDate.toISOString().split('T')[0];
@@ -43,6 +42,8 @@ const ChartNiveus = () => {
                 default:
                     break;
             }
+            console.log(startDate, endDate)
+
             const response = await fetch(`${baseURL}${urlNiveus}/data?start=${startDate}T00:00:00&end=${endDate}`);
             console.log(response)
             const data = await response.json();

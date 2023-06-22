@@ -4,7 +4,7 @@ import TableRooms from '../../../../components/Tables/TableRooms';
 import background from '../../../../img/stanzePages/andrea.jpg'
 import { SHADOWSTYLE } from '../../../../utils/const/Const';
 import SwitchComponent from '../../../../components/Switch/Switch';
-import ChartPage from '../../../../components/Chart/ChartPage';
+import ChartLights from '../../../../components/Chart/ChartLights';
 import { Lights } from '../../../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 
@@ -55,7 +55,7 @@ const MeetingRoom = () => {
             </Stack>
           )
           }
-          <ChartPage id={id} />
+          <ChartLights id={id} />
         </Box>
       </Box>
     </div>
