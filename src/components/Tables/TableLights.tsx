@@ -20,7 +20,6 @@ const TableLights = ({loading, lightsDatasArray}: Props) => {
     const totalAenergy = lightsDatasArray != undefined ?  lightsDatasArray.reduce((currentValueSum, light) => currentValueSum + (light.state.aenergy != undefined ? (light.state.aenergy.total ||0) : 0), 0): 0;
     //total count of room with light on
     const totalLightsOn = lightsDatasArray != undefined ? (lightsDatasArray.filter((light) => (light.state !=undefined ? light.state.output: 0)).length ): 0;
-    console.log(totalLightsOn)
     //ordinamento per id ascendentez
     const sortedLightsDatasArray = lightsDatasArray != undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
   return (
