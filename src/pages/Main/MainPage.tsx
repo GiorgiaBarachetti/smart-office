@@ -35,7 +35,7 @@ const printerStyle = {
 }
 const niveusStyle = {
   color: "#66e0dc",
-  stroke: "#0f4389"
+  stroke: "#006dffad"
 }
 
 const MainPage = () => {
@@ -283,30 +283,30 @@ const MainPage = () => {
     switch (roomId) {
       case 0: // UFFICIO ANDREA
         x = 1000;
-        y = -100;
+        y = -70;
         break;
 
       // SALA RIUNIONI
       case 1:
         x = 810;
-        y = -170;
+        y = -120;
         break;
 
       // UFFICIO FLAVIO
       case 2:
         x = 565;
-        y = -245;
+        y = -200;
         break;
 
       // LABORATORIO
       case 3:
-        x = 370;
+        x = 400;
         y = -245;
         break;
 
       // CUCINA-RIPOSTIGLIO
       case 4:
-        x = 185;
+        x = 220;
         y = -245;
         break;
 
