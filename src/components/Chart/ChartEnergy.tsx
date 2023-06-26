@@ -29,7 +29,6 @@ const ChartEnergy = () => {
                 case 'yesterday':
                     const yesterday = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
-                    console.log('oggi',endDate,'ieri', startDate)
                     break;
                 case 'lastWeek':
                     const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -44,7 +43,6 @@ const ChartEnergy = () => {
             }
             const response = await fetch(`${baseURL}${urlAlhpa}/data/instant?start=${startDate}T00:00:00&end=${endDate}`);
             const data = await response.json();
-            console.log(data)
             setEnergyDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
         } catch (error) {

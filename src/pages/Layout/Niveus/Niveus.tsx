@@ -20,7 +20,7 @@ const NiveusPage = () => {
       setNiveusData(Array.isArray(data) ? data : [data]);
       setIsLoading(false)
     } catch (error) {
-      console.log('not found datas of niveus');
+      console.log('error fetching datas of niveus', error);
     }
   };
 

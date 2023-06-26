@@ -20,10 +20,8 @@ const PrinterPage = () => {
       const response = await fetch(`${baseURL}${urlTplink}/data`);
       const data = await response?.json();
       setPrinterDatas(Array.isArray(data) ? data : [data]);
-      console.log(data);
       setIsLoading(false)
     } catch (error) {
-      console.log('not found datas of printer');
     }
   };
 

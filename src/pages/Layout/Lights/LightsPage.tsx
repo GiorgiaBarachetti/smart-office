@@ -36,7 +36,6 @@ const LightsPage = () => {
       } else {
         const response = await fetch(`${baseURL}${urlShelly}/${key}/status`);
         const data = await response?.json();
-        console.log(data);
 
         const updatedLightsDatasArray = lightsDatasArray.map(light => {
           if (light?.state.id === key) {

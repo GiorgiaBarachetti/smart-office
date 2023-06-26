@@ -27,7 +27,6 @@ const MeetingRoom = () => {
     } catch (error) {
       console.log('Error fetching room:', error);
     }
-    console.log(room);
   };
 
 

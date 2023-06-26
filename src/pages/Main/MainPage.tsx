@@ -121,7 +121,7 @@ const MainPage = () => {
       setLightsDatasArray(data.data);
       setIsLoading(false);
     } catch (error) {
-      console.log('error fetching lights', error);
+      console.log('Error fetching lights', error);
     }
   };
 
@@ -157,7 +157,6 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlNiveus}/registers`);
       const data = await response?.json();
       setNiveusData(Array.isArray(data) ? data : [data]);
-      console.log(data)
     } catch (error) {
       console.log('not found datas of niveus');
     }
@@ -209,12 +208,10 @@ const MainPage = () => {
 
   useEffect(() => {
     setIsLoading(true)
-
     const timeoutLights = setTimeout(() => fetchLights(), 1000)
     return () => {
       clearTimeout(timeoutLights)
     }
-
   }, []);
 
   //useeffect per fare interval 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATH, SIDEBARROOMS } from '../../utils/routes/path';
-import { Box, Button, ButtonGroup, Typography, Modal } from '@mui/material';
+import { Box, Button, ButtonGroup, Typography, Modal, LinearProgress } from '@mui/material';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
 import { Lights } from '../../utils/interfaces/Interfaces';
@@ -35,10 +35,12 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
 
   const switchOnLightById = async (key: number | undefined) => {
     try {
-      const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
-      if (light && !light.state.output) {
-        await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
-        setRefreshDatas((prevState) => !prevState);
+      if (key != undefined) {
+        const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
+        if (light && light.state.output === false) {
+          await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
+          setRefreshDatas(true);
+        }
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
@@ -47,26 +49,25 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
 
   const switchOffLightById = async (key: number | undefined) => {
     try {
-      const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
-      if (light && light.state.output) {
-        await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
-        setRefreshDatas((prevState) => !prevState);
+      if (key != undefined) {
+        const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
+        if (light && light.state.output === true) {
+          await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
+          setRefreshDatas(false);
+        }
       }
     } catch (error) {
       console.log('Error switching the light of the room:', error);
     }
   };
-
+ 
+  
   useEffect(() => {
-    const timeout = setTimeout(() => { () => fetchLights() }, 1000);
+    const timeout =setTimeout(() => fetchLights(), 1000);
     return () => {
       clearTimeout(timeout)
     }
-  }, [refreshDatas])
-
-
-
-
+  }, [refreshDatas]);
 
   return (
     <Modal open={open} onClose={() => handleClose()} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -91,12 +92,12 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
               >OFF</Button>
             </ButtonGroup>
           </Box>
-          <Box component='div' sx={{ display: 'flex', flexDirection:'column', pt:'20px' }}>
-            <Box component='div' sx={{ display: 'flex', gap:'10px'}}>
-            <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>GO TO {idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
-            <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO LIGHTS PAGE</Button>
+          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', pt: '20px' }}>
+            <Box component='div' sx={{ display: 'flex', gap: '10px' }}>
+              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>GO TO {idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
+              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO LIGHTS PAGE</Button>
             </Box>
-              <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
+            <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>
       </Box>

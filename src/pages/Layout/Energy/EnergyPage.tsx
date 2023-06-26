@@ -16,7 +16,7 @@ const EnergyPage = () => {
       const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
       const data = await response?.json();
       setEnergyStatus(Array.isArray(data) ? data : [data]);
-      console.log(data);
+      
       setIsLoading(false)
     } catch (error) {
       console.log('not found datas of energy');
@@ -33,7 +33,6 @@ const EnergyPage = () => {
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
     if (energyStatus[0]?.powerUsed >= 1308) {
-      console.log(energyStatus[0]?.powerUsed);
       return {
         ...boltStyle,
         color: "rgba(202,232,76)"

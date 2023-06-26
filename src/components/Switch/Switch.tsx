@@ -19,8 +19,6 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
       clearTimeout(timeout)
     }
   }, [refreshDatas]);
-
-
   
   const switchOnLightById = async () => {
     try {

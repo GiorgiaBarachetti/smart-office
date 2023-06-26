@@ -28,7 +28,6 @@ const FlavioOffice = () => {
     } catch (error) {
       console.log('Error fetching room:', error);
     }
-    console.log(room);
   };
 
 
