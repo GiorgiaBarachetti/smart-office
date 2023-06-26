@@ -1,27 +1,16 @@
 # Material UI - Create React App example in TypeScript
 
 ## How to use
+Install or clone the repository
+```sh
+https://github.com/GiorgiaBarachetti/smart-office
+```
 
-Install it or clone the repository
->(https://github.com/GiorgiaBarachetti/smart-office)
-
-
-Install it and run:
-
+Then run:
 ```sh
 npm install
 npm start
 ```
-
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui/material-ui/tree/master/examples/material-cra-ts)
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-cra-ts)
 
 ## The idea behind the example
 
