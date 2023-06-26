@@ -418,7 +418,7 @@ const MainPage = () => {
                 <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
                 <rect x={x + 50} y={y + 300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
                 <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${niveus.data.receivedData.watt !== undefined ? niveus.data.receivedData.watt : ''} W`}</tspan>
+                  <tspan>{`Power: ${niveus?.data?.receivedData?.watt !== undefined ? niveus?.data?.receivedData?.watt : ''} W`}</tspan>
                 </text>
               </g>
             )
