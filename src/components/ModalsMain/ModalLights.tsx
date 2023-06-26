@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PATH } from '../../utils/routes/path';
+import { PATH, SIDEBARROOMS } from '../../utils/routes/path';
 import { Box, Button, ButtonGroup, Typography, Modal } from '@mui/material';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
@@ -20,6 +20,11 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   const gotoPage = () => {
     navigate(PATH.lightsPage);
   };
+  const gotoPageById = (key: number | undefined) => {
+    if (key != undefined) {
+      navigate(SIDEBARROOMS[key].href);
+    } else { }
+  }
 
   const getRoomName = (roomId: number | undefined) => {
     const roomName = lights != undefined ? (lights.find((light) => light.state.id === roomId)) : ('');
@@ -86,9 +91,12 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
               >OFF</Button>
             </ButtonGroup>
           </Box>
-          <Box component='div' sx={{ display: 'flex', }}>
+          <Box component='div' sx={{ display: 'flex', flexDirection:'column', pt:'20px' }}>
+            <Box component='div' sx={{ display: 'flex', gap:'10px'}}>
+            <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>GO TO {idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
             <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO LIGHTS PAGE</Button>
-            <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
+            </Box>
+              <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>
       </Box>
