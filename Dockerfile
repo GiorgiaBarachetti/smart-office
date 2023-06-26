@@ -1,4 +1,4 @@
-FROM node:17.14-alpine
+FROM node:18.14-alpine
 WORKDIR /index
 COPY . .
 RUN npm install
