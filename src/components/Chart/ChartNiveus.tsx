@@ -29,7 +29,6 @@ const ChartNiveus = () => {
                 case 'yesterday':
                     const yesterday = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
-                    console.log('oggi',endDate,'ieri', startDate)
                     break;
                 case 'lastWeek':
                     const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -42,10 +41,7 @@ const ChartNiveus = () => {
                 default:
                     break;
             }
-            console.log(startDate, endDate)
-
             const response = await fetch(`${baseURL}${urlNiveus}/data?start=${startDate}T00:00:00&end=${endDate}`);
-            console.log(response)
             const data = await response.json();
             setNiveusDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
@@ -75,11 +71,8 @@ const ChartNiveus = () => {
             }
         },
         vAxis: { title: "Watt", minValue: 0 },
-        //backgroundColor:'rgba(255, 255, 255, 0.8)',
         chartArea: { width: "50%", height: "60%" },
     };
-
-
 
     return (
         <Box component='div' sx={{ padding: '20px' }}>

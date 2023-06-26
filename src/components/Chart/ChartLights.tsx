@@ -53,6 +53,8 @@ const ChartLights = ({ id }: Props) => {
 
             const response = await fetch(`${baseURL}/api/shelly/${id}/data?start=${startDate}T00:00:00&end=${endDate}`);
             const data = await response.json();
+            console.log(data)
+
             setLightsDatasArray(data);
             setIsLoading(false);
         } catch (error) {
