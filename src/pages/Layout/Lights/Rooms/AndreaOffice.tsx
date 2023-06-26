@@ -30,7 +30,6 @@ const AndreaOffice = () => {
     }
   };
 
-
   useEffect(() => {
     const interval = setTimeout(() => fetchRoom(), 1000)
 

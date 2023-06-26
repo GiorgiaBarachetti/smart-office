@@ -86,7 +86,7 @@ const LightsPage = () => {
         if (light.state.output === false) {
           await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
           setIsLoading(key);
-          setTimeout(() => fetchLights(key), 4000);
+          setTimeout(() => fetchLights(key), 1000);
         }
       }
     } catch (error) {
@@ -101,7 +101,7 @@ const LightsPage = () => {
         if (light.state.output === true) {
           await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
           setIsLoading(key);
-          setTimeout( () => fetchLights(key), 4000);
+          setTimeout( () => fetchLights(key), 1000);
         }
       }
     } catch (error) {

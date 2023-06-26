@@ -221,7 +221,7 @@ const MainPage = () => {
     const intervalNiveus = setInterval(() => fetchNiveus(), 10000)
     const intervalPrinter = setInterval(() => fetchPrinter(), 10000)
     const intervalPrinterStatus = setInterval(() => fetchPrinterStatus(), 10000)
-    const intervalLights = setTimeout(() => fetchLights(), 10000)
+    const intervalLights = setInterval(() => fetchLights(), 10000)
 
     return () => {
       clearInterval(intervalCoffee)
