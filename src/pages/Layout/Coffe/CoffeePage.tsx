@@ -6,6 +6,7 @@ import { Coffee } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
 import { CONSUMESSTYLE, SHADOWSTYLE, TYTLESTYLE } from '../../../utils/const/Const';
 import Stack from '@mui/material/Stack';
+import ModalCoffeMessage from './ModalCoffeMessage';
 
 const BOXSTYLE = {
   display: 'flex',
@@ -23,11 +24,22 @@ const BOXSTYLE = {
 }
 const CoffeePage = () => {
 
+  
+  const [openModalCoffee, setOpenModalCoffee] = useState(false)
+
+  const openCoffeeModal = () => {
+    setOpenModalCoffee(true);
+  };
+  const closeCoffeeModal = () => {
+    setOpenModalCoffee(false)
+  }
+
+
   const [loading, setLoading] = useState<boolean>(false)
 
   const [coffeeData, setCoffeeData] = useState<Coffee[]>([]);
   const isXsScreen = useMediaQuery('(min-width:900px)');
-
+  
   const fetchCoffee = async () => {
     try {
       setLoading(true)
@@ -40,7 +52,7 @@ const CoffeePage = () => {
       console.log('Error fetching coffee:', error);
     }
   };
-
+  
   const handleCoffeeClick = () => {
     fetchCoffeeNumber(1);
   };
@@ -48,9 +60,9 @@ const CoffeePage = () => {
   const handleDoubleCoffeeClick = () => {
     fetchCoffeeNumber(2);
   };
-
-
+  
   const [message, setMessage] = useState('')
+
   const fetchCoffeeNumber = async (number: number) => {
     const headers = {
       Accept: 'application/json',
@@ -61,7 +73,12 @@ const CoffeePage = () => {
       headers,
     });
     await fetchCoffee();
-    return setMessage('Coffee number has been saved')
+    openCoffeeModal()
+    if(number===1){
+      return setMessage('One coffee added to coffee count')
+    }else if(number===2){
+      return setMessage('Double coffees added to coffee count')
+    }
   };
 
   useEffect(() => {
@@ -100,16 +117,13 @@ const CoffeePage = () => {
                     }} />
                 </Button>
 
-                <Button sx={{ cursor: 'pointer' }}
-                  onClick={() => handleDoubleCoffeeClick()}
-                >
+                <Button sx={{ cursor: 'pointer' }} onClick={() => handleDoubleCoffeeClick()}>
                   <Box component="img" src={doubleCoffee}
                     sx={{
                       maxHeight: { xs: 140, md: 220 },
                     }} />
                 </Button>
               </Box>
-              <Typography sx={{ textAlign: 'center', color: '#d3d3d382' }}>{message}</Typography>
             </Box>
 
             <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '40%' }}>
@@ -214,7 +228,6 @@ const CoffeePage = () => {
                   }} component="img" src={doubleCoffee} />
                 </Button>
               </Box>
-              <Typography sx={{ textAlign: 'center', color: '#d3d3d382' }}>{message}</Typography>
             </Box>
 
 
@@ -284,6 +297,7 @@ const CoffeePage = () => {
         </Box>
       )
       }
+      <ModalCoffeMessage open={openModalCoffee} message={message} handleClose={()=>closeCoffeeModal()}/>
     </Box >
   );
 };
