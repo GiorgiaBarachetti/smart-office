@@ -72,7 +72,7 @@ const EnergyPage = () => {
           <Box component='div' sx={{ padding: '1px', borderRadius: '11px', bgcolor: {...boltStyle}, mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
             <TableEnergy loading={isLoading} energy={energyStatus} />
           </Box>
-            <ChartLights id={200}/>
+            <ChartLights/>
         </Box>
       </Box>
     </div>
