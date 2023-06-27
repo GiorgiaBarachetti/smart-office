@@ -7,6 +7,7 @@ import { baseURL, urlCoffee } from '../../../utils/fetch/api';
 import { CONSUMESSTYLE, SHADOWSTYLE, TYTLESTYLE } from '../../../utils/const/Const';
 import Stack from '@mui/material/Stack';
 import ModalCoffeMessage from './ModalCoffeMessage';
+import background from './../../../img/coffee-5447420_1280.jpg'
 
 const BOXSTYLE = {
   display: 'flex',
@@ -89,12 +90,13 @@ const CoffeePage = () => {
   }, []);
 
   return (
-    <Box component='div' padding={5}>
+    <Box style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover',  height: '718px'  }}>
+      <Box component='div' paddingTop={'50px'} width={'90%'} mx={'auto'} >
       {/**DESKTOP */}
       {isXsScreen ? (
-        <Stack direction='row' gap={'10px'} width={{lg:'80%', md:'100%'}} marginLeft={'auto'} marginRight={'auto'} justifyContent={'center'}>
+        <Stack direction='row' gap={'10px'} width={{lg:'90%', md:'90%'}} marginLeft={'auto'} marginRight={'auto'} justifyContent={'center'}>
           <Stack direction='column' width={'75%'} gap={'10px'}>
-            <Box component='div' style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '60%', marginBottom: '0' }}>
+            <Box component='div' style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', marginBottom: '0' }}>
               <Typography
                 variant="h5"
                 sx={{
@@ -102,7 +104,7 @@ const CoffeePage = () => {
                   textAlign: 'center',
                   pt: '20px',
                   mx: 'auto',
-                  color: 'black'
+                  color: 'white'
                 }}>
                 SELECT THE QUANTITY OF COFFEE
               </Typography>
@@ -128,7 +130,7 @@ const CoffeePage = () => {
 
             <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '40%' }}>
               <Box component="div" p={'5px'}>
-                <Typography variant="h5" sx={{ ...TYTLESTYLE }}>COFFEE COUNT</Typography>
+                <Typography variant="h5" sx={{ ...TYTLESTYLE, color:'white' }}>COFFEE COUNT</Typography>
                 {loading ? (
                   <LinearProgress />
                 ) : (
@@ -162,7 +164,7 @@ const CoffeePage = () => {
 
           <Box component='div' width={'25%'}>
             <Box component="div" sx={{ paddingBottom: '0', backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', pt: '30px', }}>
-              <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMPTIONS</Typography>
+              <Typography variant="h5" sx={{ ...TYTLESTYLE, color:'white' }}>CONSUMPTIONS</Typography>
               {loading ? (
                 <LinearProgress />
               ) : (
@@ -298,6 +300,7 @@ const CoffeePage = () => {
       )
       }
       <ModalCoffeMessage open={openModalCoffee} message={message} handleClose={()=>closeCoffeeModal()}/>
+      </Box>
     </Box >
   );
 };

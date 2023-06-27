@@ -22,7 +22,6 @@ const LightsPage = () => {
   const [isLoading, setIsLoading] = useState<number | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState(false);
 
-  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
 
   const fetchLights = async (key: number | null) => {
@@ -205,7 +204,7 @@ const LightsPage = () => {
 
       <Box component="div" sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: '#d3d3d382', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
         <Typography variant="h6" sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>
-          CONSUMPTIONS
+          CONSUMES
         </Typography>
         <TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />
       </Box>

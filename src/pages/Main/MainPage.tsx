@@ -6,7 +6,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
 import AirIcon from '@mui/icons-material/Air';
-import { LinearProgress, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 import planimetry from '../../img/background.png';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus } from '../../utils/fetch/api';
@@ -362,10 +362,10 @@ const MainPage = () => {
 
 
   return (
-    <div>
+    <>
       {isLoading && (<CircularProgress sx={{ position: 'absolute', top: 10, right: 10 }} />)}
-      <svg viewBox="0 0 1280 720" preserveAspectRatio="xMinYMin meet" >
-        <image href={planimetry} width={'100%'} style={{ position: 'relative' }} />
+      <svg viewBox="0 0 1280 780" preserveAspectRatio="xMinYMin meet" >
+        <image href={planimetry} height={'100%'} style={{ position: 'relative', top:0, right:0}} />
         {lightsDatasArray && lightsDatasArray.length > 0 ? (
           lightsDatasArray
             .filter((light) => light.state && light.state.id !== 8 && light.state.id !== 9)
@@ -464,7 +464,7 @@ const MainPage = () => {
       <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal} />
       <ModalNiveus open={openModalNiveus} handleClose={() => closeNiveusModal()} idNiveus={idNiveusModal} />
       <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal} printerStatus={printerStatus} fetchPrinter={() => fetchPrinter()} fetchPrinterStatus={() => fetchPrinterStatus()} />
-    </div>
+    </>
   )
 }
 

@@ -20,6 +20,15 @@ export const BOXSTYLE = {
   width: {xs: '80%',sm: '80%', md: '70%'},
   ...SHADOWSTYLE
 }
+export const CONTAINERBOX ={
+  padding: '20px', 
+  borderRadius: '6px', 
+  bgcolor: 'rgba(211, 211, 211,0.4)', 
+  mx: 'auto', 
+  my: '30px', 
+  width: {xs: '90%',sm: '90%', md: '90%'}, 
+  ...SHADOWSTYLE
+}
 
 
 import Andrea from '../../img/stanzeCard/andrea.jpg'

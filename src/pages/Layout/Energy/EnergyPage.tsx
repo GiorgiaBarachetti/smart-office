@@ -3,7 +3,7 @@ import { Energy } from '../../../utils/interfaces/Interfaces';
 import TableEnergy from '../../../components/Tables/TableEnergy'
 import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
 import { Box, Typography } from '@mui/material';
-import { SHADOWSTYLE } from '../../../utils/const/Const';
+import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
 import ChartLights from '../../../components/Chart/ChartEnergy';
 const EnergyPage = () => {
@@ -64,10 +64,10 @@ const EnergyPage = () => {
   
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px' }}>
-      <Box component='div' paddingTop={'30px'} paddingBottom={'430px'}>
-        <Box component='div' display={'flex'} flexDirection={'column'} justifyContent={'center'} sx={{ padding: '10px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
-          <Typography variant='h6' sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
+    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px', height: '745px' }}>
+      <Box component='div' paddingTop={'50px'} >
+        <Box component='div' sx={{ ...CONTAINERBOX}} >
+          <Typography variant='h6' sx={{color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
           <Box component='div' sx={{ padding: '1px', borderRadius: '11px', bgcolor: {...boltStyle}, mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
             <TableEnergy loading={isLoading} energy={energyStatus} />
           </Box>
