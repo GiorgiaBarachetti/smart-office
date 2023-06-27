@@ -1,22 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import Link, { LinkProps } from '@mui/material/Link';
-import ListItem, { ListItemProps } from '@mui/material/ListItem';
-import Collapse from '@mui/material/Collapse';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import {
-  Link as RouterLink,
-  Route,
-  Routes,
-  MemoryRouter,
-  useLocation,
-  BrowserRouter,
-} from "react-router-dom";
+import { ListItemProps } from '@mui/material/ListItem';
+import {  Route,  Routes,  BrowserRouter} from "react-router-dom";
 import { useState } from 'react'
 import MainPage from '../../pages/Main/MainPage';
 import Layout from '../../pages/Layout/Layout';
@@ -30,7 +15,6 @@ import Kitchen from '../../pages/Layout/Lights/Rooms/Kitchen';
 import BreaktimeSpace from '../../pages/Layout/Lights/Rooms/BreaktimeSpace';
 import Entrance from '../../pages/Layout/Lights/Rooms/Entrance';
 import OpenSpace from '../../pages/Layout/Lights/Rooms/OpenSpace';
-import Coffe from '../../pages/Layout/Coffe/CoffeePage';
 import Coffee from '../../pages/Layout/Coffe/CoffeePage';
 import Printer from '../../pages/Layout/Printer/PrinterPage';
 import Energy from '../../pages/Layout/Energy/EnergyPage';
