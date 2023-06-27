@@ -1,29 +1,23 @@
-<<<<<<< HEAD
-=======
-# Material UI - Create React App example in TypeScript
-
+#  SMART OFFICE
 ## How to use
 Install or clone the repository
 ```sh
 https://github.com/GiorgiaBarachetti/smart-office
 ```
-
-Then run:
+or clone the repository in Git Bash
+```sh
+git clone https://github.com/GiorgiaBarachetti/smart-office
+```
+Then run nmp commands:
 ```sh
 npm install
-npm start
+npm run start
 ```
 
-## The idea behind the example
+Started developing on the example of react app with mui extention
+https://github.com/mui/material-ui/tree/master/examples/material-cra-ts
 
-This example demonstrates how you can use Material UI with [Create React App](https://github.com/facebookincubator/create-react-app) in [TypeScript](https://github.com/Microsoft/TypeScript).
-It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/material-ui/guides/interoperability/#styled-components).
 
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/material-ui/getting-started/templates/) section.
->>>>>>> 72ab628c7df93ad2ef62ab56e3f2ff5c80a2389f
+## Tecnologies used
+* [![React][React.js]][React-url]
+* [![Typescript][Typescript.js]][Typescript-url]
