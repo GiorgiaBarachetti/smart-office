@@ -15,9 +15,23 @@ npm run start
 ```
 
 Started developing on the example of react app with mui extention
+```sh
 https://github.com/mui/material-ui/tree/master/examples/material-cra-ts
-
+```
 
 ## Tecnologies used
-* [![React][React.js]][React-url]
-* [![Typescript][Typescript.js]][Typescript-url]
+* React.ts
+* Typescript
+
+## Libraries used
+* mui
+  ```sh
+  npm install @mui/material @emotion/react @emotion/styled
+  ```
+* react google chart
+  ```sh
+  npm i react-google-charts
+  ```
+  
+
+  
