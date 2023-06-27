@@ -1,4 +1,8 @@
 #  SMART OFFICE
+Smart office is an iot application made to allow an easier control of the business consumption.
+All the devices in the office can be monitorated remotely and the environmental waste can be reduced in a very smart way.
+The application is fully written in English.
+
 ## How to use
 The project developing has started by the example of
 ```sh
