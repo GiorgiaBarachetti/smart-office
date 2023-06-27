@@ -162,7 +162,7 @@ const CoffeePage = () => {
 
           <Box component='div' width={'25%'}>
             <Box component="div" sx={{ paddingBottom: '0', backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', pt: '30px', }}>
-              <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
+              <Typography variant="h5" sx={{ ...TYTLESTYLE }}>CONSUMPTIONS</Typography>
               {loading ? (
                 <LinearProgress />
               ) : (
@@ -267,7 +267,7 @@ const CoffeePage = () => {
 
           <Box component="div" sx={{ pt: '10px' }}>
             <Box component="div" sx={{ backgroundColor: '#d3d3d382', borderRadius: '6px', height: '100%', py: '2px', }}>
-              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMES</Typography>
+              <Typography variant="h6" sx={{ ...TYTLESTYLE }}>CONSUMPTIONS</Typography>
               {loading ? (
                 <LinearProgress />
               ) : (

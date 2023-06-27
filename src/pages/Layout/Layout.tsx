@@ -8,7 +8,7 @@ const Layout = () => {
     <Box component='div' display={'flex'} flexDirection={'column'}>
       <Sidebar />
       <Box component='div' sx={{mt:'60px'}}>
-        {/* allows the routes to render their element content out */}
+        {/* allows the routes (all the sidebar elements) to render their element content out */}
         <Outlet />
       </Box>
     </Box>

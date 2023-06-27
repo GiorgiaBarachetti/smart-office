@@ -78,7 +78,7 @@ const ChartNiveus = () => {
         <Box component='div' sx={{ padding: '20px' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
-                    <Typography variant='h6' textAlign={'center'}>Select a range of data</Typography>
+                    <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
                     <Box component='div' sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
                         <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('today')}>
                             Today

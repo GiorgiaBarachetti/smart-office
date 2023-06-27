@@ -101,7 +101,7 @@ const PrinterPage = () => {
           </Box>
 
           <Box component='div' mt={'50px'} >
-            <Typography variant='h6' sx={{ mt: '20px', textAlign: 'center' }}>CONSUMES</Typography>
+            <Typography variant='h6' sx={{ mt: '20px', textAlign: 'center' }}>CONSUMPTIONS</Typography>
             <TablePrinter loading={isLoading} printer={printerDatas} />
           </Box>
         </Box>
