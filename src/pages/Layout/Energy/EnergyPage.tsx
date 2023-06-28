@@ -6,6 +6,7 @@ import { Box, Typography } from '@mui/material';
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
 import ChartLights from '../../../components/Chart/ChartEnergy';
+import ChartEnergy from '../../../components/Chart/ChartEnergy';
 const EnergyPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
@@ -16,7 +17,7 @@ const EnergyPage = () => {
       const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
       const data = await response?.json();
       setEnergyStatus(Array.isArray(data) ? data : [data]);
-      
+
       setIsLoading(false)
     } catch (error) {
       console.log('not found datas of energy');
@@ -61,17 +62,17 @@ const EnergyPage = () => {
     const updatedBoltStyle = changeStyleBolt();
     setBoltStyle(updatedBoltStyle);
   }, [energyStatus]);
-  
+
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px', height: '745px' }}>
-      <Box component='div' paddingTop={'50px'} >
-        <Box component='div' sx={{ ...CONTAINERBOX}} >
-          <Typography variant='h6' sx={{color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
-          <Box component='div' sx={{ padding: '1px', borderRadius: '11px', bgcolor: {...boltStyle}, mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
+    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover',  minHeight: '93vh' }}>
+      <Box component='div' paddingTop={'30px'} >
+        <Box component='div' sx={{ ...CONTAINERBOX }} >
+          <Typography variant='h6' sx={{ color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
+          <Box component='div' sx={{ padding: '2px', borderRadius: '13px', bgcolor: { ...boltStyle }, mx: 'auto', my: '30px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
             <TableEnergy loading={isLoading} energy={energyStatus} />
           </Box>
-            <ChartLights/>
+          <ChartEnergy />
         </Box>
       </Box>
     </div>

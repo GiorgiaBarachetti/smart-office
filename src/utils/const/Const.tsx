@@ -21,12 +21,11 @@ export const BOXSTYLE = {
   ...SHADOWSTYLE
 }
 export const CONTAINERBOX ={
-  padding: '20px', 
+  padding: '40px', 
   borderRadius: '6px', 
   bgcolor: 'rgba(211, 211, 211,0.4)', 
   mx: 'auto', 
-  my: '30px', 
-  width: {xs: '90%',sm: '90%', md: '90%'}, 
+  width: '90%', 
   ...SHADOWSTYLE
 }
 

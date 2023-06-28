@@ -11,7 +11,7 @@ interface Props {
 const TableNiveus = ({ loading, niveus }: Props) => {
 
 
-  return  ( <TableContainer sx={{ borderRadius: '8px', mx: 'auto', my: '3px', width: '99%', ...SHADOWSTYLE, ...TABLECOLOR }} >
+  return  ( <TableContainer sx={{ borderRadius: '11px', mb:'20px' , mx: 'auto', width: '70%', ...SHADOWSTYLE, ...TABLECOLOR }} >
   <Table size="small">
     <TableHead>
       <TableRow>

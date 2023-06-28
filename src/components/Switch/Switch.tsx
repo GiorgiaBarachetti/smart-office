@@ -5,7 +5,7 @@ import { Card, Box, Button, ButtonGroup, CardActionArea, CardContent, LinearProg
 interface Props {
   id: number
   room: Lights[]
-  fetchRoom: ()=>void
+  fetchRoom: () => void
 }
 
 const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
@@ -13,19 +13,12 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
 
   const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
-  useEffect(() => {
-    const timeout =setTimeout(() => fetchRoom(), 1000);
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [refreshDatas]);
-  
   const switchOnLightById = async () => {
     try {
       setIsLoading(true)
       if (room) {
         await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
-       setRefreshDatas((prevState) => !prevState);
+        setRefreshDatas((prevState) => !prevState);
       }
       setIsLoading(false)
     } catch (error) {
@@ -36,7 +29,7 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
     try {
       setIsLoading(true)
       if (room) {
-          await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
+        await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
         setRefreshDatas((prevState) => !prevState);
       }
       setIsLoading(false)
@@ -46,27 +39,35 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
 
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => fetchRoom(), 1000);
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [refreshDatas]);
+
+
   return (
-    <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
+    <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',mb:'20px', gap: '32px' }}>
       {room?.map((light) => (
-            <Card key={id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
-              <CardActionArea>
-                <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
-                    {isLoading ? (
-                      <LinearProgress/>):(
-                  <ButtonGroup style={{ alignSelf: 'center' }} aria-label="button group">
-                    <Button sx={{cursor:'pointer'}} onClick={() => switchOnLightById()} disabled={light.state.output == true}>ON</Button>
-                    <Button sx={{cursor:'pointer'}} onClick={() => switchOffLightById()} disabled={light.state.output == false}>OFF</Button>
-                  </ButtonGroup>
-                    )}
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))
+        <Card key={id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
+          <CardActionArea>
+            <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center',gap:'10px' }}>
+              <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
+              <ButtonGroup style={{ alignSelf: 'center' }} aria-label="button group">
+                <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnLightById()} disabled={light.state.output == true || isLoading}>ON</Button>
+                <Button sx={{ cursor: 'pointer' }} onClick={() => switchOffLightById()} disabled={light.state.output == false || isLoading}>OFF</Button>
+              </ButtonGroup>
+
+              {isLoading &&
+                <LinearProgress />}
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))
       }
     </Box>
   );
-                      }  
+}
 
 export default SwitchComponent

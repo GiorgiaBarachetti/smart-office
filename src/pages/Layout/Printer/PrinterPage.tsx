@@ -69,22 +69,19 @@ const PrinterPage = () => {
   }, [statoPresa]);
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px', height: '745px'  }} >
-      <Box component='div' paddingTop={'50px'}  >
-      <Box component='div' sx={{height:'40%', ...CONTAINERBOX}}>
-          <Box component='div'
-            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '20px', borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: { xs: '80%', sm: '40%', md: '30%' }, textAlign:'center', ...SHADOWSTYLE}}>
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh'  }} >
+      <Box component='div' paddingTop={'30px'}  >
+      <Box component='div' sx={{...CONTAINERBOX}}>
+          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap:'10px', p: '20px', borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: { xs: '80%', sm: '40%', md: '30%' }, textAlign:'center', ...SHADOWSTYLE}}>
             <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
             <ButtonGroup>
               <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
               {isLoadingButton && (
                   <LinearProgress/>
                 )}
-              
               <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
             </ButtonGroup>
           </Box>
-
           <Box component='div' mt={'50px'} >
             <Typography variant='h6' sx={{ mt: '20px', textAlign: 'center', color:'white' }}>CONSUMPTIONS</Typography>
             <TablePrinter loading={isLoading} printer={printerDatas} />

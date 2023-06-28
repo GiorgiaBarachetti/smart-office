@@ -90,7 +90,7 @@ const CoffeePage = () => {
   }, []);
 
   return (
-    <Box style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover',  height: '718px'  }}>
+    <Box style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover',  minHeight: '100vh'  }}>
       <Box component='div' paddingTop={'50px'} width={'90%'} mx={'auto'} >
       {/**DESKTOP */}
       {isXsScreen ? (
@@ -108,7 +108,6 @@ const CoffeePage = () => {
                 }}>
                 SELECT THE QUANTITY OF COFFEE
               </Typography>
-
               <Box component='div' sx={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center', p: '20px' }}>
                 <Button sx={{ cursor: 'pointer' }} onClick={() => handleCoffeeClick()}>
                   <Box

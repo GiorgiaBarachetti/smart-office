@@ -11,7 +11,7 @@ interface Props {
 const TableEnergy = ({ loading, energy }: Props) => {
 
 
-  return <TableContainer sx={{ borderRadius: '8px', mx: 'auto', my: '3px', width: '99%', ...SHADOWSTYLE, ...TABLECOLOR }} >
+  return <TableContainer sx={{ borderRadius: '8px', mx: 'auto', my: '5px', width: '99%', ...SHADOWSTYLE, ...TABLECOLOR }} >
     <Table size="small">
       <TableHead>
         <TableRow>
@@ -30,8 +30,8 @@ const TableEnergy = ({ loading, energy }: Props) => {
 
         {energy?.map((energ) => (
         <TableRow key={energ.id}>
-          <TableCell>{energ.powerUsed} W</TableCell>
-          <TableCell>{energ.averagePowerUsed} W</TableCell>
+          <TableCell>{energ.powerUsed != undefined ? energ.powerUsed : 0} W</TableCell>
+          <TableCell>{energ.averagePowerUsed != undefined ? energ.averagePowerUsed : 0} W</TableCell>
         </TableRow>
         ))}
 

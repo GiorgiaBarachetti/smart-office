@@ -10,7 +10,7 @@ interface Props {
 
 const TablePrinter = ({ loading, printer }: Props) => {
   return (
-    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: '85%', ...SHADOWSTYLE }}>
+    <TableContainer sx={{ borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
       <Table size="small">
         <TableHead>
           <TableRow>
