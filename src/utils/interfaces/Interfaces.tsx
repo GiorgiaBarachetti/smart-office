@@ -55,8 +55,8 @@ export interface PrinterStatus {
 }
 export interface Coffee {
   data: {
-    unCaffe: number;
-    dueCaffe: number;
+    UNCaffe: number;
+    DUECaffe: number;
     accensione: number;
     spegnimento: number;
   }
