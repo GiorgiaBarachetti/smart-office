@@ -11,6 +11,9 @@ import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 const AndreaOffice = () => {
   const id = 0;
   const [room, setRoom] = useState<Lights[]>([]);
+
+  const isXsScreen = useMediaQuery('(min-width:770px)');
+
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
   const fetchRoom = async (numberCase: number) => {
@@ -57,12 +60,19 @@ const AndreaOffice = () => {
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: 'calc(100vh - 60px)' }} >
       {isLoadingPage ? <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} /> :
         <Box component='div' py={'30px'} >
-          <Box component='div' sx={{ ...CONTAINERBOX,}}>
-            <Box sx={{ padding: '', width: '90%', mx: 'auto' }}>
-              <Stack direction="row" spacing={2} alignItems={'center'} >
-                <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
-                <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
-              </Stack>
+          <Box component='div' sx={{ ...CONTAINERBOX }}>
+            <Box sx={{ width: '95%', mx: 'auto' }}>
+              {isXsScreen ? (
+                <Stack direction="row" spacing={2} alignItems={'center'} >
+                  <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
+                </Stack>
+              ) : (
+                <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'auto'} >
+                  <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
+                </Stack>
+              )}
               <ChartLights id={id} />
             </Box>
           </Box>

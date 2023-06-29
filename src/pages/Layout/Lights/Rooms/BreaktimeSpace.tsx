@@ -10,7 +10,8 @@ import { baseURL, urlShelly } from '../../../../utils/fetch/api';
 
 const BreaktimeSpace = () => {
   const id = 6;
-  
+
+  const isXsScreen = useMediaQuery('(min-width:770px)');
 
   const [room, setRoom] = useState<Lights[]>([]);
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
@@ -57,15 +58,22 @@ const BreaktimeSpace = () => {
   }, []);
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', marginTop: '-27px', height: '745px' }} >
-      {isLoadingPage ? <CircularProgress size={'50px'} sx={{ position: 'absolute', top: 100, right: 50  }} /> :
-        <Box component='div' paddingTop={'30px'} >
-          <Box component='div' sx={{ ...CONTAINERBOX, heigth: '40%' }}>
-            <Box sx={{ padding: '20px', width: '80%', mx: 'auto' }}>
-              <Stack direction="row" spacing={2} alignItems={'center'} my={'20px'} >
-                <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
-                <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
-              </Stack>
+    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: 'calc(100vh - 60px)' }} >
+      {isLoadingPage ? <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} /> :
+        <Box component='div' py={'30px'} >
+          <Box component='div' sx={{ ...CONTAINERBOX }}>
+            <Box sx={{ width: '95%', mx: 'auto' }}>
+              {isXsScreen ? (
+                <Stack direction="column" spacing={2} alignItems={'center'} >
+                  <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
+                </Stack>
+              ) : (
+                <Stack direction="row" spacing={2} alignItems={'center'} justifyContent={'center'} px={'auto'} >
+                  <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom(1)} loading={loading} />
+                </Stack>
+              )}
               <ChartLights id={id} />
             </Box>
           </Box>
