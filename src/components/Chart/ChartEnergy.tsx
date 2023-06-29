@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, LinearProgress, Typography, Paper } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlAlhpa } from "../../utils/fetch/api";
-import { ChartData } from "../../utils/interfaces/Interfaces";
 
 const ChartEnergy = () => {
+    interface ChartData {
+        power: {
+            timestamp: string;
+            power: number
+        }[];
+    }
 
     const [EnergyDatas, setEnergyDatas] = useState<ChartData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -15,13 +20,13 @@ const ChartEnergy = () => {
         setSelectedDateRange(dateRange);
         fetchEnergyData(dateRange)
     }
-    
+
     const fetchEnergyData = async (range: string) => {
         try {
             setIsLoading(true);
             const currentDate = new Date();
             let startDate = '';
-            let endDate =currentDate;
+            let endDate = currentDate;
             switch (range) {
                 case 'today':
                     startDate = currentDate.toISOString().split('T')[0];
@@ -55,31 +60,14 @@ const ChartEnergy = () => {
     }, []);
 
     const options = {
-        hAxis: { title: "Time", titleTextStyle: { color: "#333" } },
-        gridlines: {
-            count: -1,
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
-            }
-        },
-        minorGridlines: {
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
-            }
-        },
-        vAxis: { title: "Watt", minValue: 0 },
-        chartArea: { width: "50%", height: "60%" },
+
         //animation: {duration: 1000, easing: 'in',}
     };
 
 
 
     return (
-        <Box component='div' sx={{ padding: '20px', width:'80%', mx:'auto'  }}>
+        <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
@@ -108,9 +96,28 @@ const ChartEnergy = () => {
                             chartType="LineChart"
                             data={[
                                 ['timestamp', 'watt'],
-                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => { return [new Date(timestamp), power]}),
+                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => { return [new Date(timestamp), power] }),
                             ]}
-                            options={options}
+                            options={{
+                                hAxis: {title: "Time", titleTextStyle: {color: "#333" } },
+                                            gridlines: {
+                                                count: -1,
+                                            units: {
+                                                days: {format: ['dd/MM/YY'] },
+                                                hours: {format: ['HH'] },
+                                                minutes: {format: ['HH'] },
+                                    }
+                                },
+                                            minorGridlines: {
+                                                units: {
+                                                days: {format: ['dd/MM/YY'] },
+                                                hours: {format: ['HH'] },
+                                                minutes: {format: ['HH'] },
+                                    }
+                                },
+                                            vAxis: {title: "Watt", minValue: 0 },
+                                            chartArea: {width: "50%", height: "60%" },
+                            }}
                         />
                     )}
                 </Box>

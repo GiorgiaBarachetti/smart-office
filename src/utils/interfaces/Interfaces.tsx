@@ -41,7 +41,6 @@ export interface Printer {
 }
 
 export interface Energy {
-  //id setted by me, inexistent in api
   id: number,
   powerUsed: number,
   averagePowerUsed: number,
@@ -55,23 +54,11 @@ export interface PrinterStatus {
   stato_presa: boolean
 }
 export interface Coffee {
-  coffes: {
-    id: number,
-    accensioni: number,
-    coffeeCount: number
-  },
   data: {
-    macchinettaCaffe: {
-      receivedData: {
-        volts: number;
-        ampere: number;
-        watt: number;
-      };
-      timestamp: number
-    },
-    totalCoffeeToday: number,
-    count1: number,
-    count2: number
+    unCaffe: number;
+    dueCaffe: number;
+    accensione: number;
+    spegnimento: number;
   }
 }
 
@@ -85,17 +72,4 @@ export interface Niveus {
     },
     timestamp: string
   }
-}
-
-export interface ChartData {
-  power: {
-    timestamp: string;
-    power: number
-  }[];
-}
-export interface ChartDataNiveus {
-  data: {
-    timestamp: string,
-    watt: number
-  }[];
 }

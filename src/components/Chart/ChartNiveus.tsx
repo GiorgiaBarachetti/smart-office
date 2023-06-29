@@ -2,10 +2,15 @@ import { Chart } from "react-google-charts";
 import React, { useEffect, useState } from 'react';
 import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
-import { baseURL, urlAlhpa, urlNiveus } from "../../utils/fetch/api";
-import { ChartDataNiveus } from "../../utils/interfaces/Interfaces";
+import { baseURL, urlNiveus } from "../../utils/fetch/api";
 
 const ChartNiveus = () => {
+    interface ChartDataNiveus {
+        data: {
+          timestamp: string,
+          watt: number
+        }[];
+      }
 
     const [NiveusDatas, setNiveusDatas] = useState<ChartDataNiveus[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -52,10 +57,10 @@ const ChartNiveus = () => {
 
     useEffect(() => {
         fetchNiveusData('today')
-    }, []);
+    }, [selectedDateRange]);
 
     const options = {
-        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
+        hAxis: { /*title: "Time",*/ titleTextStyle: { color: "#333" } }, gridlines: {
             count: -1,
             units: {
                 days: { format: ['dd/MM/YY'] },
@@ -70,16 +75,16 @@ const ChartNiveus = () => {
                 minutes: { format: ['HH:mm'] },
             }
         },
-        vAxis: { title: "Watt", minValue: 0 },
+        vAxis: { /*title: "Watt",*/ minValue: 0 },
         chartArea: { width: "50%", height: "60%" },
     };
 
     return (
-        <Box component='div' sx={{ padding: '20px' }}>
+        <Box component='div' sx={{ padding: '20px', width:'100%', mx:'auto' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
-                    <Box component='div' sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+                    <Box component='div' sx={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
                         <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('today')}>
                             Today
                         </Button>
@@ -94,7 +99,7 @@ const ChartNiveus = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{height: '260px'}}>
+                <Box sx={{ height: '260px' }}>
                     {isLoading ? (
                         <LinearProgress />
                     ) : (
@@ -104,9 +109,20 @@ const ChartNiveus = () => {
                             chartType="LineChart"
                             data={[
                                 ['timestamp', 'watt'],
-                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => {return [new Date(timestamp), watt]}),
+                                [
+                                    new Date(new Date().setHours(0, 0, 0, 0)),
+                                    0
+                                  ],
+                                  ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => [
+                                    new Date(timestamp),
+                                    watt
+                                  ]),
+                                  [
+                                    new Date(new Date()),
+                                    0
+                                  ]
                             ]}
-                            options={options}
+                    options={options}
                         />
                     )}
                 </Box>
@@ -117,3 +133,10 @@ const ChartNiveus = () => {
 };
 
 export default ChartNiveus;
+/*
+  [
+                                    [new Date(timestamp), null],
+                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => {return [new Date(timestamp), watt]}),
+                                     [new Date(), null]
+                                ]
+                                */

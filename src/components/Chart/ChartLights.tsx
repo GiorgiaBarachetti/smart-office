@@ -84,7 +84,7 @@ const ChartLights = ({ id }: Props) => {
     };
 
     return (
-        <Box component='div' sx={{ }}>
+        <Box component='div' sx={{ mt: '30px'}}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
