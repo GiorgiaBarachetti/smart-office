@@ -389,7 +389,8 @@ const MainPage = () => {
         )}
 
         {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
-
+{/**
+ * 
         {coffeeDatas.length ? (
           coffeeDatas.map((coffee) => {
             const { x, y } = getCoordinates(coffee.coffes.id);
@@ -407,6 +408,7 @@ const MainPage = () => {
           'CoffeeDatas array is empty'
         )}
 
+        */}
         {niveusData.length ? (
           niveusData.map((niveus) => {
             const { x, y } = getCoordinates(niveus.id);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Niveus } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlNiveus } from '../../../utils/fetch/api';
 import { Box, Typography, CircularProgress } from '@mui/material';
-import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
+import { CONTAINERBOX } from '../../../utils/const/Const';
 import background from '../../../img/niveus.png'
 import TableNiveus from '../../../components/Tables/TableNiveus';
 import ChartNiveus from '../../../components/Chart/ChartNiveus';
