@@ -119,24 +119,13 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data.data);
+      console.log(data, response)
       setIsLoading(false);
     } catch (error) {
       console.log('Error fetching lights', error);
     }
   };
 
-
-  const [coffeeDatas, setCoffeeDatas] = useState<Coffee[]>([]);
-  const fetchCoffee = async () => {
-    try {
-      const response = await fetch(`${baseURL}${urlCoffee}/data`);
-      const data = await response?.json();
-      //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
-      setCoffeeDatas(Array.isArray(data) ? data : [data]);
-    } catch (error) {
-      console.log('Error fetching coffee:', error);
-    }
-  };
 
   const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
   const fetchEnergy = async () => {
@@ -190,14 +179,12 @@ const MainPage = () => {
 
   useEffect(() => {
     setIsLoading(true)
-    const intervalCoffee = setTimeout(() => fetchCoffee(), 1000)
     const intervalEnergy = setTimeout(() => fetchEnergy(), 1000)
     const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
     const timeoutPrinter = setTimeout(() => fetchPrinter(), 1000)
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
 
     return () => {
-      clearTimeout(intervalCoffee)
       clearTimeout(intervalEnergy)
       clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
@@ -216,7 +203,6 @@ const MainPage = () => {
 
   //useeffect per fare interval 
   useEffect(() => {
-    const intervalCoffee = setInterval(() => fetchCoffee(), 10000)
     const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
     const intervalNiveus = setInterval(() => fetchNiveus(), 10000)
     const intervalPrinter = setInterval(() => fetchPrinter(), 10000)
@@ -224,7 +210,6 @@ const MainPage = () => {
     const intervalLights = setInterval(() => fetchLights(), 10000)
 
     return () => {
-      clearInterval(intervalCoffee)
       clearInterval(intervalEnergy)
       clearInterval(intervalNiveus)
       clearInterval(intervalPrinter)
@@ -338,8 +323,8 @@ const MainPage = () => {
 
       //ENERGY
       case 200:
-        x = 480;
-        y = 120;
+        x = 530;
+        y = 150;
         break;
 
       //PRINTER
@@ -359,7 +344,7 @@ const MainPage = () => {
     }
     return { x, y };
   };
-
+  const { x, y } = getCoordinates(100);
 
   return (
     <>
@@ -374,11 +359,11 @@ const MainPage = () => {
               return (
                 <g key={light.state.id} style={{ cursor: 'pointer' }}>
                   <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle} onClick={() => openModalLights(light.state.id)} />
-                  <rect x={x + 50} y={y + 300} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
-                  <text x={x + 60} y={y + 320} fill="black" fontSize="15px">
+                  <rect x={x + 50} y={y + 325} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 345} fill="black" fontSize="15px">
                     <tspan>{`Power: ${light.state.apower} W`}</tspan>
                   </text>
-                  <text x={x + 60} y={y + 340} fill="black" fontSize="15px">
+                  <text x={x + 60} y={y + 365} fill="black" fontSize="15px">
                     <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
                   </text>
                 </g>
@@ -389,34 +374,20 @@ const MainPage = () => {
         )}
 
         {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
-{/**
- * 
-        {coffeeDatas.length ? (
-          coffeeDatas.map((coffee) => {
-            const { x, y } = getCoordinates(coffee.coffes.id);
-            return (
-              <g key={coffee.coffes.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
-                <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(coffee.coffes.id)} />
-                <rect x={x + 50} y={y + 300} width="140px" height="50px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x + 70} y={y + 330} fontSize="15px">
-                  <tspan>{`Power: ${coffee.data.macchinettaCaffe?.receivedData?.watt !== undefined ? coffee.data.macchinettaCaffe?.receivedData?.watt : '0'} W`}</tspan>
-                </text>
+        {<g key={100} style={{ ...coffeeStyle, cursor: 'pointer' }} >
+                <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(100)} />
               </g>
-            )
-          })
-        ) : (
-          'CoffeeDatas array is empty'
-        )}
+              }
 
-        */}
+
         {niveusData.length ? (
           niveusData.map((niveus) => {
             const { x, y } = getCoordinates(niveus.id);
             return (
               <g key={niveus.id} style={{ ...niveusStyle, cursor: 'pointer' }}>
                 <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
-                <rect x={x + 50} y={y + 300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
+                <rect x={x + 50} y={y + 335} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
                   <tspan>{`Power: ${niveus?.data?.receivedData?.watt !== undefined ? niveus?.data?.receivedData?.watt : ''} W`}</tspan>
                 </text>
               </g>
@@ -430,8 +401,8 @@ const MainPage = () => {
             return (
               <g key={energy.id} style={{ ...boltStyle, cursor: 'pointer' }}>
                 <SvgIcon component={BoltIcon} x={x} y={y} width="80px" onClick={() => openEnergyModal(energy.id)} />
-                <rect x={x + 50} y={y + 300} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
+                <rect x={x + 50} y={y + 335} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
                   <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
                 </text>
               </g>
@@ -448,8 +419,8 @@ const MainPage = () => {
             return (
               <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
                 <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-                <rect x={x + 50} y={y + 300} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
+                <rect x={x + 50} y={y + 335} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
                   <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
               </g>
