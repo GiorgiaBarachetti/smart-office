@@ -25,7 +25,7 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
       aria-describedby="modal-modal-description"
     >
       <Box component='div' sx={MODALSTYLE}>
-        <Typography variant="h6" component="h1">Coffee, id {idCoffee}</Typography>
+        <Typography variant="h6" component="h1">Coffee machine, id {idCoffee}</Typography>
         <Box component='div'>
           <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO COFFEE PAGE</Button>
           <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
