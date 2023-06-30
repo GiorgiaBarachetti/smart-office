@@ -127,6 +127,24 @@ const MainPage = () => {
   };
 
 
+  const [coffeeDatas, setCoffeeDatas] = useState<Coffee[]>([]);
+  const fetchCoffee = async () => {
+    try {
+      const currentDay = new Date()
+      const startDate = currentDay.toISOString().split('T')[0];
+      const endDate = currentDay
+      console.log(startDate, endDate)
+
+      const response = await fetch(`${baseURL}${urlCoffee}/data/count?start=${startDate} 00:00:00&end=${endDate}`);
+      const data = await response?.json();
+      //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
+      setCoffeeDatas(Array.isArray(data) ? data : [data]);
+      console.log(response, data)
+    } catch (error) {
+      console.log('Error fetching coffee:', error);
+    }
+  };
+
   const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
   const fetchEnergy = async () => {
     try {
@@ -179,12 +197,14 @@ const MainPage = () => {
 
   useEffect(() => {
     setIsLoading(true)
+    const intervalCoffee = setTimeout(() => fetchCoffee(), 1000)
     const intervalEnergy = setTimeout(() => fetchEnergy(), 1000)
     const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
     const timeoutPrinter = setTimeout(() => fetchPrinter(), 1000)
     const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
 
     return () => {
+      clearTimeout(intervalCoffee)
       clearTimeout(intervalEnergy)
       clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
@@ -203,6 +223,7 @@ const MainPage = () => {
 
   //useeffect per fare interval 
   useEffect(() => {
+    const intervalCoffee = setInterval(() => fetchCoffee(), 100000)
     const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
     const intervalNiveus = setInterval(() => fetchNiveus(), 10000)
     const intervalPrinter = setInterval(() => fetchPrinter(), 10000)
@@ -210,6 +231,7 @@ const MainPage = () => {
     const intervalLights = setInterval(() => fetchLights(), 10000)
 
     return () => {
+      clearInterval(intervalCoffee)
       clearInterval(intervalEnergy)
       clearInterval(intervalNiveus)
       clearInterval(intervalPrinter)
@@ -350,7 +372,7 @@ const MainPage = () => {
     <>
       {isLoading && (<CircularProgress sx={{ position: 'absolute', top: 10, right: 10 }} />)}
       <svg viewBox="0 0 1280 780" preserveAspectRatio="xMinYMin meet" >
-        <image href={planimetry} height={'100%'} style={{ position: 'relative', top:0, right:0}} />
+        <image href={planimetry} height={'100%'} style={{ position: 'relative', top: 0, right: 0 }} />
         {lightsDatasArray && lightsDatasArray.length > 0 ? (
           lightsDatasArray
             .filter((light) => light.state && light.state.id !== 8 && light.state.id !== 9)
@@ -374,10 +396,19 @@ const MainPage = () => {
         )}
 
         {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
-        {<g key={100} style={{ ...coffeeStyle, cursor: 'pointer' }} >
-                <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(100)} />
-              </g>
-              }
+        {coffeeDatas.map((c) =>
+          <g key={c.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
+            <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(100)} />
+            <rect x={x + 60} y={y + 320} width="140px" height="60px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+            <text x={x + 70} y={y + 345} fill="black" fontSize="15px">
+              <tspan>{`Single coffees: ${c?.data?.UNCaffe !== undefined ? c?.data?.UNCaffe : ''}`}</tspan>
+            </text>
+            <text x={x + 70} y={y + 365} fill="black" fontSize="15px">
+              <tspan>{`Double coffees: ${c?.data?.DUECaffe !== undefined ? c?.data?.DUECaffe : ''}`}</tspan>
+            </text>
+          </g>
+        )
+        }
 
 
         {niveusData.length ? (
