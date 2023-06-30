@@ -59,13 +59,6 @@ const ChartEnergy = () => {
         fetchEnergyData('today')
     }, []);
 
-    const options = {
-
-        //animation: {duration: 1000, easing: 'in',}
-    };
-
-
-
     return (
         <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
             <Paper>

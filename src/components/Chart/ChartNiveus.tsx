@@ -57,7 +57,7 @@ const ChartNiveus = () => {
 
     useEffect(() => {
         fetchNiveusData('today')
-    }, [selectedDateRange]);
+    }, []);
 
     const options = {
         hAxis: { /*title: "Time",*/ titleTextStyle: { color: "#333" } }, gridlines: {
