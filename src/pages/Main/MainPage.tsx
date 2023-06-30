@@ -381,7 +381,10 @@ const MainPage = () => {
               return (
                 <g key={light.state.id} style={{ cursor: 'pointer' }}>
                   <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle} onClick={() => openModalLights(light.state.id)} />
-                  <rect x={x + 50} y={y + 325} width="125px" height="50px" fill="#ffef3c66" rx="5px" ry="5px" />
+                  <rect x={x + 50} y={y + 305} width="145px" height="70px" fill="#ffef3c66" rx="5px" ry="5px" />
+                  <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
+                    <tspan style={{fontWeight:'bold'}}>{`${light.room != undefined ? `${light.room}` : ''}`}</tspan>
+                  </text>
                   <text x={x + 60} y={y + 345} fill="black" fontSize="15px">
                     <tspan>{`Power: ${light.state.apower} W`}</tspan>
                   </text>
