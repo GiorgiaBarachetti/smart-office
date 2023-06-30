@@ -35,7 +35,8 @@ const NiveusPage = () => {
 
   useEffect(() => {
     setIsLoadingPage(true)
-    fetchNiveus(0);
+    fetchNiveus(0)
+    setInterval(()=>fetchNiveus(1),5000);
   }, []);
 
   return (
