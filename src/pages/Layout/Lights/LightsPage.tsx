@@ -155,7 +155,8 @@ const LightsPage = () => {
               (light) => light.room !== '----' && light.room !== 'Punto luce non attivo'
             ).map((light) =>
             (
-              <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
+              <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light.state.output ? '2px solid green' : '2px solid red', ...SHADOWSTYLE }}>
+
                 <CardActionArea>
                   {light.state.output === false ? (
                     getRoomOFFPhotoById(light.state.id) ? (
@@ -178,9 +179,10 @@ const LightsPage = () => {
                       />
                     ) : null
                   )}
+                  {/*
                   <CircleIcon
                     style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }}
-                  />
+                    />*/}
                   <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
                     {isLoading !== null && isLoading === light.state.id ? (<LinearProgress />) : (

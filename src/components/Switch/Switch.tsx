@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { Card, Box, Button, ButtonGroup, CardActionArea, CardContent, LinearProgress, Typography } from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle';
+
 interface Props {
   id: number
   room: Lights[]
@@ -52,7 +54,10 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
       {room?.map((light) => (
         <Card key={id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
           <CardActionArea>
-            <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center',gap:'10px' }}>
+          <CircleIcon
+                    style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }}
+                    />
+            <CardContent sx={{ backgroundColor: light.state.output ? '2px solid green' : '2px solid red',p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center',gap:'10px' }}>
               <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
               <ButtonGroup style={{ alignSelf: 'center' }} aria-label="button group">
                 <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnLightById()} disabled={light.state.output == true || isLoading}>ON</Button>
