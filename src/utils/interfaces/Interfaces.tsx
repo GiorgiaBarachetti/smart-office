@@ -54,6 +54,7 @@ export interface PrinterStatus {
   stato_presa: boolean
 }
 export interface Coffee {
+  id: number
   data: {
     UNCaffe: number;
     DUECaffe: number;
