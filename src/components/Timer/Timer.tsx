@@ -7,17 +7,29 @@ const [date, setDate] = useState(new Date())
 
 useEffect (()=> {
 
-    const timer = setInterval(()=>setDate(new Date()), 100)
+    const timer = setInterval(()=>setDate(new Date()), 1000)
     return function cleanup(){
         clearInterval(timer)
     }
-}
-)
+},[])
+
+const dateTime = () => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let partOfDay = hours >= 12 ? 'pm' : 'am';
+  //convert 24 format into 12 
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = parseInt(minutes.toString().padStart(2, '0'));
+  let clock = hours + ':' + minutes + ' ' + partOfDay;
+ return clock;
+ }
+ 
 
   return (
     <Box component='div' sx={{position:'absolute', right: '10px', textAlign:'end'}}>
-              <Typography>{date.toLocaleDateString()}</Typography>
-              <Typography>{date.getHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}</Typography>
+              <Typography>{date.toLocaleDateString('en-US')}</Typography>
+              <Typography>{dateTime()}</Typography>
     </Box>
   )
 }
