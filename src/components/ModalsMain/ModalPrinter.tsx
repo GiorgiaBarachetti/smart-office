@@ -68,8 +68,8 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
           <Button sx={{ cursor: 'pointer' }} onClick={() => switchOffPrinter()} disabled={printerStatus != undefined && printerStatus[0]?.stato_presa === false}>OFF</Button>
         </ButtonGroup>
         <Box component='div'>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO PRINTER PAGE</Button>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>PRINTER PAGE</Button>
+          <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
         </Box>
       </Box>
     </Modal>

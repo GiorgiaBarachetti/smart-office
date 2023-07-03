@@ -27,8 +27,8 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
       <Box component='div' sx={MODALSTYLE}>
         <Typography variant="h6" component="h1">Coffee machine, id {idCoffee}</Typography>
         <Box component='div'>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO COFFEE PAGE</Button>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>COFFEE PAGE</Button>
+          <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
         </Box>
       </Box>
     </Modal>

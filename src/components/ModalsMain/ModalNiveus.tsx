@@ -27,8 +27,8 @@ const ModalNiveus = ({ open, handleClose, idNiveus }: Props) => {
       <Box component='div' sx={MODALSTYLE}>
         <Typography variant="h6" component="h1">Niveus, id {idNiveus}</Typography>
         <Box component='div'>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO NIVEUS PAGE</Button>
-          <Button sx={{ cursor: 'pointer' }} onClick={() => handleClose()}>CLOSE</Button>
+          <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>NIVEUS PAGE</Button>
+          <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
         </Box>
       </Box>
     </Modal>

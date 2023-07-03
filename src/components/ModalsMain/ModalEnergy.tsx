@@ -25,12 +25,12 @@ const ModalEnergy = ({ open, handleClose, idEnergy }: Props) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={MODALSTYLE}>
+      <Box component='div' sx={MODALSTYLE}>
         <Typography variant="h6" component="h1">Bolt, id {idEnergy}</Typography>
 
-        <Box>
-          <Button sx={{ cursor: 'pointer' }} onClick={gotoPage}>GO TO ENERGY PAGE</Button>
-          <Button sx={{ cursor: 'pointer' }} onClick={handleClose}>CLOSE</Button>
+        <Box component='div'>
+          <Button sx={{ cursor: 'pointer' }} onClick={gotoPage}>ENERGY PAGE</Button>
+          <Button sx={{ cursor: 'pointer',color: 'red' }} onClick={handleClose}>CLOSE</Button>
         </Box>
 
       </Box>

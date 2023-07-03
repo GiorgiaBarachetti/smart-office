@@ -79,7 +79,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
         )}
         <Box component='div' sx={{ textAlign: 'center' }}>
           <Box component='div'>
-            <ButtonGroup>
+            <ButtonGroup >
               <Button
                 sx={{ cursor: 'pointer' }}
                 onClick={() => switchOnLightById(idRoomModal)}
@@ -92,11 +92,9 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
               >OFF</Button>
             </ButtonGroup>
           </Box>
-          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', pt: '20px' }}>
-            <Box component='div' sx={{ display: 'flex', gap: '10px' }}>
-              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>GO TO {idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
-              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>GO TO LIGHTS PAGE</Button>
-            </Box>
+          <Box component='div' sx={{ display: 'flex', flexDirection: 'row', pt: '30px'}}>
+              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>{idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
+              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>LIGHTS PAGE</Button>
             <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>
