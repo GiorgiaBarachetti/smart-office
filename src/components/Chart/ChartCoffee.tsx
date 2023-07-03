@@ -104,7 +104,7 @@ const ChartCoffee = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ height: '260px' }}>
+                <Box component='div' sx={{ height: '260px' }}>
                     {isLoading ? (
                         <LinearProgress />
                     ) : (
@@ -114,16 +114,22 @@ const ChartCoffee = () => {
                             chartType="LineChart"
                             data={[
                                 ['timestamp', 'value'],
+                                [
+                                    new Date(new Date().setHours(0, 0, 0, 0)),
+                                    0
+                                  ],
                                 ...(CoffeeDatas[0]?.data || []).map(({ timestamp, value }) => {
-                                   
-                                    return ([new Date(timestamp).toISOString(), value]);
-                                })]}
+                                    return ([new Date(timestamp), value]);
+                                }),
+                                [
+                                  new Date(new Date()),
+                                  0
+                                ]
+                            ]}
                             options={options}
                         />
                     )}
                 </Box>
-
-
             </Paper >
         </Box >
     );

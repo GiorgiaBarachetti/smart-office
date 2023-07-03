@@ -80,13 +80,13 @@ const CoffeePage = () => {
   )
 
   return (
-    <Box style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '92.3vh'}}>
+    <Box style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '92.3vh' }}>
       <Box component='div' py={'30px'} mx={'auto'} >
         {/**DESKTOP */}
-        <Stack direction='column' gap={'10px'} sx={{width:'90%', marginLeft:'auto', marginRight:'auto', justifyContent:'center', alignItems:'stretch'}} >
+        <Stack direction='column' gap={'10px'} sx={{ width: '90%', marginLeft: 'auto', marginRight: 'auto', justifyContent: 'center', alignItems: 'stretch' }} >
           <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', }}>
             <Typography variant="h6" sx={{ ...TYTLESTYLE, color: 'white', pt: '20px' }}>COFFEE COUNT</Typography>
-            <Box component="div" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', height: '360px', bgcolor: 'white', padding: '30px', mx: 'auto', my: '30px', borderRadius: '11px',width:'70%' }}>
+            <Box component="div" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', height: '360px', bgcolor: 'white', padding: '25px', mx: 'auto', my: '30px', borderRadius: '11px', width: '70%' }}>
               <Typography>Choose a date range</Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoItem component="MultiInputDateTimeRangeField">
@@ -97,44 +97,59 @@ const CoffeePage = () => {
                   />
                 </DemoItem>
               </LocalizationProvider>
+              {/*
               <Button onClick={handleFetch}>CHECK THE USAGE</Button>
+  */}
               {loading ? (<LinearProgress />) : (
                 coffeeData.map((coffee) => (
                   isXsScreen ? (
-                    <Stack alignItems={'center'} sx={{alignItems: 'stretch', gap:'20px', maxWidth:'640px' }} direction={'row'} key={coffee.id} >
-                      <Box sx={{ width: '30%', border: '0.5px solid lightgrey', borderRadius: '11px', padding: '10px', backgroundColor:'rgba(79, 64, 61, 0.75)', color:'rgba(238, 231, 225, 0.77)'}}>
+                    <Stack alignItems={'center'} sx={{ alignItems: 'stretch', gap: '20px', maxWidth: '640px', pt: '20px' }} direction={'row'} key={coffee.id} >
+                      <Box component='div' sx={{ width: '30%', borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                         <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
                       </Box>
                       <Stack direction={'row'} gap={'15px'} width={'70%'} alignItems={'center'}>
-                        <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column',gap:'10px', justifyContent: 'space-between' }}>
-                          <Box sx={{ border: '0.5px solid lightgrey', borderRadius: '11px', padding: '10px' , backgroundColor:'rgba(79, 64, 61, 0.75)', color:'rgba(238, 231, 225, 0.77)'}}>
+                        <Box component='div' sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'space-between' }}>
+                          <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                             <Typography fontWeight={'bold'} display={'inline'}>TOTAL SINGLE COFFEES </Typography>{coffee.data.UNCaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.UNCaffe} coffee` : `${coffee.data.UNCaffe} coffees`) : '0 coffees'}
                           </Box>
-                          <Box sx={{ border: '0.5px solid lightgrey', borderRadius: '11px', padding: '10px' , backgroundColor:'rgba(79, 64, 61, 0.75)', color:'rgba(238, 231, 225, 0.77)'}}>
+                          <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                             <Typography fontWeight={'bold'} display={'inline'}>TOTAL DOUBLE COFFEES </Typography>{coffee.data.DUECaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.DUECaffe} coffee` : `${coffee.data.DUECaffe} coffees`) : '0 coffees'}
                           </Box>
                         </Box>
-                        <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap:'10px'/*, justifyContent: 'space-between' */ }}>
-                          <Box sx={{ border: '0.5px solid lightgrey', borderRadius: '11px', padding: '10px', bgcolor: '#b9ec86', color: '#4d8317'}}>
-                            <Typography fontWeight={'bold'} display={'inline'}>IGNITION </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
+                        <Box component='div' sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '10px'/*, justifyContent: 'space-between' */ }}>
+                          <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#b9ec86', color: '#4d8317' }}>
+                            <Typography fontWeight={'bold'} display={'inline'}>IGNITIONS </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
                           </Box>
-                          <Box sx={{ border: '0.5px solid lightgrey', borderRadius: '11px', padding: '10px', bgcolor: '#e4160ca6',color: '#680703a6' }}>
-                            <Typography fontWeight={'bold'} display={'inline'}>SHUTDOWN </Typography>{coffee.data.spegnimento != undefined ? (coffee.data.spegnimento === 1 ? `${coffee.data.spegnimento} time` : `${coffee.data.spegnimento} times`) : '0 times'}
+                          <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#e4160ca6', color: '#680703a6' }}>
+                            <Typography fontWeight={'bold'} display={'inline'}>SHUTDOWNS  </Typography>{coffee.data.spegnimento != undefined ? (coffee.data.spegnimento === 1 ? `${coffee.data.spegnimento} time` : `${coffee.data.spegnimento} times`) : '0 times'}
                           </Box>
                         </Box>
                       </Stack>
                     </Stack>
                   ) : (
-                    <Box key={coffee.id} sx={{ textAlign: 'center' }}>
-                      <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
-                      <br />
-                      <Typography fontWeight={'bold'} display={'inline'}>TOTAL SINGLE COFFEES </Typography>{coffee.data.UNCaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.UNCaffe} coffee` : `${coffee.data.UNCaffe} coffees`) : '0 coffees'}
-                      <br />
-                      <Typography fontWeight={'bold'} display={'inline'}>TOTAL DOUBLE COFFEES </Typography>{coffee.data.DUECaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.DUECaffe} coffee` : `${coffee.data.DUECaffe} coffees`) : '0 coffees'}
-                      <br />
-                      <Typography fontWeight={'bold'} display={'inline'}>IGNITION </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
-                      <br />
-                      <Typography fontWeight={'bold'} display={'inline'}>SHUTDOWN </Typography>{coffee.data.spegnimento != undefined ? (coffee.data.spegnimento === 1 ? `${coffee.data.spegnimento} time` : `${coffee.data.spegnimento} times`) : '0 times'}
+                    <Box component='div' key={coffee.id} sx={{ textAlign: 'center', pt: '10px' }}>
+                      <Box component='div' sx={{borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
+                        <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
+                      </Box>
+                      <Stack direction={'row'} gap={'10px'} pt={'10px'} alignItems={'center'}>
+
+                      <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'space-between'}}>
+                        <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
+                          <Typography fontWeight={'bold'} display={'inline'}>TOTAL SINGLE COFFEES </Typography>{coffee.data.UNCaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.UNCaffe} coffee` : `${coffee.data.UNCaffe} coffees`) : '0 coffees'}
+                        </Box>
+                        <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
+                          <Typography fontWeight={'bold'} display={'inline'}>TOTAL DOUBLE COFFEES </Typography>{coffee.data.DUECaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.DUECaffe} coffee` : `${coffee.data.DUECaffe} coffees`) : '0 coffees'}
+                        </Box>
+                      </Box>
+                      <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px'/*, justifyContent: 'space-between' */ }}>
+                        <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#b9ec86', color: '#4d8317' }}>
+                          <Typography fontWeight={'bold'} display={'inline'}>IGNITIONS </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
+                        </Box>
+                        <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#e4160ca6', color: '#680703a6' }}>
+                          <Typography fontWeight={'bold'} display={'inline'}>SHUTDOWNS  </Typography>{coffee.data.spegnimento != undefined ? (coffee.data.spegnimento === 1 ? `${coffee.data.spegnimento} time` : `${coffee.data.spegnimento} times`) : '0 times'}
+                        </Box>
+                      </Box>
+                      </Stack>
                     </Box>
                   )))
               )}
