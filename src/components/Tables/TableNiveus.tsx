@@ -23,13 +23,13 @@ const TableNiveus = ({ loading, niveus }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {loading && (
+          {/*{loading && (
             <TableRow>
               <TableCell colSpan={4}>
                 <LinearProgress />
               </TableCell>
             </TableRow>
-          )}
+          )}*/}
 
           {niveus?.map((n) => (
             <TableRow key={n.id}>
@@ -43,7 +43,7 @@ const TableNiveus = ({ loading, niveus }: Props) => {
       </Table>
     </TableContainer>
     {niveus?.map((n) => (
-      <Box key={n.id} textAlign={'center'}>
+      <Box component='div' key={n.id} textAlign={'center'}>
         {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 20 ? (
           <Brightness1Icon style={{ color: 'white' }} />
         ) : (

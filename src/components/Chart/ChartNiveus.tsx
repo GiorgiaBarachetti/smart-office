@@ -99,7 +99,7 @@ const ChartNiveus = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{ height: '260px' }}>
+                <Box component='div' sx={{ height: '260px' }}>
                     {isLoading ? (
                         <LinearProgress />
                     ) : (
