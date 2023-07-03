@@ -62,7 +62,7 @@ const OpenSpace = () => {
       {isLoadingPage ? <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} /> :
         <Box component='div' py={'30px'} >
           <Box component='div' sx={{ ...CONTAINERBOX }}>
-            <Box sx={{ width: '95%', mx: 'auto' }}>
+            <Box component='div' sx={{ width: '95%', mx: 'auto' }}>
               {/*desktop*/}
               {isXsScreen ? (
                 <Stack direction="row" spacing={2} alignItems={'center'} >

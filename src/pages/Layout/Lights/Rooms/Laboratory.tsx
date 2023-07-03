@@ -61,7 +61,7 @@ const Laboratory = () => {
       {isLoadingPage ? <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} /> :
         <Box component='div' py={'30px'} >
           <Box component='div' sx={{ ...CONTAINERBOX }}>
-            <Box sx={{ width: '95%', mx: 'auto' }}>
+            <Box component='div' sx={{ width: '95%', mx: 'auto' }}>
               {isXsScreen ? (
                 <Stack direction="row" spacing={2} alignItems={'center'} >
                   <SwitchComponent id={id} room={room} fetchRoom={() => fetchRoom(1)} />
