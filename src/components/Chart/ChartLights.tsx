@@ -79,7 +79,6 @@ const ChartLights = ({ id }: Props) => {
             }
         },
         vAxis: { title: "Watt", minValue: 0 },
-        //backgroundColor:'rgba(255, 255, 255, 0.8)',
         chartArea: { width: "50%", height: "60%" },
     };
 

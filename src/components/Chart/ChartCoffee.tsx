@@ -63,7 +63,7 @@ const ChartCoffee = () => {
     }, []);
 
     const options = {
-        hAxis: { /*title: "Time", */titleTextStyle: { color: "#333" } }, gridlines: {
+        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
             count: -1,
             units: {
                 days: { format: ['dd/MM/YY'] },
@@ -79,7 +79,7 @@ const ChartCoffee = () => {
             }
         },
         //ticks: CoffeeDatas.map((item) => new Date(item.data.timestamp)), 
-        vAxis: { /*title: "Watt",*/ minValue: 0 },
+        vAxis: { title: "Watt", minValue: 0 },
         //backgroundColor:'rgba(255, 255, 255, 0.8)',
         chartArea: { width: "50%", height: "60%" },
     };

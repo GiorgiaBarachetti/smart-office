@@ -60,7 +60,7 @@ const ChartNiveus = () => {
     }, []);
 
     const options = {
-        hAxis: { /*title: "Time",*/ titleTextStyle: { color: "#333" } }, gridlines: {
+        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
             count: -1,
             units: {
                 days: { format: ['dd/MM/YY'] },
@@ -75,7 +75,7 @@ const ChartNiveus = () => {
                 minutes: { format: ['HH:mm'] },
             }
         },
-        vAxis: { /*title: "Watt",*/ minValue: 0 },
+        vAxis: { title: "Watt", minValue: 0 },
         chartArea: { width: "50%", height: "60%" },
     };
 
