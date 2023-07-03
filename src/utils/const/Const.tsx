@@ -119,7 +119,7 @@ export const MODALSTYLE = {
   bgcolor: 'background.paper',
   border:'none',
   boxShadow: 24,
-  p: 4,
+  p:3,
   borderRadius: 5,
 };
 

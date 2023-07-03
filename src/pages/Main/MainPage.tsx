@@ -389,7 +389,7 @@ const MainPage = () => {
                     <tspan>{`Power: ${light.state.apower} W`}</tspan>
                   </text>
                   <text x={x + 60} y={y + 365} fill="black" fontSize="15px">
-                    <tspan>{`Output: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
+                    <tspan>{`Status: ${light.state.output === true ? 'ON' : 'OFF'}`}</tspan>
                   </text>
                 </g>
               );
@@ -453,10 +453,13 @@ const MainPage = () => {
             return (
               <g key={printer.tplinkStampante.id} style={{ ...printerStyle, cursor: 'pointer' }}>
                 <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
-                <rect x={x + 50} y={y + 335} width="140px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-                <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
+                <rect x={x + 50} y={y + 325} width="140px" height="60px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+                <text x={x + 60} y={y + 350} fill="black" fontSize="15px">
                   <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
+                <text x={x + 60} y={y + 370} fill="black" fontSize="15px">
+                    <tspan>{`Status: ${printerStatus[0].stato_presa != undefined && printerStatus[0].stato_presa  === true ? 'ON' : 'OFF'}`}</tspan>
+                  </text>
               </g>
             )
           })
