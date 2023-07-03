@@ -53,7 +53,6 @@ const PrinterPage = () => {
       const data: PrinterStatus = await response.json();
       const isPrinterOn = data.stato_presa;
       setStatoPresa(isPrinterOn);
-      console.log(isPrinterOn);
     } catch (error) {
       console.log('Error fetching printer Status:', error);
     }
@@ -69,10 +68,10 @@ const PrinterPage = () => {
   }, [statoPresa]);
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh'  }} >
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }} >
       <Box component='div' paddingTop={'30px'}  >
       <Box component='div' sx={{...CONTAINERBOX}}>
-          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap:'10px', p: '20px', borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: { xs: '80%', sm: '40%', md: '30%' }, textAlign:'center', ...SHADOWSTYLE}}>
+          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap:'10px', p: '20px', borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: { xs: '80%', sm: '40%', md: '30%' }, textAlign:'center',  border: statoPresa ? '2px solid green' : '2px solid red',...SHADOWSTYLE}}>
             <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
             <ButtonGroup>
               <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>

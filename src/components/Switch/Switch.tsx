@@ -52,11 +52,13 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
   return (
     <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',mb:'20px', gap: '32px' }}>
       {room?.map((light) => (
-        <Card key={id} sx={{ display: 'flex', flexDirection: 'column', width: '201px' }}>
+        <Card key={id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light.state.output ? '2px solid green' : '2px solid red'}}>
           <CardActionArea>
+            {/*
           <CircleIcon
                     style={{ color: light.state.output ? 'green' : 'red', position: 'absolute', right: '7px', top: '7px', fontSize: '20px' }}
                     />
+            */}
             <CardContent sx={{ backgroundColor: light.state.output ? '2px solid green' : '2px solid red',p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center',gap:'10px' }}>
               <Typography textAlign={'center'}>SWITCH LIGHT STATUS</Typography>
               <ButtonGroup style={{ alignSelf: 'center' }} aria-label="button group">
