@@ -149,7 +149,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                 elem.href !== PATH.main
               )
                 .map((elem) => {
-                  return (<>
+                  return (<Box key={elem.href}>
                     <ListItem
                       key={elem.href}
                       onClick={() => handleClick(elem.href, elem.name)}
@@ -173,7 +173,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                             </ListItemButton>
                           </ListItem>
                         ))}
-                      </List> : null}</>
+                      </List> : null}</Box>
                   )
                 })}
             </List>
