@@ -68,14 +68,14 @@ const ChartLights = ({ id }: Props) => {
             units: {
                 days: { format: ['dd/MM/YY'] },
                 hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
+                minutes: { format: ['HH'] },
             }
         },
         minorGridlines: {
             units: {
                 days: { format: ['dd/MM/YY'] },
                 hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
+                minutes: { format: ['HH'] },
             }
         },
         vAxis: { title: "Watt", minValue: 0 },

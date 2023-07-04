@@ -68,14 +68,14 @@ const ChartCoffee = () => {
             units: {
                 days: { format: ['dd/MM/YY'] },
                 hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
+                minutes: { format: ['HH'] },
             }
         },
         minorGridlines: {
             units: {
                 days: { format: ['dd/MM/YY'] },
                 hours: { format: ['HH'] },
-                minutes: { format: ['HH:mm'] },
+                minutes: { format: ['HH'] },
             }
         },
         //ticks: CoffeeDatas.map((item) => new Date(item.data.timestamp)), 

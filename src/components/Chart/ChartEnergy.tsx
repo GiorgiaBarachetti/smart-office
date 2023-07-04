@@ -59,6 +59,13 @@ const ChartEnergy = () => {
         fetchEnergyData('today')
     }, []);
 
+    const options = {
+
+        //animation: {duration: 1000, easing: 'in',}
+    };
+
+
+
     return (
         <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
             <Paper>
@@ -79,7 +86,7 @@ const ChartEnergy = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Box component='div' sx={{ height: '260px' }}>
+                <Box sx={{ height: '260px' }}>
                     {isLoading ? (
                         <LinearProgress />
                     ) : (
@@ -89,27 +96,28 @@ const ChartEnergy = () => {
                             chartType="LineChart"
                             data={[
                                 ['timestamp', 'watt'],
-                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => { return [new Date(timestamp), power] }),
+                                ...EnergyDatas[0]?.power.map(({ timestamp, power }) => [new Date(timestamp), power]),
                             ]}
+
                             options={{
-                                hAxis: {title: "Time", titleTextStyle: {color: "#333" } },
-                                            gridlines: {
-                                                count: -1,
-                                            units: {
-                                                days: {format: ['dd/MM/YY'] },
-                                                hours: {format: ['HH'] },
-                                                minutes: {format: ['HH'] },
+                                hAxis: { title: "Time", titleTextStyle: { color: "#333" } },
+                                gridlines: {
+                                    count: -1,
+                                    units: {
+                                        days: { format: ['dd/MM/YY'] },
+                                        hours: { format: ['HH'] },
+                                        minutes: { format: ['HH'] },
                                     }
                                 },
-                                            minorGridlines: {
-                                                units: {
-                                                days: {format: ['dd/MM/YY'] },
-                                                hours: {format: ['HH'] },
-                                                minutes: {format: ['HH'] },
+                                minorGridlines: {
+                                    units: {
+                                        days: { format: ['dd/MM/YY'] },
+                                        hours: { format: ['HH'] },
+                                        minutes: { format: ['HH'] },
                                     }
                                 },
-                                            vAxis: {title: "Watt", minValue: 0 },
-                                            chartArea: {width: "50%", height: "60%" },
+                                vAxis: { title: "Watt", minValue: 0 },
+                                chartArea: { width: "50%", height: "60%" },
                             }}
                         />
                     )}
