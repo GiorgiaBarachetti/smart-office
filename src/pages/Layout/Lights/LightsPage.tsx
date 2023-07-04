@@ -14,7 +14,6 @@ import TableLights from '../../../components/Tables/TableLights';
 import { Lights } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../../utils/fetch/api';
 import { ROOMPHOTOS, SHADOWSTYLE } from '../../../utils/const/Const';
-import CircleIcon from '@mui/icons-material/Circle';
 import { useNavigate } from 'react-router-dom';
 import { SIDEBARROOMS } from '../../../utils/routes/path';
 

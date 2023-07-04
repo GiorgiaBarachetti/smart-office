@@ -63,6 +63,19 @@ export interface Coffee {
   }
 }
 
+export interface CoffeeConsumes {
+  id: number,
+  data: {
+    receivedData: {
+      volts: number;
+      ampere: number;
+      watt: number;
+    };
+    timestamp: number
+  }
+}
+
+
 export interface Niveus {
   id: number,
   data: {

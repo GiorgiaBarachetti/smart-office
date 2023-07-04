@@ -457,9 +457,11 @@ const MainPage = () => {
                 <text x={x + 60} y={y + 350} fill="black" fontSize="15px">
                   <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
+                
                 <text x={x + 60} y={y + 370} fill="black" fontSize="15px">
-                    <tspan>{`Status: ${printerStatus[0].stato_presa != undefined && printerStatus[0].stato_presa  === true ? 'ON' : 'OFF'}`}</tspan>
-                  </text>
+                <tspan>{`Status: ${printerStatus[0]?.stato_presa != undefined && printerStatus[0]?.stato_presa  === true ? 'ON' : 'OFF'}`}</tspan>
+                </text>
+            
               </g>
             )
           })
