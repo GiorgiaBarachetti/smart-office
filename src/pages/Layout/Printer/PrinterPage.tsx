@@ -59,13 +59,36 @@ const PrinterPage = () => {
   };
 
   useEffect(() => {
-    const timeoutStato = setTimeout(()=>fetchPrinterStatus(), 1000)
-    const timeoutDati = setTimeout(()=>fetchPrinter(),1000)
-    return () => {
-      clearTimeout(timeoutStato)
-      clearTimeout(timeoutDati)
+    fetchPrinterStatus()
+    fetchPrinter()
+  }, []);
+
+  useEffect(() => {
+    const source = new EventSource('http://192.168.1.6:3000/events');
+
+    source.onmessage = (event) => {
+      if (event.data) {
+        const json: Printer = JSON.parse(event.data)
+
+        if (json?.tplinkStampante?.id === 300 && json.tplinkStampante) {
+          const newData: Printer = {
+            ...json
+          };
+          setPrinterDatas(Array.isArray(newData) ? newData : [newData]);
+        }
+      }
+    };
+
+    source.onerror = () => {
+      console.log('Error finding Niveus events')
     }
-  }, [statoPresa]);
+
+
+    return () => {
+      source.close();
+    };
+
+  }, []);
 
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }} >

@@ -28,6 +28,36 @@ const EnergyPage = () => {
     fetchEnergy();
   }, []);
 
+
+  useEffect(() => {
+    const source = new EventSource('http://192.168.1.6:3000/events');
+
+    source.onmessage = (event) => {
+      if (event.data) {
+        const json: Energy = JSON.parse(event.data)
+
+        if (json.id === 200 && json) {
+          const newData: Energy = {
+            ...json
+          };
+          setEnergyStatus(Array.isArray(newData) ? newData : [newData]);
+        }
+      }
+    };
+
+    source.onerror = () => {
+      console.log('Error finding Niveus events')
+    }
+
+
+    return () => {
+      source.close();
+    };
+
+  }, []);
+
+
+
   const [boltStyle, setBoltStyle] = useState({
     backgroundColor: "rgba(113,200,16)"
   })
@@ -65,7 +95,7 @@ const EnergyPage = () => {
 
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover',  minHeight: '93vh' }}>
+    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: '93vh' }}>
       <Box component='div' paddingTop={'30px'} >
         <Box component='div' sx={{ ...CONTAINERBOX }} >
           <Typography variant='h6' sx={{ color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>

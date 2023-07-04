@@ -7,10 +7,9 @@ import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 import BoltIcon from '@mui/icons-material/Bolt';
 import AirIcon from '@mui/icons-material/Air';
 import { CircularProgress } from '@mui/material';
-
 import planimetry from '../../img/background.png';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus } from '../../utils/fetch/api';
-import { Energy, Lights, Printer, Coffee, PrinterStatus, Niveus } from '../../utils/interfaces/Interfaces';
+import { Energy, Lights, Printer, Coffee, PrinterStatus, Niveus, CoffeeConsumes } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/ModalsMain/ModalLights';
 import ModalPrinter from '../../components/ModalsMain/ModalPrinter';
 import ModalCoffee from '../../components/ModalsMain/ModalCoffee';
@@ -127,19 +126,14 @@ const MainPage = () => {
   };
 
 
-  const [coffeeDatas, setCoffeeDatas] = useState<Coffee[]>([]);
+  const [coffeeConsumes, setCoffeeConsumes] = useState<CoffeeConsumes[]>([]);
+
   const fetchCoffee = async () => {
     try {
-      const currentDay = new Date()
-      const startDate = currentDay.toISOString().split('T')[0];
-      const endDate = currentDay
-      console.log(startDate, endDate)
-
-      const response = await fetch(`${baseURL}${urlCoffee}/data/count?start=${startDate} 00:00:00&end=${endDate}`);
+      const response = await fetch(`${baseURL}${urlCoffee}/registers`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
-      setCoffeeDatas(Array.isArray(data) ? data : [data]);
-      console.log(response, data)
+      setCoffeeConsumes(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -195,6 +189,69 @@ const MainPage = () => {
     }
   };
 
+
+
+  useEffect(() => {
+    const source = new EventSource('http://192.168.1.6:3000/events');
+
+    source.onmessage = (event) => {
+      if (event.data) {
+        const json = JSON.parse(event.data);
+
+        if (json.id === 100 && json) {
+          const newData: CoffeeConsumes = {
+            ...json
+          };
+          setCoffeeConsumes(Array.isArray(newData) ? newData : [newData]);
+        } else if (json?.tplinkStampante?.id === 300 && json.tplinkStampante) {
+          const newData: Printer = {
+            ...json
+          };
+          setPrinterDatas(Array.isArray(newData) ? newData : [newData]);
+        } else if (json?.id === 200 && json) {
+          const newData: Energy = {
+            ...json
+          };
+          setEnergyDatas(Array.isArray(newData) ? newData : [newData]);
+        } else if (json.id === 400 && json.data.receivedData) {
+          const { volts, ampere, watt } = json.data.receivedData;
+          const newData: Niveus = {
+            id: json.id,
+            data: {
+              receivedData: {
+                volts: volts,
+                ampere: ampere,
+                watt: watt,
+              }
+            },
+          };
+          setNiveusData(Array.isArray(newData) ? newData : [newData]);
+        } else if (json?.state?.id >= 0 && json?.state?.id <= 7) {
+          const updatedLightsDatasArray = lightsDatasArray.map((light) => {
+            if (light?.state?.id === json?.state?.id) {
+              return {
+                ...json
+              }
+            };
+            return light;
+          })
+          setLightsDatasArray(updatedLightsDatasArray);
+          console.log(updatedLightsDatasArray)
+        }
+      }
+  
+    };
+
+    source.onerror = () => {
+      console.log('Error finding Niveus events');
+    };
+
+    return () => {
+      source.close();
+    };
+  }, []);
+
+
   useEffect(() => {
     setIsLoading(true)
     const intervalCoffee = setTimeout(() => fetchCoffee(), 1000)
@@ -209,36 +266,11 @@ const MainPage = () => {
       clearTimeout(intervalNiveus)
       clearTimeout(timeoutPrinter)
       clearTimeout(timeoutPrinterStatus)
-
-    }
-  }, []);
+    }}, []);
 
   useEffect(() => {
     setIsLoading(true)
-    const timeoutLights = setTimeout(() => fetchLights(), 1000)
-    return () => {
-      clearTimeout(timeoutLights)
-    }
-  }, []);
-
-  //useeffect per fare interval 
-  useEffect(() => {
-    const intervalCoffee = setInterval(() => fetchCoffee(), 100000)
-    const intervalEnergy = setInterval(() => fetchEnergy(), 10000)
-    const intervalNiveus = setInterval(() => fetchNiveus(), 10000)
-    const intervalPrinter = setInterval(() => fetchPrinter(), 10000)
-    const intervalPrinterStatus = setInterval(() => fetchPrinterStatus(), 10000)
-    const intervalLights = setInterval(() => fetchLights(), 10000)
-
-    return () => {
-      clearInterval(intervalCoffee)
-      clearInterval(intervalEnergy)
-      clearInterval(intervalNiveus)
-      clearInterval(intervalPrinter)
-      clearInterval(intervalPrinterStatus)
-      clearInterval(intervalLights)
-
-    }
+    fetchLights()
   }, []);
 
 
@@ -383,7 +415,7 @@ const MainPage = () => {
                   <SvgIcon component={LightbulbIcon} x={x} y={y} width="80px" style={lightStyle} onClick={() => openModalLights(light.state.id)} />
                   <rect x={x + 50} y={y + 305} width="145px" height="70px" fill="#ffef3c66" rx="5px" ry="5px" />
                   <text x={x + 60} y={y + 325} fill="black" fontSize="15px">
-                    <tspan style={{fontWeight:'bold'}}>{`${light.room != undefined ? `${light.room}` : ''}`}</tspan>
+                    <tspan style={{ fontWeight: 'bold' }}>{`${light.room != undefined ? `${light.room}` : ''}`}</tspan>
                   </text>
                   <text x={x + 60} y={y + 345} fill="black" fontSize="15px">
                     <tspan>{`Power: ${light.state.apower} W`}</tspan>
@@ -399,15 +431,12 @@ const MainPage = () => {
         )}
 
         {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
-        {coffeeDatas.map((c) =>
+        {coffeeConsumes.map((c) =>
           <g key={c.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
             <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(100)} />
-            <rect x={x + 60} y={y + 320} width="140px" height="60px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
-            <text x={x + 70} y={y + 345} fill="black" fontSize="15px">
-              <tspan>{`Single coffees: ${c?.data?.UNCaffe !== undefined ? c?.data?.UNCaffe : ''}`}</tspan>
-            </text>
-            <text x={x + 70} y={y + 365} fill="black" fontSize="15px">
-              <tspan>{`Double coffees: ${c?.data?.DUECaffe !== undefined ? c?.data?.DUECaffe : ''}`}</tspan>
+            <rect x={x + 70} y={y + 340} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
+            <text x={x + 80} y={y + 365} fill="black" fontSize="15px">
+              <tspan>{`Power: ${c?.data?.receivedData?.watt !== undefined ? c?.data?.receivedData?.watt : '0'} W`}</tspan>
             </text>
           </g>
         )
@@ -457,11 +486,11 @@ const MainPage = () => {
                 <text x={x + 60} y={y + 350} fill="black" fontSize="15px">
                   <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
                 </text>
-                
+
                 <text x={x + 60} y={y + 370} fill="black" fontSize="15px">
-                <tspan>{`Status: ${printerStatus[0]?.stato_presa != undefined && printerStatus[0]?.stato_presa  === true ? 'ON' : 'OFF'}`}</tspan>
+                  <tspan>{`Status: ${printerStatus[0]?.stato_presa != undefined && printerStatus[0]?.stato_presa === true ? 'ON' : 'OFF'}`}</tspan>
                 </text>
-            
+
               </g>
             )
           })

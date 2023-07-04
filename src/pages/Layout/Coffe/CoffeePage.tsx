@@ -60,12 +60,10 @@ const CoffeePage = () => {
       setLoading(true)
       const startDate = selectedDates[0]?.toISOString()
       const endDate = selectedDates[1]?.toISOString()
-      console.log(startDate, endDate)
       const response = await fetch(`${baseURL}${urlCoffee}/data/count?start=${startDate}&end=${endDate}`);
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeData(Array.isArray(data) ? data : [data]);
-      console.log(response, data)
       setLoading(false)
     } catch (error) {
       console.log('Error fetching coffee:', error);
@@ -88,14 +86,41 @@ const CoffeePage = () => {
 
   )
 
+  useEffect(() => {
+    const source = new EventSource('http://192.168.1.6:3000/events');
+
+    source.onmessage = (event) => {
+      if (event.data) {
+        const json: CoffeeConsumes = JSON.parse(event.data)
+
+        if (json.id === 100 && json) {
+          const newData: CoffeeConsumes = {
+            ...json
+          };
+          setCoffeeConsumes(Array.isArray(newData) ? newData : [newData]);
+        }
+      }
+    };
+
+    source.onerror = () => {
+      console.log('Error finding Niveus events')
+    }
+
+
+    return () => {
+      source.close();
+    };
+
+  }, []);
+
   return (
     <Box style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '92.3vh' }}>
       <Box component='div' py={'30px'} mx={'auto'} >
         {/**DESKTOP */}
         <Stack direction='column' gap={'10px'} sx={{ width: '90%', marginLeft: 'auto', marginRight: 'auto', justifyContent: 'center', alignItems: 'stretch' }} >
           <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', }}>
-            
-              <Typography variant="h6" sx={{ textAlign:'center', pt:'30px', color:'white' }}>CONSUMPTIONS</Typography>
+
+            <Typography variant="h6" sx={{ textAlign: 'center', pt: '30px', color: 'white' }}>CONSUMPTIONS</Typography>
             <Box component="div" sx={{ display: 'flex', flexDirection: 'column', bgcolor: 'white', padding: '15px', mx: 'auto', my: '30px', borderRadius: '11px', width: '65%' }}>
 
               {loading ? (
@@ -122,8 +147,8 @@ const CoffeePage = () => {
                   ))}
                 </Box>
               )}
-              </Box>
-            <Typography variant="h6" sx={{ textAlign:'center',color: 'white', mt:'30px' }}>COFFEE COUNT</Typography>
+            </Box>
+            <Typography variant="h6" sx={{ textAlign: 'center', color: 'white', mt: '30px' }}>COFFEE COUNT</Typography>
             <Box component="div" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', height: '360px', bgcolor: 'white', padding: '25px', mx: 'auto', my: '30px', borderRadius: '11px', width: '70%' }}>
               <Typography>Choose a date range</Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -141,7 +166,7 @@ const CoffeePage = () => {
               {loading ? (<LinearProgress />) : (
                 coffeeData.map((coffee) => (
                   isXsScreen ? (
-                    <>
+                    <Box key={coffee.id}>
                       <Stack alignItems={'center'} sx={{ alignItems: 'stretch', gap: '20px', maxWidth: '640px', pt: '20px' }} direction={'row'} key={coffee.id} >
                         <Box component='div' sx={{ width: '30%', borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                           <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
@@ -165,9 +190,10 @@ const CoffeePage = () => {
                           </Box>
                         </Stack>
                       </Stack>
-                    </>
+                    </Box>
                   ) : (
-                    <>
+                    <Box key={coffee.id}>
+
                       <Box component='div' key={coffee.id} sx={{ textAlign: 'center', pt: '10px' }}>
                         <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                           <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
@@ -192,7 +218,7 @@ const CoffeePage = () => {
                           </Box>
                         </Stack>
                       </Box>
-                    </>
+                    </Box>
                   )))
               )}
             </Box>

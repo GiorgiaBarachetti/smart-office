@@ -23,14 +23,15 @@ const LightsPage = () => {
 
   const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
 
-  const fetchLights = async (key: number | null) => {
+  const fetchLights = async (/*key: number | null*/) => {
     try {
-      if (key === null) {
+     // if (key === null) {
         setIsLoadingPage(true);
         const response = await fetch(`${baseURL}${urlShelly}/all/status`);
         const data = await response?.json();
         setLightsDatasArray(data.data);
         setIsLoadingPage(false);
+        /*
       } else {
         const response = await fetch(`${baseURL}${urlShelly}/${key}/status`);
         const data = await response?.json();
@@ -59,7 +60,7 @@ const LightsPage = () => {
         setLightsDatasArray(updatedLightsDatasArray);
         setIsLoading(null);
         setKeyForFetch(key)
-      }
+      }*/
     } catch (error) {
       console.log('error fetching lights', error);
     }
@@ -75,7 +76,7 @@ const LightsPage = () => {
     }
   };
 
-  const [keyForFetch, setKeyForFetch] = useState<number | null>(null);
+  //const [keyForFetch, setKeyForFetch] = useState<number | null>(null);
 
   const switchOnLightById = async (key: number) => {
     try {
@@ -83,8 +84,7 @@ const LightsPage = () => {
       if (light) {
         if (light.state.output === false) {
           await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
-          setIsLoading(key);
-          setTimeout(() => fetchLights(key), 1000);
+          //setIsLoading(key);
         }
       }
     } catch (error) {
@@ -98,8 +98,7 @@ const LightsPage = () => {
       if (light) {
         if (light.state.output === true) {
           await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
-          setIsLoading(key);
-          setTimeout( () => fetchLights(key), 1000);
+          //setIsLoading(key);
         }
       }
     } catch (error) {
@@ -108,7 +107,7 @@ const LightsPage = () => {
   };
 
   useEffect(() => {
-    fetchLights(null);
+    fetchLights(/*null*/);
   }, []);
 
   const sortedLightsDatasArray = lightsDatasArray !== undefined ? lightsDatasArray.sort((a, b) => a.state.id - b.state.id) : [];
@@ -136,6 +135,36 @@ const LightsPage = () => {
     navigate(SIDEBARROOMS[key].href);
   };
 
+  useEffect(() => {
+    const source = new EventSource('http://192.168.1.6:3000/events');
+  
+    source.onmessage = (event) => {
+      if (event.data) {
+        const json: Lights = JSON.parse(event.data);
+  
+        const updatedLightsDatasArray = lightsDatasArray.map((light) => {
+          if (light?.state?.id === json?.state?.id) {
+            return {
+              ...json
+            };
+          }
+          return light;
+        });
+  
+        setLightsDatasArray(updatedLightsDatasArray);
+      }
+    };
+  
+    source.onerror = () => {
+      console.log('Error finding Niveus events');
+    };
+  
+    return () => {
+      source.close();
+    };
+  }, [lightsDatasArray]);
+  
+
   return (
     <>
       <Box
@@ -154,10 +183,10 @@ const LightsPage = () => {
               (light) => light.room !== '----' && light.room !== 'Punto luce non attivo'
             ).map((light) =>
             (
-              <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light.state.output ? '2px solid green' : '2px solid red', ...SHADOWSTYLE }}>
+              <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light?.state?.output ? '2px solid green' : '2px solid red', ...SHADOWSTYLE }}>
 
                 <CardActionArea>
-                  {light.state.output === false ? (
+                  {light?.state?.output === false ? (
                     getRoomOFFPhotoById(light.state.id) ? (
                       <CardMedia
                         component="img"
@@ -184,7 +213,7 @@ const LightsPage = () => {
                     />*/}
                   <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light.room}</Typography>
-                    {isLoading !== null && isLoading === light.state.id ? (<LinearProgress />) : (
+                    {/*{isLoading !== null && isLoading === light.state.id ? (<LinearProgress />) : (*/}
                       <ButtonGroup sx={{ position: 'relative', alignSelf: 'center' }}>
                         <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnLightById(light.state.id)} disabled={light.state.output === true || isLoading !== null}>
                           ON
@@ -193,7 +222,7 @@ const LightsPage = () => {
                           OFF
                         </Button>
                       </ButtonGroup>
-                    )}
+                    {/*)}*/}
                     <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light.state.output === true ? `Power used: ${light.state.apower}Watt` : ''}</Typography>
                   </CardContent>
                 </CardActionArea>

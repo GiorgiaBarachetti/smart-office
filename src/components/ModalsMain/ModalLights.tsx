@@ -27,7 +27,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   }
 
   const getRoomName = (roomId: number | undefined) => {
-    const roomName = lights != undefined ? (lights.find((light) => light.state.id === roomId)) : ('');
+    const roomName = lights != undefined ? (lights.find((light) => light.state?.id === roomId)) : ('');
     return roomName ? roomName.room : '';
   };
 
@@ -36,8 +36,8 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   const switchOnLightById = async (key: number | undefined) => {
     try {
       if (key != undefined) {
-        const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
-        if (light && light.state.output === false) {
+        const light = lights != undefined ? (lights.find((light) => light.state?.id === key)) : '';
+        if (light && light.state?.output === false) {
           await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
           setRefreshDatas(true);
         }
@@ -50,8 +50,8 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
   const switchOffLightById = async (key: number | undefined) => {
     try {
       if (key != undefined) {
-        const light = lights != undefined ? (lights.find((light) => light.state.id === key)) : '';
-        if (light && light.state.output === true) {
+        const light = lights != undefined ? (lights.find((light) => light.state?.id === key)) : '';
+        if (light && light.state?.output === true) {
           await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
           setRefreshDatas(false);
         }
@@ -60,10 +60,10 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
       console.log('Error switching the light of the room:', error);
     }
   };
- 
-  
+
+
   useEffect(() => {
-    const timeout =setTimeout(() => fetchLights(), 1000);
+    const timeout = setTimeout(() => fetchLights(), 1000);
     return () => {
       clearTimeout(timeout)
     }
@@ -83,18 +83,20 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
               <Button
                 sx={{ cursor: 'pointer' }}
                 onClick={() => switchOnLightById(idRoomModal)}
-                disabled={idRoomModal != undefined && lights[idRoomModal].state.output == true}
+                disabled={idRoomModal !== undefined && lights?.[idRoomModal]?.state?.output === true}
               >ON</Button>
+
               <Button
                 sx={{ cursor: 'pointer' }}
                 onClick={() => switchOffLightById(idRoomModal)}
-                disabled={idRoomModal != undefined && lights[idRoomModal].state.output == false}
+                disabled={idRoomModal !== undefined && lights?.[idRoomModal]?.state?.output === false}
               >OFF</Button>
+
             </ButtonGroup>
           </Box>
-          <Box component='div' sx={{ display: 'flex', flexDirection: 'row', pt: '30px'}}>
-              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>{idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
-              <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>LIGHTS PAGE</Button>
+          <Box component='div' sx={{ display: 'flex', flexDirection: 'row', pt: '30px' }}>
+            <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPageById(idRoomModal)}>{idRoomModal !== undefined && (getRoomName(idRoomModal))}</Button>
+            <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>LIGHTS PAGE</Button>
             <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>

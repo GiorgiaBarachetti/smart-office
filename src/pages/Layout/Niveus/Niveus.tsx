@@ -34,7 +34,6 @@ const NiveusPage = () => {
   useEffect(() => {
     setIsLoadingPage(true);
     fetchNiveus(0);
-    // setInterval(()=>fetchNiveus(1),5000);
   }, []);
 
 
@@ -72,6 +71,7 @@ const NiveusPage = () => {
     };
 
   }, []);
+  
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }}>
       {isLoadingPage ? (
