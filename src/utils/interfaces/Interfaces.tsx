@@ -84,6 +84,5 @@ export interface Niveus {
       ampere: number,
       watt: number
     },
-    timestamp: string
-  }
+    }
 }

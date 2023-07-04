@@ -13,6 +13,36 @@ const TableNiveus = ({ loading, niveus }: Props) => {
 
 
   return (<>
+          {niveus?.map((n) => (
+            <Box component='div' key={n.id} sx={{textAlign:'center', p:'10px'}}>
+              {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 20 ? (
+                <Brightness1Icon style={{ color: 'white' }} />
+              ) : (
+                <Brightness1OutlinedIcon style={{ color: 'white' }} />
+              )}
+              {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 55 ? (
+                <Brightness1Icon style={{ color: 'white' }} />
+              ) : (
+                <Brightness1OutlinedIcon style={{ color: 'white' }} />
+              )}
+              {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 90 ? (
+                <Brightness1Icon style={{ color: 'white' }} />
+              ) : (
+                <Brightness1OutlinedIcon style={{ color: 'white' }} />
+              )}
+              {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 110 ? (
+                <Brightness1Icon style={{ color: 'white' }} />
+              ) : (
+                <Brightness1OutlinedIcon style={{ color: 'white' }} />
+              )}
+              {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 200 ? (
+                <Brightness1Icon style={{ color: 'white' }} />
+              ) : (
+                <Brightness1OutlinedIcon style={{ color: 'white' }} />
+              )}
+            </Box>
+          
+          ))}
     <TableContainer sx={{ borderRadius: '11px', mb: '20px', mx: 'auto', width: '70%', ...SHADOWSTYLE, ...TABLECOLOR }} >
       <Table size="small">
         <TableHead>
@@ -42,36 +72,6 @@ const TableNiveus = ({ loading, niveus }: Props) => {
         </TableBody>
       </Table>
     </TableContainer>
-    {niveus?.map((n) => (
-      <Box component='div' key={n.id} textAlign={'center'}>
-        {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 20 ? (
-          <Brightness1Icon style={{ color: 'white' }} />
-        ) : (
-          <Brightness1OutlinedIcon style={{ color: 'white' }} />
-        )}
-        {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 55 ? (
-          <Brightness1Icon style={{ color: 'white' }} />
-        ) : (
-          <Brightness1OutlinedIcon style={{ color: 'white' }} />
-        )}
-        {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 90 ? (
-          <Brightness1Icon style={{ color: 'white' }} />
-        ) : (
-          <Brightness1OutlinedIcon style={{ color: 'white' }} />
-        )}
-        {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 110 ? (
-          <Brightness1Icon style={{ color: 'white' }} />
-        ) : (
-          <Brightness1OutlinedIcon style={{ color: 'white' }} />
-        )}
-        {n?.data?.receivedData?.watt != undefined && n?.data?.receivedData?.watt >= 200 ? (
-          <Brightness1Icon style={{ color: 'white' }} />
-        ) : (
-          <Brightness1OutlinedIcon style={{ color: 'white' }} />
-        )}
-      </Box>
-
-    ))}
 
   </>
   )

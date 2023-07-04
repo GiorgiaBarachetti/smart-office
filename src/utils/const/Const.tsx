@@ -127,14 +127,12 @@ export const CONSUMESSTYLE = {
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
-  backgroundColor: 'white',
+  color: 'rgba(238, 231, 225, 0.77)',
   padding: '20px',
-  m: '20px',
+  m: '10px',
   alignItems: 'center',
-  color: 'black',
-  borderRadius: '50%',
-  width: '105px',
-  height: '105px',
+  backgroundColor: 'rgba(79, 64, 61, 0.80)',
+  borderRadius: '11px',
   ...SHADOWSTYLE
 }
 
