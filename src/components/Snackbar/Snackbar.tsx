@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
@@ -28,7 +28,7 @@ export default function SimpleSnackbar() {
 
   const action = (
     <>
-      <Button color="secondary" size="small" onClick={()=>goToPage()}>
+      <Button color="secondary" size="small" onClick={() => goToPage()}>
         COFFEE PAGE
       </Button>
       <IconButton
@@ -43,38 +43,38 @@ export default function SimpleSnackbar() {
   );
 
   const [message, setMessage] = useState('')
-
+  const [date, setDate] = useState(new Date())
   useEffect(() => {
     const source = new EventSource('http://192.168.1.6:3000/events');
 
     source.onmessage = (event) => {
-        if (event.data) {
-            const json = JSON.parse(event.data);
+      if (event.data) {
+        const json = JSON.parse(event.data);
 
-            if (json.id === 1000 && json) {
-                setOpen(true)
-                const coffeeMessage = json.id
-                if(json.count === -1){
-                  setMessage('Turning off the coffee machine')
-                } else  if(coffeeMessage.count === 0){
-                  setMessage('Ignition of the coffee machine')
-                } else  if(coffeeMessage.count === 1){
-                  setMessage('Making one coffee...')
-                } else  if(coffeeMessage.count === 2){
-                  setMessage('Making two coffees...')
-                }
-            } 
+        if (json.id === 1000 && json) {
+          setOpen(true)
+          const coffeeMessage = json.id
+          if(json.count === -1){
+            setMessage(`${date.getHours()}:${date.getMinutes()} | Turning off the coffee machine `)
+          } else  if(coffeeMessage.count === 0){
+            setMessage(`${date.getHours()}:${date.getMinutes()} |Ignition of the coffee machine`)
+          } else  if(coffeeMessage.count === 1){
+            setMessage(`${date.getHours()}:${date.getMinutes()} | Making one coffee`)
+          } else  if(coffeeMessage.count === 2){
+            setMessage(`${date.getHours()}:${date.getMinutes()} | Making two coffees`)
+          }
         }
+      }
     }
 
     source.onerror = () => {
-        console.log('Error finding Coffee events');
+      console.log('Error finding Coffee events');
     };
 
     return () => {
-        source.close();
+      source.close();
     };
-}, []);
+  }, []);
 
   return (
     <div>
