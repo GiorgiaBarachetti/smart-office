@@ -77,7 +77,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
   };
 
   useEffect(() => {
-    // Get the sidebar item and sidebar dropdown item
+    // Get the sidebar item and sidebarrooms item
     const sidebarItem = SIDEBAR.find((o) => o.href === location.pathname);
     const sidebarDropdownItem = SIDEBARROOMS.find((o) => o.href === location.pathname);
   

@@ -7,20 +7,16 @@ import CircleIcon from '@mui/icons-material/Circle';
 interface Props {
   id: number
   room: Lights[]
-  fetchRoom: () => void
 }
 
-const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
+const SwitchComponent = ({ id, room }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
 
   const switchOnLightById = async () => {
     try {
       setIsLoading(true)
       if (room) {
         await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
-        setRefreshDatas((prevState) => !prevState);
       }
       setIsLoading(false)
     } catch (error) {
@@ -32,7 +28,6 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
       setIsLoading(true)
       if (room) {
         await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
-        setRefreshDatas((prevState) => !prevState);
       }
       setIsLoading(false)
     } catch (error) {
@@ -40,14 +35,6 @@ const SwitchComponent = ({ id, room, fetchRoom }: Props) => {
     }
 
   }
-
-  useEffect(() => {
-    const timeout = setTimeout(() => fetchRoom(), 1000);
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [refreshDatas]);
-
 
   return (
     <Box component='div' sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',mb:'20px', gap: '32px' }}>
