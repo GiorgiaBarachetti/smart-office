@@ -95,8 +95,8 @@ const EnergyPage = () => {
 
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: '93vh' }}>
-      <Box component='div' paddingTop={'30px'} >
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }}>
+      <Box component='div' py={'30px'} >
         <Box component='div' sx={{ ...CONTAINERBOX }} >
           <Typography variant='h6' sx={{ color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
           <Box component='div' sx={{ padding: '2px', borderRadius: '13px', bgcolor: { ...boltStyle }, mx: 'auto', my: '20px', width: { xs: '80%', sm: '80%', md: '70%' }, ...SHADOWSTYLE }} >
