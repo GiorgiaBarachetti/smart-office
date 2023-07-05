@@ -63,9 +63,9 @@ const TableNiveus = ({ loading, niveus }: Props) => {
 
           {niveus?.map((n) => (
             <TableRow key={n.id}>
-              <TableCell>{n?.data?.receivedData?.watt != undefined ? n.data.receivedData.watt : ''} W</TableCell>
-              <TableCell>{n?.data?.receivedData?.volts != undefined ? n.data.receivedData.volts : ''} V</TableCell>
-              <TableCell>{n?.data?.receivedData?.ampere != undefined ? n.data.receivedData.ampere : ''} A</TableCell>
+              <TableCell>{n?.data?.receivedData?.watt != undefined ? n.data.receivedData.watt : '0'} W</TableCell>
+              <TableCell>{n?.data?.receivedData?.volts != undefined ? n.data.receivedData.volts : '0'} V</TableCell>
+              <TableCell>{n?.data?.receivedData?.ampere != undefined ? n.data.receivedData.ampere : '0'} A</TableCell>
             </TableRow>
           ))}
 
