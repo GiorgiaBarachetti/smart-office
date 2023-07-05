@@ -134,6 +134,7 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeConsumes(Array.isArray(data) ? data : [data]);
+      console.log(data, response)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -146,6 +147,7 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);
+      console.log(data, response)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -158,6 +160,7 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlNiveus}/registers`);
       const data = await response?.json();
       setNiveusData(Array.isArray(data) ? data : [data]);
+      console.log(data, response)
     } catch (error) {
       console.log('not found datas of niveus');
     }
@@ -171,6 +174,7 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterDatas(Array.isArray(data) ? data : [data]);
+      console.log(data, response)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -184,6 +188,7 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterStatus(Array.isArray(data) ? data : [data]);
+      console.log(data, response)
     } catch (error) {
       console.log('Error fetching coffee:', error);
     }
@@ -227,51 +232,74 @@ const MainPage = () => {
           };
           setNiveusData(Array.isArray(newData) ? newData : [newData]);
         } else if (json?.state?.id >= 0 && json?.state?.id <= 7) {
+          if(lightsDatasArray[json.state.id]){
+            lightsDatasArray[json.state.id] = { ...lightsDatasArray[json.state.id], ...json}
+            //console.log(lightsDatasArray)
+          }
+          
+          /*
           const updatedLightsDatasArray = lightsDatasArray.map((light) => {
             if (light?.state?.id === json?.state?.id) {
               return {
                 ...json
-              }
+              };
+                }
+                return light;
+              });
+              console.log('aaaaaaaaaaaa')
+              setLightsDatasArray(updatedLightsDatasArray);
+              console.log(updatedLightsDatasArray)
+              
             };
-            return light;
-          })
-          setLightsDatasArray(updatedLightsDatasArray);
-          console.log(updatedLightsDatasArray)
-        }
+            const updatedLightsDatasArray = lightsDatasArray.map(light => {
+              if (light?.state.id === json.state.id) {
+                const updatedArray = {
+                  //if the old lightdataarry.property s different from the new one from the object data sostituiscila
+                  ...({ output: light.state.output }),
+                  ...({ apower: light.state.apower })
+                };
+                //se le key (output and apower) dei nuovi valori esistono stampale  senno stampa array di prima 
+                if (Object.keys(updatedArray).length > 0) {
+                  return {
+                    ...light,
+                    state: {
+                      ...light.state,
+                      ...updatedArray
+                    }
+                  };
+                }
+              }
+              return light;
+            });
+      
+            setLightsDatasArray(updatedLightsDatasArray);
+            console.log(updatedLightsDatasArray)
+            */
+            
+          }
       }
-  
-    };
+    }
 
-    source.onerror = () => {
-      console.log('Error finding Niveus events');
-    };
+      source.onerror = () => {
+        console.log('Error finding Niveus events');
+      };
 
-    return () => {
-      source.close();
-    };
-  }, []);
+      return () => {
+        source.close();
+      };
+    }, []);
 
-
-  useEffect(() => {
-    setIsLoading(true)
-    const intervalCoffee = setTimeout(() => fetchCoffee(), 1000)
-    const intervalEnergy = setTimeout(() => fetchEnergy(), 1000)
-    const intervalNiveus = setTimeout(() => fetchNiveus(), 1000)
-    const timeoutPrinter = setTimeout(() => fetchPrinter(), 1000)
-    const timeoutPrinterStatus = setTimeout(() => fetchPrinterStatus(), 1000)
-
-    return () => {
-      clearTimeout(intervalCoffee)
-      clearTimeout(intervalEnergy)
-      clearTimeout(intervalNiveus)
-      clearTimeout(timeoutPrinter)
-      clearTimeout(timeoutPrinterStatus)
-    }}, []);
 
   useEffect(() => {
     setIsLoading(true)
     fetchLights()
+    fetchCoffee()
+    fetchEnergy()
+    fetchNiveus()
+    fetchPrinter()
+    fetchPrinterStatus()
   }, []);
+
 
 
   const [boltStyle, setBoltStyle] = useState({
@@ -451,7 +479,7 @@ const MainPage = () => {
                 <SvgIcon component={AirIcon} x={x} y={y} width="80px" onClick={() => openNiveusModal(niveus.id)} />
                 <rect x={x + 50} y={y + 335} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
                 <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${niveus?.data?.receivedData?.watt !== undefined ? niveus?.data?.receivedData?.watt : ''} W`}</tspan>
+                  <tspan>{`Power: ${niveus?.data?.receivedData?.watt !== undefined ? niveus?.data?.receivedData?.watt : '0'} W`}</tspan>
                 </text>
               </g>
             )
@@ -466,7 +494,7 @@ const MainPage = () => {
                 <SvgIcon component={BoltIcon} x={x} y={y} width="80px" onClick={() => openEnergyModal(energy.id)} />
                 <rect x={x + 50} y={y + 335} width="125px" height="40px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
                 <text x={x + 60} y={y + 360} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : ''} W`}</tspan>
+                  <tspan>{`Power: ${energy.powerUsed !== undefined ? energy.powerUsed : '0'} W`}</tspan>
                 </text>
               </g>
             )
@@ -484,7 +512,7 @@ const MainPage = () => {
                 <SvgIcon component={PrintIcon} x={x} y={y} width="80px" onClick={() => openPrinterModal(printer.tplinkStampante.id)} />
                 <rect x={x + 50} y={y + 325} width="140px" height="60px" fill="rgba(167,156,156,0.53)" rx="5px" ry="5px" />
                 <text x={x + 60} y={y + 350} fill="black" fontSize="15px">
-                  <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : ''} W`}</tspan>
+                  <tspan>{`Power: ${printer.tplinkStampante.power.value !== undefined ? printer.tplinkStampante.power.value : '0'} W`}</tspan>
                 </text>
 
                 <text x={x + 60} y={y + 370} fill="black" fontSize="15px">
