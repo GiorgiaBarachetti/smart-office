@@ -32,7 +32,7 @@ const ChartEnergy = () => {
                     startDate = currentDate.toISOString().split('T')[0];
                     break;
                 case 'yesterday':
-                    const yesterday = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+                    const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
                     break;
                 case 'lastWeek':

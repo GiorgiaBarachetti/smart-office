@@ -32,7 +32,7 @@ const ChartNiveus = () => {
                     startDate = currentDate.toISOString().split('T')[0];
                     break;
                 case 'yesterday':
-                    const yesterday = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+                    const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
                     break;
                 case 'lastWeek':
@@ -84,7 +84,7 @@ const ChartNiveus = () => {
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
-                    <Box component='div' sx={{ display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+                    <Box component='div' sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
                         <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('today')}>
                             Today
                         </Button>
