@@ -15,6 +15,7 @@ import ModalPrinter from '../../components/ModalsMain/ModalPrinter';
 import ModalCoffee from '../../components/ModalsMain/ModalCoffee';
 import ModalEnergy from '../../components/ModalsMain/ModalEnergy';
 import ModalNiveus from '../../components/ModalsMain/ModalNiveus';
+import SnackbarGeneral from '../../components/Snackbar/SnackbarGeneral';
 
 const lightStyle = {
   color: '#fff25fc7',
@@ -38,6 +39,12 @@ const niveusStyle = {
 }
 
 const MainPage = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
 
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
@@ -118,10 +125,10 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
       setLightsDatasArray(data.data);
-      console.log(data, response)
       setIsLoading(false);
     } catch (error) {
-      console.log('Error fetching lights', error);
+      setOpen(true)
+      setMessage(`Error fetching lights`);
     }
   };
 
@@ -134,9 +141,9 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setCoffeeConsumes(Array.isArray(data) ? data : [data]);
-      console.log(data, response)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching coffee`);
     }
   };
 
@@ -147,9 +154,9 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che coffeeDatas non è una function
       setEnergyDatas(Array.isArray(data) ? data : [data]);
-      console.log(data, response)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching energy`);
     }
   };
 
@@ -160,9 +167,9 @@ const MainPage = () => {
       const response = await fetch(`${baseURL}${urlNiveus}/registers`);
       const data = await response?.json();
       setNiveusData(Array.isArray(data) ? data : [data]);
-      console.log(data, response)
     } catch (error) {
-      console.log('not found datas of niveus');
+      setOpen(true)
+      setMessage(`Error fetching niveus`);
     }
   };
 
@@ -174,9 +181,9 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterDatas(Array.isArray(data) ? data : [data]);
-      console.log(data, response)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching printer datas`);
     }
   };
 
@@ -188,13 +195,36 @@ const MainPage = () => {
       const data = await response?.json();
       //Array.isArray(data) ? data : [data] senno dice che printerDatas non è una function
       setPrinterStatus(Array.isArray(data) ? data : [data]);
-      console.log(data, response)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching printer status`);
     }
   };
 
+  const [updatedLights, setUpdatedLights] = useState<Lights>();
 
+  useEffect(() => {
+    const id = updatedLights?.state?.id
+    const output = updatedLights?.state?.output
+    const power = updatedLights?.state?.apower
+
+    if (id != undefined && output != undefined && power != undefined) {
+      const current_output = lightsDatasArray[id].state.output
+      const current_power = lightsDatasArray[id].state.apower
+
+      if (current_output != output && current_power != power && lightsDatasArray != undefined && updatedLights != undefined) {
+        const updatedArray = lightsDatasArray.map((c, i) => {
+          if (i === id) {
+            return updatedLights;
+          } else {
+            return c;
+          }
+        });
+        setLightsDatasArray(updatedArray);
+      } else {
+      }
+    }
+  }, [updatedLights]);
 
   useEffect(() => {
     const source = new EventSource('http://192.168.1.6:3000/events');
@@ -231,63 +261,21 @@ const MainPage = () => {
             },
           };
           setNiveusData(Array.isArray(newData) ? newData : [newData]);
-        } else if (json?.state?.id >= 0 && json?.state?.id <= 7) {
-          if(lightsDatasArray[json.state.id]){
-            lightsDatasArray[json.state.id] = { ...lightsDatasArray[json.state.id], ...json}
-            //console.log(lightsDatasArray)
-          }
-          
-          /*
-          const updatedLightsDatasArray = lightsDatasArray.map((light) => {
-            if (light?.state?.id === json?.state?.id) {
-              return {
-                ...json
-              };
-                }
-                return light;
-              });
-              console.log('aaaaaaaaaaaa')
-              setLightsDatasArray(updatedLightsDatasArray);
-              console.log(updatedLightsDatasArray)
-              
-            };
-            const updatedLightsDatasArray = lightsDatasArray.map(light => {
-              if (light?.state.id === json.state.id) {
-                const updatedArray = {
-                  //if the old lightdataarry.property s different from the new one from the object data sostituiscila
-                  ...({ output: light.state.output }),
-                  ...({ apower: light.state.apower })
-                };
-                //se le key (output and apower) dei nuovi valori esistono stampale  senno stampa array di prima 
-                if (Object.keys(updatedArray).length > 0) {
-                  return {
-                    ...light,
-                    state: {
-                      ...light.state,
-                      ...updatedArray
-                    }
-                  };
-                }
-              }
-              return light;
-            });
-      
-            setLightsDatasArray(updatedLightsDatasArray);
-            console.log(updatedLightsDatasArray)
-            */
-            
-          }
+        } else if (json?.state?.id != undefined && json?.state?.id >= 0 && json?.state?.id <= 7) {
+          setUpdatedLights(json)
+        }
       }
     }
 
-      source.onerror = () => {
-        console.log('Error finding Niveus events');
-      };
+    source.onerror = () => {
+      setOpen(true)
+      setMessage(`Error finding new events`);
+    };
 
-      return () => {
-        source.close();
-      };
-    }, []);
+    return () => {
+      source.close();
+    };
+  }, []);
 
 
   useEffect(() => {
@@ -528,11 +516,12 @@ const MainPage = () => {
         }
       </svg>
 
-      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} fetchLights={fetchLights} />
+      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} /*fetchLights={fetchLights}*/ />
       <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal} />
       <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal} />
       <ModalNiveus open={openModalNiveus} handleClose={() => closeNiveusModal()} idNiveus={idNiveusModal} />
       <ModalPrinter open={openModalPrinter} handleClose={() => closePrinterModal()} idPrinter={idPrinterModal} printerStatus={printerStatus} fetchPrinter={() => fetchPrinter()} fetchPrinterStatus={() => fetchPrinterStatus()} />
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </>
   )
 }

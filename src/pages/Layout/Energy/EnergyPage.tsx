@@ -7,8 +7,15 @@ import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
 import ChartLights from '../../../components/Chart/ChartEnergy';
 import ChartEnergy from '../../../components/Chart/ChartEnergy';
+import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const EnergyPage = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
   const [isLoading, setIsLoading] = useState(false)
   const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
 
@@ -20,7 +27,8 @@ const EnergyPage = () => {
       setEnergyStatus(Array.isArray(data) ? data : [data]);
       setIsLoading(false)
     } catch (error) {
-      console.log('not found datas of energy');
+      setOpen(true)
+      setMessage(`Error fetching energy`);
     }
   };
 
@@ -46,17 +54,15 @@ const EnergyPage = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Niveus events')
+      setOpen(true)
+      setMessage(`Error finding energy events`);
     }
-
 
     return () => {
       source.close();
     };
 
   }, []);
-
-
 
   const [boltStyle, setBoltStyle] = useState({
     backgroundColor: "rgba(113,200,16)"
@@ -95,7 +101,7 @@ const EnergyPage = () => {
 
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }}>
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '94vh' }}>
       <Box component='div' py={'30px'} >
         <Box component='div' sx={{ ...CONTAINERBOX }} >
           <Typography variant='h6' sx={{ color: 'white', mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMPTIONS</Typography>
@@ -105,6 +111,7 @@ const EnergyPage = () => {
           <ChartEnergy />
         </Box>
       </Box>
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </div>
   )
 }

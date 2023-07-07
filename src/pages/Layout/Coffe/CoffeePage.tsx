@@ -2,7 +2,6 @@ import { Box, Typography, useMediaQuery, LinearProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Coffee, CoffeeConsumes } from '../../../utils/interfaces/Interfaces';
 import { baseURL, urlCoffee } from '../../../utils/fetch/api';
-import { CONSUMESSTYLE, SHADOWSTYLE, TYTLESTYLE } from '../../../utils/const/Const';
 import Stack from '@mui/material/Stack';
 import background from './../../../img/coffee-5447420_1280.jpg'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -11,29 +10,24 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MultiInputDateTimeRangeField } from '@mui/x-date-pickers-pro';
 import dayjs, { Dayjs } from 'dayjs';
 import ChartCoffee from '../../../components/Chart/ChartCoffee';
+import TableCoffee from '../../../components/Tables/TableCoffee';
+import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
-const BOXSTYLE = {
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'column',
-  backgroundColor: 'white',
-  maxWidth: '160px',
-  height: '110px',
-  padding: '20px',
-  m: '20px',
-  alignItems: 'center',
-  borderRadius: '7px',
-  color: 'black',
-  ...SHADOWSTYLE
-}
+
 const CoffeePage = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
+
   const isXsScreen = useMediaQuery('(min-width:910px)');
 
   const defaultValue: [Dayjs | null, Dayjs | null] = [dayjs(new Date().setHours(0)), dayjs(new Date())];
   const [selectedDates, setSelectedDates] = useState<[Dayjs | null, Dayjs | null]>(defaultValue);
 
   const handleDateChange = (newDates: [Dayjs | null, Dayjs | null]) => {
-    console.log(newDates)
     setSelectedDates(newDates);
   };
 
@@ -50,7 +44,8 @@ const CoffeePage = () => {
       setCoffeeConsumes(Array.isArray(data) ? data : [data]);
       setLoading(false)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching coffee consumes`);
     }
   };
 
@@ -66,7 +61,8 @@ const CoffeePage = () => {
       setCoffeeData(Array.isArray(data) ? data : [data]);
       setLoading(false)
     } catch (error) {
-      console.log('Error fetching coffee:', error);
+      setOpen(true)
+      setMessage(`Error fetching coffee count`);
     }
   };
 
@@ -103,7 +99,8 @@ const CoffeePage = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Niveus events')
+      setOpen(true)
+      setMessage(`Error finding coffee events`);
     }
 
 
@@ -121,33 +118,7 @@ const CoffeePage = () => {
           <Box component="div" style={{ backgroundColor: '#d3d3d382', borderRadius: '6px', }}>
 
             <Typography variant="h6" sx={{ textAlign: 'center', pt: '30px', color: 'white' }}>CONSUMPTIONS</Typography>
-            <Box component="div" sx={{ display: 'flex', flexDirection: 'column', bgcolor: 'white', padding: '15px', mx: 'auto', my: '30px', borderRadius: '11px', width: '65%' }}>
-
-              {loading ? (
-                <LinearProgress />
-              ) : (
-                <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                  {coffeeConsumes.map((c) => (
-                    <Box key={c.id} sx={{ ...CONSUMESSTYLE }}>
-                      <Typography sx={{ textAlign: 'center' }}>POWER</Typography>
-                      <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c?.data?.receivedData?.watt !== undefined ? `${c?.data?.receivedData?.watt}` : '0'} W</Typography>
-                    </Box>
-                  ))}
-                  {coffeeConsumes.map((c) => (
-                    <Box component="div" key={c.id} sx={{ ...CONSUMESSTYLE }}>
-                      <Typography sx={{ textAlign: 'center' }}>VOLTAGE</Typography>
-                      <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c?.data?.receivedData?.volts !== undefined ? `${c?.data?.receivedData?.volts}` : '0'} V</Typography>
-                    </Box>
-                  ))}
-                  {coffeeConsumes.map((c) => (
-                    <Box component="div" key={c.id} sx={{ ...CONSUMESSTYLE }}>
-                      <Typography sx={{ textAlign: 'center' }}>AMPERE</Typography>
-                      <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>{c.data?.receivedData?.ampere !== undefined ? `${c.data?.receivedData?.ampere}` : '0'} A</Typography>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
+            <TableCoffee coffee={coffeeConsumes} loading={loading} />
             <Typography variant="h6" sx={{ textAlign: 'center', color: 'white', mt: '30px' }}>COFFEE COUNT</Typography>
             <Box component="div" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', height: '360px', bgcolor: 'white', padding: '25px', mx: 'auto', my: '30px', borderRadius: '11px', width: '70%' }}>
               <Typography>Choose a date range</Typography>
@@ -160,9 +131,6 @@ const CoffeePage = () => {
                   />
                 </DemoItem>
               </LocalizationProvider>
-              {/*
-              <Button onClick={handleFetch}>CHECK THE USAGE</Button>
-*/}
               {loading ? (<LinearProgress />) : (
                 coffeeData.map((coffee) => (
                   isXsScreen ? (
@@ -226,6 +194,7 @@ const CoffeePage = () => {
           </Box>
         </Stack>
       </Box>
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </Box>
   );
 };

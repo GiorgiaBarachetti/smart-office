@@ -3,14 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, LinearProgress, Typography, Paper } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlAlhpa } from "../../utils/fetch/api";
+import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
+interface ChartData {
+    power: {
+        timestamp: string;
+        power: number
+    }[];
+}
 
 const ChartEnergy = () => {
-    interface ChartData {
-        power: {
-            timestamp: string;
-            power: number
-        }[];
-    }
+
+    const [message, setMessage] = useState('')
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        setMessage('')
+    };
 
     const [EnergyDatas, setEnergyDatas] = useState<ChartData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -49,22 +57,19 @@ const ChartEnergy = () => {
             const response = await fetch(`${baseURL}${urlAlhpa}/data/instant?start=${startDate}T00:00:00&end=${endDate}`);
             const data = await response.json();
             setEnergyDatas(Array.isArray(data) ? data : [data]);
-            setIsLoading(false);
+            setIsLoading(false); 
+            if (!response.ok) {
+                throw new Error
+            }
         } catch (error) {
-            console.log('Error fetching lights data', error);
+            setOpen(true)
+            setMessage('Error fetching energy data');
         }
     };
 
     useEffect(() => {
         fetchEnergyData('today')
     }, []);
-
-    const options = {
-
-        //animation: {duration: 1000, easing: 'in',}
-    };
-
-
 
     return (
         <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
@@ -124,6 +129,8 @@ const ChartEnergy = () => {
                 </Box>
 
             </Paper>
+            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+
         </Box>
     );
 };

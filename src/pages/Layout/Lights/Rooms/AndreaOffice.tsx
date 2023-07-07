@@ -17,38 +17,21 @@ const AndreaOffice = () => {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const fetchRoom = async (/*numberCase: number*/) => {
+  const fetchRoom = async () => {
     try {
-      //if (numberCase === 0) {
       const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       if (response.ok) {
         const data = await response.json();
         setRoom(Array.isArray(data) ? data : [data]);
+        console.log(data)
       } else {
         console.log('Error fetching room:', response.status);
       }
       setIsLoadingPage(false)
-      console.log('caught in bithc')
-      /*
-    } else {
-      setLoading(true)
-      const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
-      if (response.ok) {
-        const data = await response.json();
-        setRoom(Array.isArray(data) ? data : [data]);
-      } else {
-        console.log('Error fetching room:', response.status);
-      }
-      setLoading(false)
-    }
-    */
     } catch (error) {
       console.log('Error fetching room:', error);
     }
   };
-
-
-  
 
   useEffect(() => {
     const source = new EventSource('http://192.168.1.6:3000/events');

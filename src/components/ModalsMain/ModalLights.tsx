@@ -5,16 +5,24 @@ import { Box, Button, ButtonGroup, Typography, Modal, LinearProgress } from '@mu
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
 import { Lights } from '../../utils/interfaces/Interfaces';
+import SnackbarGeneral from '../Snackbar/SnackbarGeneral';
 
 interface Props {
   open: boolean;
   idRoomModal: number | undefined;
   lights: Lights[];
   handleClose: () => void;
-  fetchLights: () => void;
+  //fetchLights: () => void;
 }
 
-const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Props) => {
+const ModalLights = ({ open, handleClose, lights, idRoomModal/*, fetchLights*/ }: Props) => {
+  const [message, setMessage] = useState('')
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const handleCloseSnackBar = () => {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    (false);
+    setMessage('')
+  };
 
   const navigate = useNavigate();
   const gotoPage = () => {
@@ -31,19 +39,20 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
     return roomName ? roomName.room : '';
   };
 
-  const [refreshDatas, setRefreshDatas] = useState<boolean>(false);
-
   const switchOnLightById = async (key: number | undefined) => {
     try {
       if (key != undefined) {
         const light = lights != undefined ? (lights.find((light) => light.state?.id === key)) : '';
         if (light && light.state?.output === false) {
-          await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
-          setRefreshDatas(true);
+          const response = await fetch(`${baseURL}${urlShelly}/${key}/on`, { method: 'POST' });
+          if (!response.ok) {
+            throw new Error()
+          }
         }
       }
     } catch (error) {
-      console.log('Error switching the light of the room:', error);
+      setOpenSnackbar(true)
+      setMessage(`Error switching on the light of the room`);
     }
   };
 
@@ -52,23 +61,26 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
       if (key != undefined) {
         const light = lights != undefined ? (lights.find((light) => light.state?.id === key)) : '';
         if (light && light.state?.output === true) {
-          await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
-          setRefreshDatas(false);
+          const response = await fetch(`${baseURL}${urlShelly}/${key}/off`, { method: 'POST' });
+          if (!response.ok) {
+            throw new Error()
+          }
         }
       }
     } catch (error) {
-      console.log('Error switching the light of the room:', error);
+      setOpenSnackbar(true)
+      setMessage(`Error switching off the light of the room`);
     }
   };
 
-
+/*
   useEffect(() => {
     const timeout = setTimeout(() => fetchLights(), 1000);
     return () => {
       clearTimeout(timeout)
     }
   }, [refreshDatas]);
-
+*/
   return (
     <Modal open={open} onClose={() => handleClose()} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box component='div' sx={MODALSTYLE}>
@@ -100,8 +112,10 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal, fetchLights }: Pr
             <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
       </Box>
     </Modal>
+
   );
 };
 

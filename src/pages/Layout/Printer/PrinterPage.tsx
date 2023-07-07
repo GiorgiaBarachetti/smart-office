@@ -5,11 +5,17 @@ import { Box, Button, ButtonGroup, Typography, LinearProgress } from '@mui/mater
 import { baseURL, urlTplink } from '../../../utils/fetch/api'
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/stampante.avif'
+import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const PrinterPage = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingButton, setIsLoadingButton] = useState(false)
-  const [isLoadingButtonOff, setIsLoadingButtonOff] = useState(false)
 
   const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
   const [statoPresa, setStatoPresa] = useState<boolean>(false);
@@ -22,28 +28,32 @@ const PrinterPage = () => {
       setPrinterDatas(Array.isArray(data) ? data : [data]);
       setIsLoading(false)
     } catch (error) {
+      setOpen(true)
+      setMessage(`Error fetching lights`);
     }
   };
 
   const switchOnPrinter = async () => {
     try {
-      setIsLoadingButton(true)
+      //setIsLoadingButton(true)
       await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
-      setIsLoadingButton(false)
+      //setIsLoadingButton(false)
     } catch (error) {
-      console.log('Error switching on the printer:', error);
+      setOpen(true)
+      setMessage(`Error switching on the printer`);
     }
   };
 
   const switchOffPrinter = async () => {
     try {
-      setIsLoadingButtonOff(true)
+      //setIsLoadingButton(true)
       await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
-      setIsLoadingButtonOff(false)
+      //setIsLoadingButton(false)
     } catch (error) {
-      console.log('Error switching off the printer:', error);
+      setOpen(true)
+      setMessage(`Error switching off the printer`);
     }
   };
 
@@ -54,7 +64,8 @@ const PrinterPage = () => {
       const isPrinterOn = data.stato_presa;
       setStatoPresa(isPrinterOn);
     } catch (error) {
-      console.log('Error fetching printer Status:', error);
+      setOpen(true)
+      setMessage(`Error fetching printer Status`);
     }
   };
 
@@ -80,7 +91,8 @@ const PrinterPage = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Niveus events')
+      setOpen(true)
+      setMessage(`Error finding printer events`);
     }
 
 
@@ -91,7 +103,7 @@ const PrinterPage = () => {
   }, []);
 
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }} >
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '94vh' }} >
       <Box component='div' paddingTop={'30px'}  >
       <Box component='div' sx={{...CONTAINERBOX}}>
           <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap:'10px', p: '20px', borderRadius: '6px', bgcolor: 'white', mx: 'auto', my: '30px', width: { xs: '80%', sm: '40%', md: '30%' }, textAlign:'center',  border: statoPresa ? '2px solid green' : '2px solid red',...SHADOWSTYLE}}>
@@ -110,6 +122,7 @@ const PrinterPage = () => {
           </Box>
         </Box>
       </Box>
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </div>
   );
 };

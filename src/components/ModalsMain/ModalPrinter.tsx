@@ -47,10 +47,10 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => fetchPrinter(), 1000)
+    //const timeout = setTimeout(() => fetchPrinter(), 1000)
     const timeoutStatus = setTimeout(() => fetchPrinterStatus(), 1000)
     return () => {
-      clearTimeout(timeout)
+      //clearTimeout(timeout)
       clearTimeout(timeoutStatus)
     }
   }, [refreshDatas]);

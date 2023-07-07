@@ -3,14 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlNiveus } from "../../utils/fetch/api";
+import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
 
+interface ChartDataNiveus {
+    data: {
+        timestamp: string,
+        watt: number
+    }[];
+}
 const ChartNiveus = () => {
-    interface ChartDataNiveus {
-        data: {
-          timestamp: string,
-          watt: number
-        }[];
-      }
+    const [message, setMessage] = useState('')
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        setMessage('')
+    };
 
     const [NiveusDatas, setNiveusDatas] = useState<ChartDataNiveus[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -50,8 +57,12 @@ const ChartNiveus = () => {
             const data = await response.json();
             setNiveusDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
+            if (!response.ok) {
+                throw new Error
+            }
         } catch (error) {
-            console.log('Error fetching niveus data', error);
+            setOpen(true)
+            setMessage('Error fetching niveus data');
         }
     };
 
@@ -80,7 +91,7 @@ const ChartNiveus = () => {
     };
 
     return (
-        <Box component='div' sx={{ padding: '20px', width:'100%', mx:'auto' }}>
+        <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
@@ -112,31 +123,24 @@ const ChartNiveus = () => {
                                 [
                                     new Date(new Date().setHours(0, 0, 0, 0)),
                                     0
-                                  ],
-                                  ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => [
+                                ],
+                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => [
                                     new Date(timestamp),
                                     watt
-                                  ]),
-                                  [
+                                ]),
+                                [
                                     new Date(new Date()),
                                     0
-                                  ]
+                                ]
                             ]}
-                    options={options}
+                            options={options}
                         />
                     )}
                 </Box>
-
             </Paper>
+            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
         </Box>
     );
 };
 
 export default ChartNiveus;
-/*
-  [
-                                    [new Date(timestamp), null],
-                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => {return [new Date(timestamp), watt]}),
-                                     [new Date(), null]
-                                ]
-                                */

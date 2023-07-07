@@ -3,15 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlCoffee } from "../../utils/fetch/api";
+import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
 
+interface ChartDataCoffee {
+    data: {
+        timestamp: number,
+        value: number,
+    }[]
+}
 
 const ChartCoffee = () => {
-    interface ChartDataCoffee {
-        data: {
-            timestamp: number,
-            value: number,
-        }[]
-    }
+    const [message, setMessage] = useState('')
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        setMessage('')
+    };
 
     const [CoffeeDatas, setCoffeeDatas] = useState<ChartDataCoffee[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -51,10 +58,13 @@ const ChartCoffee = () => {
             const response = await fetch(`${baseURL}${urlCoffee}/data/watt?start=${startDate}T00:00:00&end=${endDate}`);
             const data = await response.json();
             setCoffeeDatas(Array.isArray(data) ? data : [data]);
-            console.log(response, data)
             setIsLoading(false);
+            if(response.ok){
+                throw new Error
+            }
         } catch (error) {
-            console.log('Error fetching coffee data', error);
+            setOpen(true)
+            setMessage('Error fetching coffee data');
         }
     };
 
@@ -117,13 +127,13 @@ const ChartCoffee = () => {
                                 [
                                     new Date(new Date().setHours(0, 0, 0, 0)),
                                     0
-                                  ],
+                                ],
                                 ...(CoffeeDatas[0]?.data || []).map(({ timestamp, value }) => {
                                     return ([new Date(timestamp), value]);
                                 }),
                                 [
-                                  new Date(new Date()),
-                                  0
+                                    new Date(new Date()),
+                                    0
                                 ]
                             ]}
                             options={options}
@@ -131,6 +141,8 @@ const ChartCoffee = () => {
                     )}
                 </Box>
             </Paper >
+            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+
         </Box >
     );
 };

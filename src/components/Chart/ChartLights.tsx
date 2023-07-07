@@ -3,16 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL } from "../../utils/fetch/api";
+import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
 
 interface Props {
     id: number
 }
+interface ChartData {
+    time: string;
+    watt: number;
+    id: string
+}
 const ChartLights = ({ id }: Props) => {
-    interface ChartData {
-        time: string;
-        watt: number;
-        id:string
-    }
+    const [message, setMessage] = useState('')
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        setMessage('')
+    };
 
     const [lightsDatasArray, setLightsDatasArray] = useState<ChartData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -53,8 +60,12 @@ const ChartLights = ({ id }: Props) => {
             const data = await response.json();
             setLightsDatasArray(data);
             setIsLoading(false);
+            if (!response.ok) {
+                throw new Error
+            }
         } catch (error) {
-            console.log('Error fetching lights data', error);
+            setOpen(true)
+            setMessage('Error fetching lights data');
         }
     };
 
@@ -63,27 +74,11 @@ const ChartLights = ({ id }: Props) => {
     }, []);
 
     const options = {
-        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
-            count: -1,
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        minorGridlines: {
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        vAxis: { title: "Watt", minValue: 0 },
-        chartArea: { width: "50%", height: "60%" },
+
     };
 
     return (
-        <Box component='div' sx={{ mt: '30px'}}>
+        <Box component='div' sx={{ mt: '30px' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
@@ -102,27 +97,29 @@ const ChartLights = ({ id }: Props) => {
                         </Button>
                     </Box>
                 </Box>
-                <Box sx={{height: '260px'}}>
-                {isLoading ? (
-                    <LinearProgress />
-                ) : (
-                    <Chart
-                        width={'100%'}
-                        height={250}
-                        chartType="LineChart"
-                        data={[
-                            ['time', 'watt'],
-                            ...lightsDatasArray.map(({ time, watt }) => {
-                                return [new Date(time), watt];
-                            }),
-                        ]}
-                        options={options}
-                    />
-                )}
-        </Box>
+                <Box sx={{ height: '260px' }}>
+                    {isLoading ? (
+                        <LinearProgress />
+                    ) : (
+                        <Chart
+                            width={'100%'}
+                            height={250}
+                            chartType="LineChart"
+                            data={[
+                                ['time', 'watt'],
+                                ...lightsDatasArray.map(({ time, watt }) => {
+                                    return [new Date(time), watt];
+                                }),
+                            ]}
+                            options={options}
+                        />
+                    )}
+                </Box>
 
 
             </Paper >
+            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+
         </Box >
     );
 };

@@ -7,35 +7,37 @@ import background from '../../../img/niveus.png';
 import TableNiveus from '../../../components/Tables/TableNiveus';
 import ChartNiveus from '../../../components/Chart/ChartNiveus';
 import './style.css'
+import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
+
 const NiveusPage = () => {
+   const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
+
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const [niveusData, setNiveusData] = useState<Niveus[]>([]);
 
-  const fetchNiveus = async (numberCase: number) => {
+  const fetchNiveus = async (/*numberCase: number*/) => {
     try {
-      if (numberCase === 0) {
+      //if (numberCase === 0) {
         const response = await fetch(`${baseURL}${urlNiveus}/registers`);
         const data = await response?.json();
         setNiveusData(Array.isArray(data) ? data : [data]);
         setIsLoadingPage(false);
-      } else {
-        setIsLoading(true);
-        const response = await fetch(`${baseURL}${urlNiveus}/registers`);
-        const data = await response?.json();
-        setNiveusData(Array.isArray(data) ? data : [data]);
-        setIsLoading(false);
-      }
     } catch (error) {
-      console.log('error fetching datas of niveus', error);
+      setOpen(true)
+      setMessage(`Error fetching niveus`);
     }
   };
 
   useEffect(() => {
     setIsLoadingPage(true);
-    fetchNiveus(0);
+    fetchNiveus();
   }, []);
-
 
   useEffect(() => {
     const source = new EventSource('http://192.168.1.6:3000/events');
@@ -62,9 +64,9 @@ const NiveusPage = () => {
     };
     
     source.onerror=()=>{
-      console.log('Error finding Niveus events')
+      setOpen(true)
+      setMessage(`Error fetching niveus`);
     }
-
 
     return () => {
       source.close();
@@ -73,7 +75,7 @@ const NiveusPage = () => {
   }, []);
   
   return (
-    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '93vh' }}>
+    <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '94vh' }}>
       {isLoadingPage ? (
         <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} />
       ) : (
@@ -85,6 +87,8 @@ const NiveusPage = () => {
           </Box>
         </Box>
       )}
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+
     </div>
   );
 };

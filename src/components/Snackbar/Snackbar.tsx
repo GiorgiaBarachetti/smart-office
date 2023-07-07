@@ -8,11 +8,11 @@ import { PATH } from '../../utils/routes/path';
 
 export default function SimpleSnackbar() {
   const [open, setOpen] = React.useState(false);
-
+/*
   const handleClick = () => {
     setOpen(true);
   };
-
+*/
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -50,17 +50,15 @@ export default function SimpleSnackbar() {
     source.onmessage = (event) => {
       if (event.data) {
         const json = JSON.parse(event.data);
-
         if (json.id === 1000 && json) {
           setOpen(true)
-          const coffeeMessage = json.id
-          if(json.count === -1){
+          if (json.count === -1) {
             setMessage(`${date.getHours()}:${date.getMinutes()} | Turning off the coffee machine `)
-          } else  if(coffeeMessage.count === 0){
-            setMessage(`${date.getHours()}:${date.getMinutes()} |Ignition of the coffee machine`)
-          } else  if(coffeeMessage.count === 1){
+          } else if (json.count === 0) {
+            setMessage(`${date.getHours()}:${date.getMinutes()} | Ignition of the coffee machine`)
+          } else if (json.count === 1) {
             setMessage(`${date.getHours()}:${date.getMinutes()} | Making one coffee`)
-          } else  if(coffeeMessage.count === 2){
+          } else if (json.count === 2) {
             setMessage(`${date.getHours()}:${date.getMinutes()} | Making two coffees`)
           }
         }
