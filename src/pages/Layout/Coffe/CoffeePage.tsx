@@ -1,7 +1,7 @@
 import { Box, Typography, useMediaQuery, LinearProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Coffee, CoffeeConsumes } from '../../../utils/interfaces/Interfaces';
-import { baseURL, urlCoffee } from '../../../utils/fetch/api';
+import { baseURL, urlCoffee, urlEvents } from '../../../utils/fetch/api';
 import Stack from '@mui/material/Stack';
 import background from './../../../img/coffee-5447420_1280.jpg'
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -83,7 +83,7 @@ const CoffeePage = () => {
   )
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {

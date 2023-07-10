@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Niveus } from '../../../utils/interfaces/Interfaces';
-import { baseURL, urlNiveus } from '../../../utils/fetch/api';
+import { baseURL, urlEvents, urlNiveus } from '../../../utils/fetch/api';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { CONTAINERBOX } from '../../../utils/const/Const';
 import background from '../../../img/niveus.png';
@@ -39,7 +39,7 @@ const NiveusPage = () => {
   }, []);
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if(event.data){

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
 import { Box, Button, ButtonGroup, Typography, LinearProgress } from '@mui/material';
-import { baseURL, urlTplink } from '../../../utils/fetch/api'
+import { baseURL, urlEvents, urlTplink } from '../../../utils/fetch/api'
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/stampante.avif'
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
@@ -77,7 +77,7 @@ const PrinterPage = () => {
   }, []);
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {

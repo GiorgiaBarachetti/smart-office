@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import TableLights from '../../../components/Tables/TableLights';
 import { Lights } from '../../../utils/interfaces/Interfaces';
-import { baseURL, urlShelly } from '../../../utils/fetch/api';
+import { baseURL, urlEvents, urlShelly } from '../../../utils/fetch/api';
 import { ROOMPHOTOS, SHADOWSTYLE } from '../../../utils/const/Const';
 import { useNavigate } from 'react-router-dom';
 import { SIDEBARROOMS } from '../../../utils/routes/path';
@@ -144,7 +144,7 @@ const LightsPage = () => {
   }, [updatedLights]);
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
     source.onmessage = (event) => {
       if (event.data) {
         const json = JSON.parse(event.data);

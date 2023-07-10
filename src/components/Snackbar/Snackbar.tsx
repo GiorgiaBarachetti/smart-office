@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../utils/routes/path';
+import { baseURL, urlEvents } from '../../utils/fetch/api';
 
 export default function SimpleSnackbar() {
   const [open, setOpen] = React.useState(false);
@@ -45,7 +46,7 @@ export default function SimpleSnackbar() {
   const [message, setMessage] = useState('')
   const [date, setDate] = useState(new Date())
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {

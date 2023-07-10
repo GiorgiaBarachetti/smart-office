@@ -8,7 +8,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import AirIcon from '@mui/icons-material/Air';
 import { CircularProgress } from '@mui/material';
 import planimetry from '../../img/background.png';
-import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus } from '../../utils/fetch/api';
+import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus, urlEvents } from '../../utils/fetch/api';
 import { Energy, Lights, Printer, Coffee, PrinterStatus, Niveus, CoffeeConsumes } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/ModalsMain/ModalLights';
 import ModalPrinter from '../../components/ModalsMain/ModalPrinter';
@@ -227,7 +227,7 @@ const MainPage = () => {
   }, [updatedLights]);
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {

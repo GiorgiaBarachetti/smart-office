@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Energy } from '../../../utils/interfaces/Interfaces';
 import TableEnergy from '../../../components/Tables/TableEnergy'
-import { baseURL, urlAlhpa } from '../../../utils/fetch/api';
+import { baseURL, urlAlhpa, urlEvents } from '../../../utils/fetch/api';
 import { Box, Typography } from '@mui/material';
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
@@ -38,7 +38,7 @@ const EnergyPage = () => {
 
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {

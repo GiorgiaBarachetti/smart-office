@@ -6,7 +6,7 @@ import { CONTAINERBOX } from '../../../../utils/const/Const';
 import SwitchComponent from '../../../../components/Switch/Switch';
 import ChartLights from '../../../../components/Chart/ChartLights';
 import { Lights } from '../../../../utils/interfaces/Interfaces';
-import { baseURL, urlShelly } from '../../../../utils/fetch/api';
+import { baseURL, urlEvents, urlShelly } from '../../../../utils/fetch/api';
 import SnackbarGeneral from '../../../../components/Snackbar/SnackbarGeneral';
 
 const OpenSpace = () => {
@@ -43,7 +43,7 @@ const OpenSpace = () => {
   };
 
   useEffect(() => {
-    const source = new EventSource('http://192.168.1.6:3000/events');
+    const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {
