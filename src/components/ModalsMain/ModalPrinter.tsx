@@ -5,6 +5,7 @@ import { ButtonGroup, Button, Box, Modal, Typography } from '@mui/material';
 import { PrinterStatus } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlTplink } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
+import SnackbarGeneral from '../Snackbar/SnackbarGeneral';
 
 interface Props {
   open: boolean;
@@ -15,7 +16,14 @@ interface Props {
   fetchPrinterStatus: () => void
 }
 
-const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinter, fetchPrinterStatus }: Props) => {
+const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinterStatus }: Props) => {
+  const [message, setMessage] = useState('')
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const handleCloseSnackBar = () => {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    (false);
+    setMessage('')
+  };
 
   const navigate = useNavigate();
   const gotoPage = () => {
@@ -27,30 +35,36 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
   const switchOnPrinter = async () => {
     try {
       if (printerStatus) {
-        await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
+        const response = await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
         setRefreshDatas((prevState) => !prevState);
+        if(response.ok){
+          throw new Error
+      }
       }
     } catch (error) {
-      console.log('Error switching on the printer:', error);
+      setOpenSnackbar(true)
+      setMessage(`Error switching on the printer`);
     }
   };
 
   const switchOffPrinter = async () => {
     try {
       if (printerStatus) {
-        await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
+        const response = await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
         setRefreshDatas((prevState) => !prevState);
+        if(response.ok){
+          throw new Error
+      }
       }
     } catch (error) {
-      console.log('Error switching off the printer:', error);
+      setOpenSnackbar(true)
+      setMessage(`Error switching off the printer`);
     }
   };
 
   useEffect(() => {
-    //const timeout = setTimeout(() => fetchPrinter(), 1000)
     const timeoutStatus = setTimeout(() => fetchPrinterStatus(), 1000)
     return () => {
-      //clearTimeout(timeout)
       clearTimeout(timeoutStatus)
     }
   }, [refreshDatas]);
@@ -71,6 +85,7 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
           <Button sx={{ cursor: 'pointer' }} onClick={() => gotoPage()}>PRINTER PAGE</Button>
           <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
         </Box>
+      {message != '' ? <SnackbarGeneral openSnackbar={openSnackbar} handleClose={() => handleCloseSnackBar()} message={message} /> : null}
       </Box>
     </Modal>
   );

@@ -138,8 +138,6 @@ const LightsPage = () => {
           }
         });
         setLightsDatasArray(updatedArray);
-
-        //console.log(lightsDatasArray)
       } else {
       }
     }
@@ -147,15 +145,10 @@ const LightsPage = () => {
 
   useEffect(() => {
     const source = new EventSource('http://192.168.1.6:3000/events');
-    //console.log('onmessage')
     source.onmessage = (event) => {
       if (event.data) {
         const json = JSON.parse(event.data);
-        //console.log(json?.state?.id)
-        //console.log('lighthsghb', json.state)
         const id = json?.state?.id
-        //console.log(id)
-        //const output = json?.state?.output
         if (id != undefined && id >= 0 && id <= 7) {
           setUpdatedLights(json)
         }
@@ -163,7 +156,8 @@ const LightsPage = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Lights events');
+      setOpen(true)
+      setMessage(`Error finding Lights events`);
     };
 
 

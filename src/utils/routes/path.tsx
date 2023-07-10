@@ -3,7 +3,6 @@
 export const PATH = {
     main: '/',
     lightsPage: '/lights',
-    //rooms: '/rooms',    
     coffee: '/coffee',
     niveus: '/niveus',
     printer: '/printer',
@@ -24,7 +23,6 @@ export const PATHDROPDOWNROOMS  = {
 export const SIDEBAR = [
     { name: "MAIN", href: PATH.main},
     { name: "LIGHTS", href: PATH.lightsPage},
-   // { name: "ROOMS", href: PATH.rooms},
     { name: "COFFEE", href: PATH.coffee},
     { name: "NIVEUS", href: PATH.niveus},
     { name: "PRINTER", href: PATH.printer},

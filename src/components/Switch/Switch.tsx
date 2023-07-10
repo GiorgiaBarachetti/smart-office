@@ -3,6 +3,7 @@ import { Lights } from '../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { Card, Box, Button, ButtonGroup, CardActionArea, CardContent, LinearProgress, Typography } from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle';
+import SnackbarGeneral from '../Snackbar/SnackbarGeneral';
 
 interface Props {
   id: number
@@ -10,28 +11,43 @@ interface Props {
 }
 
 const SwitchComponent = ({ id, room }: Props) => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
+
   const [isLoading, setIsLoading] = useState(false);
 
   const switchOnLightById = async () => {
     try {
       setIsLoading(true)
       if (room) {
-        await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
+        const response = await fetch(`${baseURL}${urlShelly}/${id}/on`, { method: 'POST' });
+        if(response.ok){
+          throw new Error
+      }
       }
       setIsLoading(false)
     } catch (error) {
-      console.log(`Error switching the light of the room:`, error);
+      setOpen(true)
+      setMessage(`Error switching on the light of the room:`);
     }
   }
   const switchOffLightById = async () => {
     try {
       setIsLoading(true)
       if (room) {
-        await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
+        const response = await fetch(`${baseURL}${urlShelly}/${id}/off`, { method: 'POST' });
+        if(response.ok){
+          throw new Error
+      }
       }
       setIsLoading(false)
     } catch (error) {
-      console.log(`Error switching the light of the room:`, error);
+      setOpen(true)
+      setMessage(`Error switching off the light of the room:`);
     }
 
   }
@@ -60,6 +76,7 @@ const SwitchComponent = ({ id, room }: Props) => {
         </Card>
       ))
       }
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </Box>
   );
 }

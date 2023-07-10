@@ -12,7 +12,6 @@ interface Props {
   idRoomModal: number | undefined;
   lights: Lights[];
   handleClose: () => void;
-  //fetchLights: () => void;
 }
 
 const ModalLights = ({ open, handleClose, lights, idRoomModal/*, fetchLights*/ }: Props) => {
@@ -73,14 +72,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal/*, fetchLights*/ }
     }
   };
 
-/*
-  useEffect(() => {
-    const timeout = setTimeout(() => fetchLights(), 1000);
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [refreshDatas]);
-*/
+
   return (
     <Modal open={open} onClose={() => handleClose()} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box component='div' sx={MODALSTYLE}>

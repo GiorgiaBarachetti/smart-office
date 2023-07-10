@@ -7,8 +7,16 @@ import SwitchComponent from '../../../../components/Switch/Switch';
 import ChartLights from '../../../../components/Chart/ChartLights';
 import { Lights } from '../../../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../../../utils/fetch/api';
+import SnackbarGeneral from '../../../../components/Snackbar/SnackbarGeneral';
 
 const Kitchen = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
+
   const id = 4;
   const [room, setRoom] = useState<Lights[]>([]);
 
@@ -17,19 +25,20 @@ const Kitchen = () => {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
 
-  const fetchRoom = async (/*numberCase: number*/) => {
+  const fetchRoom = async () => {
     try {
-      //if (numberCase === 0) {
       const response = await fetch(`${baseURL}${urlShelly}/${id}/status`);
       if (response.ok) {
         const data = await response.json();
         setRoom(Array.isArray(data) ? data : [data]);
       } else {
-        console.log('Error fetching room:', response.status);
+        setOpen(true)
+      setMessage(`Error fetching Kitchen: ${response.status}`);
       }
       setIsLoadingPage(false)
        } catch (error) {
-      console.log('Error fetching room:', error);
+        setOpen(true)
+        setMessage(`Error fetching Kitchen`);
     }
   };
 
@@ -53,7 +62,8 @@ const Kitchen = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Niveus events');
+      setOpen(true)
+      setMessage(`Error finding Kitchen events`);
     };
 
     return () => {
@@ -89,6 +99,7 @@ const Kitchen = () => {
           </Box>
         </Box>
       }
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </div>
   )
 }

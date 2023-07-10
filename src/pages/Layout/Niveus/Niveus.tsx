@@ -21,9 +21,8 @@ const NiveusPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [niveusData, setNiveusData] = useState<Niveus[]>([]);
 
-  const fetchNiveus = async (/*numberCase: number*/) => {
+  const fetchNiveus = async () => {
     try {
-      //if (numberCase === 0) {
         const response = await fetch(`${baseURL}${urlNiveus}/registers`);
         const data = await response?.json();
         setNiveusData(Array.isArray(data) ? data : [data]);

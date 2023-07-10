@@ -22,7 +22,6 @@ export default function SnackbarGeneral({ message, handleClose , openSnackbar }:
         autoHideDuration={3000}
         onClose={handleClose}
         message={message}
-        //action={action}
         color="secondary"
       />
   );

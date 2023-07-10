@@ -7,8 +7,16 @@ import SwitchComponent from '../../../../components/Switch/Switch';
 import ChartLights from '../../../../components/Chart/ChartLights';
 import { Lights } from '../../../../utils/interfaces/Interfaces';
 import { baseURL, urlShelly } from '../../../../utils/fetch/api';
+import SnackbarGeneral from '../../../../components/Snackbar/SnackbarGeneral';
 
 const AndreaOffice = () => {
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    setMessage('')
+  };
+
   const id = 0;
   const [room, setRoom] = useState<Lights[]>([]);
 
@@ -23,13 +31,14 @@ const AndreaOffice = () => {
       if (response.ok) {
         const data = await response.json();
         setRoom(Array.isArray(data) ? data : [data]);
-        console.log(data)
       } else {
-        console.log('Error fetching room:', response.status);
+        setOpen(true)
+        setMessage(`Error fetching room: ${response.status}`);
       }
       setIsLoadingPage(false)
     } catch (error) {
-      console.log('Error fetching room:', error);
+      setOpen(true)
+      setMessage(`Error fetching room`);
     }
   };
 
@@ -50,7 +59,8 @@ const AndreaOffice = () => {
     };
 
     source.onerror = () => {
-      console.log('Error finding Niveus events');
+      setOpen(true)
+      setMessage(`Error finding light events`);
     };
 
     return () => {
@@ -86,6 +96,7 @@ const AndreaOffice = () => {
           </Box>
         </Box>
       }
+      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </div>
   )
 }

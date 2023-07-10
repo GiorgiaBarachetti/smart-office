@@ -35,10 +35,11 @@ const PrinterPage = () => {
 
   const switchOnPrinter = async () => {
     try {
-      //setIsLoadingButton(true)
-      await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
+      const response = await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
-      //setIsLoadingButton(false)
+      if(response.ok){
+        throw new Error
+    }
     } catch (error) {
       setOpen(true)
       setMessage(`Error switching on the printer`);
@@ -47,10 +48,11 @@ const PrinterPage = () => {
 
   const switchOffPrinter = async () => {
     try {
-      //setIsLoadingButton(true)
-      await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
+      const response = await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
-      //setIsLoadingButton(false)
+      if(response.ok){
+        throw new Error
+    }
     } catch (error) {
       setOpen(true)
       setMessage(`Error switching off the printer`);
