@@ -1,141 +1,133 @@
-import { Chart } from "react-google-charts";
-import React, { useEffect, useState } from 'react';
-import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
-import { SHADOWSTYLE } from "../../utils/const/Const";
-import { baseURL, urlCoffee } from "../../utils/fetch/api";
-import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
+import { Chart } from 'react-google-charts'
+import React, { useEffect, useState } from 'react'
+import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material'
+import { SHADOWSTYLE } from '../../utils/const/Const'
+import { baseURL, urlCoffee } from '../../utils/fetch/api'
+import SnackbarGeneral from '../Snackbar/SnackbarGeneral'
 
 interface ChartDataCoffee {
-    data: {
-        timestamp: string,
-        value: number,
-    }[]
+  data: Array<{
+    timestamp: string
+    value: number
+  }>
 }
 
 const ChartCoffee = () => {
-    const [message, setMessage] = useState('')
-    const [open, setOpen] = useState(false);
-    const [CoffeeDatas, setCoffeeDatas] = useState<ChartDataCoffee[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [selectedDateRange, setSelectedDateRange] = useState('today');
-    
-    const handleClose = () => {
-        setOpen(false);
-        setMessage('')
-    };
-    
-    const handleDateRangeClick = (dateRange: string) => {
-        setSelectedDateRange(dateRange);
-        fetchCoffeeData(dateRange)
-    }
+  const [message, setMessage] = useState('')
+  const [open, setOpen] = useState(false)
+  const [CoffeeDatas, setCoffeeDatas] = useState<ChartDataCoffee[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [selectedDateRange, setSelectedDateRange] = useState('today')
 
-    const fetchCoffeeData = async (range: string) => {
-        console.log('response')
+  const handleClose = () => {
+    setOpen(false)
+    setMessage('')
+  }
 
-        try {
-            setIsLoading(true);
-            const currentDate = new Date();
-            let startDate = '';
-            const endDate = currentDate;
-            console.log('2 response')
+  const handleDateRangeClick = (dateRange: string) => {
+    setSelectedDateRange(dateRange)
+    fetchCoffeeData(dateRange)
+  }
 
-            switch (range) {
-                case 'today': {
-            console.log('222 response')
+  const fetchCoffeeData = async (range: string) => {
+    try {
+      setIsLoading(true)
+      const currentDate = new Date()
+      let startDate = ''
+      const endDate = currentDate
 
-                    startDate = currentDate.toISOString().split('T')[0];
-                    break;
-                }
-                case 'yesterday': {
-                    const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
-                    startDate = yesterday.toISOString().split('T')[0];
-                    break;
-                }
-                case 'lastWeek': {
-                    const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-                    startDate = lastWeekStart.toISOString().split('T')[0];
-                    break;
-                }
-                case 'lastMonth': {
-                    const lastMonthStart = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    startDate = lastMonthStart.toISOString().split('T')[0];
-                    break;
-                }
-                default:
-                    break;
-            }
-            console.log('22fsd2 response')
-
-            const response = await fetch(`${baseURL}${urlCoffee}/data/watt?start=${startDate}T00:00:00&end=${endDate}`);
-        console.log('3 response')
-
-            const data = await response.json();
-            console.log(response)
-            setCoffeeDatas(Array.isArray(data) ? data : [data]);
-            setIsLoading(false);
-            console.log(data)
-            if (!response.ok) {
-                throw new Error
-            }
-        } catch (error) {
-            setOpen(true)
-            setMessage('Error fetching coffee data');
+      switch (range) {
+        case 'today': {
+          startDate = currentDate.toISOString().split('T')[0]
+          break
         }
-    };
+        case 'yesterday': {
+          const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000)
+          startDate = yesterday.toISOString().split('T')[0]
+          break
+        }
+        case 'lastWeek': {
+          const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000)
+          startDate = lastWeekStart.toISOString().split('T')[0]
+          break
+        }
+        case 'lastMonth': {
+          const lastMonthStart = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000)
+          startDate = lastMonthStart.toISOString().split('T')[0]
+          break
+        }
+        default:
+          break
+      }
 
-    useEffect(() => {
-        fetchCoffeeData('today')
-    }, []);
+      const response = await fetch(`${baseURL}${urlCoffee}/data/watt?start=${startDate}T00:00:00&end=${endDate}`)
+      const data = await response.json()
+      setCoffeeDatas(Array.isArray(data) ? data : [data])
+      setIsLoading(false)
+      if (!response.ok) {
+        throw new Error()
+      }
+    } catch (error) {
+      setOpen(true)
+      setMessage('Error fetching coffee data')
+    }
+  }
 
-    const options = {
-        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
-            count: -1,
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        minorGridlines: {
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        vAxis: { title: "Watt", minValue: 0 },
-        chartArea: { width: "50%", height: "60%" },
-        explorer: { 
-            actions: ['dragToZoom', 'rightClickToReset'],
-            axis: 'horizontal',
-            keepInBounds: true,
-            maxZoomIn: 4.0},
-          colors: ['#4f403d'],
-          legend: 'none',
-        };
-    
-    const chartData = CoffeeDatas[0]?.data || [];
-    const chartItems = chartData.map(({ timestamp, value }) => [
-        new Date(timestamp),
-        value
-    ]);
+  useEffect(() => {
+    fetchCoffeeData('today')
+  }, [])
 
-    return (
+  const options = {
+    hAxis: { title: 'Time', titleTextStyle: { color: '#333' } },
+    gridlines: {
+      count: -1,
+      units: {
+        days: { format: ['dd/MM/YY'] },
+        hours: { format: ['HH'] },
+        minutes: { format: ['HH'] }
+      }
+    },
+    minorGridlines: {
+      units: {
+        days: { format: ['dd/MM/YY'] },
+        hours: { format: ['HH'] },
+        minutes: { format: ['HH'] }
+      }
+    },
+    vAxis: { title: 'Watt', minValue: 0 },
+    chartArea: { width: '50%', height: '60%' },
+    explorer: {
+      actions: ['dragToZoom', 'rightClickToReset'],
+      axis: 'horizontal',
+      keepInBounds: true,
+      maxZoomIn: 4.0
+    },
+    colors: ['#4f403d'],
+    legend: 'none'
+  }
+
+  const chartData = CoffeeDatas[0]?.data || []
+  const chartItems = chartData.map(({ timestamp, value }) => [
+    new Date(timestamp),
+    value
+  ])
+
+  return (
         <Box component='div' sx={{ padding: '20px', width: '90%', mx: 'auto' }}>
             <Paper>
                 <Box component='div' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', pt: '20px' }}>
                     <Typography variant='h6' textAlign={'center'}>Select a data range</Typography>
                     <Box component='div' sx={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('today')}>
+                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'today' ? 'contained' : 'outlined'} onClick={() => { handleDateRangeClick('today') }}>
                             TODAY
                         </Button>
-                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'yesterday' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('yesterday')}>
+                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'yesterday' ? 'contained' : 'outlined'} onClick={() => { handleDateRangeClick('yesterday') }}>
                             LAST 48 HOURS
                         </Button>
-                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'lastWeek' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('lastWeek')}>
+                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'lastWeek' ? 'contained' : 'outlined'} onClick={() => { handleDateRangeClick('lastWeek') }}>
                             LAST WEEK
                         </Button>
-                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'lastMonth' ? 'contained' : 'outlined'} onClick={() => handleDateRangeClick('lastMonth')}>
+                        <Button sx={{ cursor: 'pointer', mx: '10px', ...SHADOWSTYLE }} variant={selectedDateRange === 'lastMonth' ? 'contained' : 'outlined'} onClick={() => { handleDateRangeClick('lastMonth') }}>
                             LAST MONTH
                         </Button>
                     </Box>
@@ -149,22 +141,22 @@ const ChartCoffee = () => {
                             height={250}
                             chartType="LineChart"
                             data={[
-                                ['timestamp', 'value'],
-                                /*[
+                              ['timestamp', 'value'],
+                              /* [
                                     new Date(new Date().setHours(0, 0, 0, 0)),
                                     null
-                                ],*/
-                                ...chartItems,
+                                ], */
+                              ...chartItems
                             ]}
                             options={options}
                         />
                     )}
                 </Box>
             </Paper >
-            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+            {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => { handleClose() }} message={message} /> : null}
 
         </Box >
-    );
-};
+  )
+}
 
-export default ChartCoffee;
+export default ChartCoffee

@@ -63,7 +63,8 @@ export default function SimpleSnackbar() {
     }
 
     source.onerror = () => {
-      console.log('Error finding Coffee events');
+      // add snackbre
+      // console.log('Error finding Coffee events');
     };
 
     return () => {
