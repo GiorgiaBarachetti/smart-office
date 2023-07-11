@@ -28,7 +28,6 @@ export const CONTAINERBOX ={
   ...SHADOWSTYLE
 }
 
-
 import Andrea from '../../img/stanzeCard/andrea.jpg'
 import AndreaOn from '../../img/stanzeCard/andreaacc.jpg'
 import Meeting from '../../img/stanzeCard/meeting.jpg'
@@ -45,7 +44,6 @@ import Breaktime from '../../img/stanzeCard/breaktime.jpg'
 import BreaktimeOn from '../../img/stanzeCard/breaktimeacc.jpg'
 import Openspace from '../../img/stanzeCard/openspace.jpg'
 import OpenspaceOn from '../../img/stanzeCard/openspaceacc.jpg'
-
 
 export const ROOMPHOTOS = [
   {
@@ -110,7 +108,7 @@ export const MODALSTYLE = {
   flexDirection: 'column',
   alignItems: 'center',
   gap: '10px',
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',

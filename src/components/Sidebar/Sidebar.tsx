@@ -1,5 +1,5 @@
 import { styled, useTheme } from '@mui/material/styles';
-import {Box, Drawer, CssBaseline, Toolbar, Typography, List, Divider, IconButton, ListItem, ListItemButton, ListItemText, ClickAwayListener, LinearProgress } from '@mui/material';
+import {Box, Drawer, CssBaseline, Toolbar, Typography, List, Divider, IconButton, ListItem, ListItemButton, ListItemText, ClickAwayListener } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -42,8 +42,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-const PersistentDrawerLeft = (props: { location?: any }) => {
-
+const PersistentDrawerLeft = () => {
   const navigate = useNavigate()
   const location = useLocation();
   const [pageName, setPageName] = useState('')
@@ -71,7 +70,6 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
     setOpen(false);
   };
   
-  const now = new Date();
   const handleClickAway = () => {
     setOpen(false);
   };
@@ -80,18 +78,13 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
     // Get the sidebar item and sidebarrooms item
     const sidebarItem = SIDEBAR.find((o) => o.href === location.pathname);
     const sidebarDropdownItem = SIDEBARROOMS.find((o) => o.href === location.pathname);
-  
     // Set the page name and dropdown item name accordingly
     if (sidebarItem) {
       setPageName(sidebarItem.name);
     } else if (sidebarDropdownItem) {
-      
         setPageName(sidebarDropdownItem.name);
-      
     }
   }, [location.pathname]);
-
-
 
   return (
     <ClickAwayListener
@@ -166,7 +159,6 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                             key={elem.href}
                             onClick={() => handleClick(elem.href, elem.name)}
                             sx={{ padding: '0px', margin: '0px' }}
-
                           >
                             <ListItemButton  sx={{py:'0px' }}>
                               <ListItemText sx={{ fontSize: '5px', pl: '15px', py:'0' }}>{elem.name}</ListItemText>
@@ -177,10 +169,7 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                   )
                 })}
             </List>
-
           </Box>
-
-
           <Divider />
 
           <Box component='nav'>
@@ -200,8 +189,6 @@ const PersistentDrawerLeft = (props: { location?: any }) => {
                   </ListItem>
                 ))}
             </List>
-
-
           </Box>
         </Drawer>
       </Box>

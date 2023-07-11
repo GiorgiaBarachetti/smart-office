@@ -19,20 +19,23 @@ import { SIDEBARROOMS } from '../../../utils/routes/path';
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const LightsPage = () => {
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+  const [updatedLights, setUpdatedLights] = useState<Lights>();
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  
+  const navigate = useNavigate();
+  const goToPage = (key: number) => {
+    navigate(SIDEBARROOMS[key].href);
+  };
+
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
 
-  const [isLoading, setIsLoading] = useState<number | null>(null);
-  const [isLoadingPage, setIsLoadingPage] = useState(false);
-
-  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
-  const [updatedLights, setUpdatedLights] = useState<Lights>();
-
-  const fetchLights = async (/*key: number | null*/) => {
+  const fetchLights = async () => {
     try {
       const response = await fetch(`${baseURL}${urlShelly}/all/status`);
       const data = await response?.json();
@@ -42,7 +45,6 @@ const LightsPage = () => {
       setMessage(`Error fetching lights`);
     }
   };
-
 
   // switch off all the lights
   const switchOffAllLightDatas = async () => {
@@ -56,7 +58,6 @@ const LightsPage = () => {
       setMessage(`Error switching all the lights off`);
     }
   };
-
 
   const switchOnLightById = async (key: number) => {
     try {
@@ -106,18 +107,11 @@ const LightsPage = () => {
     return undefined;
   };
 
-  const navigate = useNavigate();
-  const goToPage = (key: number) => {
-    navigate(SIDEBARROOMS[key].href);
-  };
-
   useEffect(() => {
     setIsLoadingPage(true);
-    setTimeout(() => fetchLights(), 1000);
+    fetchLights()
     setIsLoadingPage(false);
   }, []);
-
-
 
   useEffect(() => {
     const id = updatedLights?.state?.id
@@ -128,7 +122,6 @@ const LightsPage = () => {
       const current_output = lightsDatasArray[id]?.state?.output
       const current_power = lightsDatasArray[id]?.state?.apower
 
-
       if (current_output != output && current_power != power && lightsDatasArray != undefined && updatedLights != undefined) {
         const updatedArray = lightsDatasArray.map((c, i) => {
           if (i === id) {
@@ -138,7 +131,6 @@ const LightsPage = () => {
           }
         });
         setLightsDatasArray(updatedArray);
-      } else {
       }
     }
   }, [updatedLights]);
@@ -159,70 +151,69 @@ const LightsPage = () => {
       setOpen(true)
       setMessage(`Error finding Lights events`);
     };
-
-
+    return () => {
+      source.close();
+    };
   }, [])
 
   return (
     <>
-        <Box
-          component="div"
-          sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
-          <Typography variant="h6" sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
+      <Box
+        component="div"
+        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: '20px', borderRadius: '6px', bgcolor: '#d3d3d382', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
+        <Typography variant="h6" sx={{ variant: 'h1', textAlign: 'center' }}>ROOMS</Typography>
 
-          <Button onClick={() => switchOffAllLightDatas()} sx={{ cursor: 'pointer', width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
-          {isLoadingPage ? (<LinearProgress />) : (
+        <Button onClick={() => switchOffAllLightDatas()} sx={{ cursor: 'pointer', width: '300px', mx: 'auto' }}>SWITCH OFF ALL THE LIGHTS</Button>
+        {isLoadingPage ? (<LinearProgress />) : (
 
-            <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
-              {lightsDatasArray != undefined && lightsDatasArray?.filter(
-                (light) => light?.room !== '----' && light?.room !== 'Punto luce non attivo'
-              ).map((light) =>
-              (
-                <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light?.state?.output ? '2px solid green' : '2px solid red', ...SHADOWSTYLE }}>
+          <Box component="div" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', p: '19px', gap: '32px' }}>
+            {lightsDatasArray != undefined && lightsDatasArray?.filter(
+              (light) => light?.room !== '----' && light?.room !== 'Punto luce non attivo'
+            ).map((light) =>
+            (
+              <Card key={light.state.id} sx={{ display: 'flex', flexDirection: 'column', width: '201px', border: light?.state?.output ? '2px solid green' : '2px solid red', ...SHADOWSTYLE }}>
 
-                  <CardActionArea>
-                    {light?.state?.output === false ? (
-                      getRoomOFFPhotoById(light?.state?.id) ? (
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={getRoomOFFPhotoById(light?.state?.id)}
-                          sx={{ padding: '0' }}
-                          onClick={() => goToPage(light?.state?.id)}
-                        />
-                      ) : null
-                    ) : (
-                      getRoomONPhotoById(light?.state?.id) ? (
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={getRoomONPhotoById(light?.state?.id)}
-                          sx={{ padding: '0' }}
-                          onClick={() => goToPage(light?.state?.id)}
-                        />
-                      ) : null
-                    )}
-                    <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light?.room}</Typography>
-                      {/*{isLoading !== null && isLoading === light.state.id ? (<LinearProgress />) : (*/}
-                      <ButtonGroup sx={{ position: 'relative', alignSelf: 'center' }}>
-                        <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnLightById(light?.state?.id)} disabled={light?.state?.output === true || isLoading !== null}>ON</Button>
-                        <Button sx={{ cursor: 'pointer' }} onClick={() => switchOffLightById(light?.state?.id)} disabled={light?.state?.output === false || isLoading !== null}>OFF</Button>
-                      </ButtonGroup>
-                      {/*)}*/}
-                      <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light?.state?.output === true ? `Power used: ${light?.state?.apower}Watt` : ''}</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              ))}
-            </Box>
-          )}
-        </Box>
+                <CardActionArea>
+                  {light?.state?.output === false ? (
+                    getRoomOFFPhotoById(light?.state?.id) ? (
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={getRoomOFFPhotoById(light?.state?.id)}
+                        sx={{ padding: '0' }}
+                        onClick={() => goToPage(light?.state?.id)}
+                      />
+                    ) : null
+                  ) : (
+                    getRoomONPhotoById(light?.state?.id) ? (
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={getRoomONPhotoById(light?.state?.id)}
+                        sx={{ padding: '0' }}
+                        onClick={() => goToPage(light?.state?.id)}
+                      />
+                    ) : null
+                  )}
+                  <CardContent sx={{ p: '20px', mx: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Typography sx={{ textAlign: 'center', pb: '10px' }}>{light?.room}</Typography>
+                    <ButtonGroup sx={{ position: 'relative', alignSelf: 'center' }}>
+                      <Button sx={{ cursor: 'pointer' }} onClick={() => switchOnLightById(light?.state?.id)} disabled={light?.state?.output === true}>ON</Button>
+                      <Button sx={{ cursor: 'pointer' }} onClick={() => switchOffLightById(light?.state?.id)} disabled={light?.state?.output === false}>OFF</Button>
+                    </ButtonGroup>
+                    <Typography sx={{ textAlign: 'center', pt: '10px', fontSize: '13px' }} variant="body2">{light?.state?.output === true ? `Power used: ${light?.state?.apower}Watt` : ''}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))}
+          </Box>
+        )}
+      </Box>
 
-        <Box component="div" sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: '#d3d3d382', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
-          <Typography variant="h6" sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
-          <TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />
-        </Box>
+      <Box component="div" sx={{ display: 'flex', flexDirection: 'column', gap: '10px', bgcolor: '#d3d3d382', padding: '10px', borderRadius: '6px', mx: 'auto', my: '30px', width: '90%', ...SHADOWSTYLE }}>
+        <Typography variant="h6" sx={{ mt: '10px', variant: 'h1', textAlign: 'center' }}>CONSUMES</Typography>
+        <TableLights loading={isLoadingPage} lightsDatasArray={lightsDatasArray} />
+      </Box>
       {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
     </>
   );

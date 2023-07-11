@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import TablePrinter from '../../../components/Tables/TablePrinter';
 import { Printer, PrinterStatus } from '../../../utils/interfaces/Interfaces';
-import { Box, Button, ButtonGroup, Typography, LinearProgress } from '@mui/material';
+import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { baseURL, urlEvents, urlTplink } from '../../../utils/fetch/api'
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/stampante.avif'
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const PrinterPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
+  const [statoPresa, setStatoPresa] = useState<boolean>(false);
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingButton, setIsLoadingButton] = useState(false)
-
-  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
-  const [statoPresa, setStatoPresa] = useState<boolean>(false);
 
   const fetchPrinter = async () => {
     try {
@@ -37,7 +36,7 @@ const PrinterPage = () => {
     try {
       const response = await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
       setStatoPresa(true);
-      if(response.ok){
+      if(!response.ok){
         throw new Error
     }
     } catch (error) {
@@ -50,7 +49,7 @@ const PrinterPage = () => {
     try {
       const response = await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
       setStatoPresa(false);
-      if(response.ok){
+      if(!response.ok){
         throw new Error
     }
     } catch (error) {
@@ -82,7 +81,6 @@ const PrinterPage = () => {
     source.onmessage = (event) => {
       if (event.data) {
         const json: Printer = JSON.parse(event.data)
-
         if (json?.tplinkStampante?.id === 300 && json.tplinkStampante) {
           const newData: Printer = {
             ...json
@@ -97,11 +95,9 @@ const PrinterPage = () => {
       setMessage(`Error finding printer events`);
     }
 
-
     return () => {
       source.close();
     };
-
   }, []);
 
   return (
@@ -112,9 +108,6 @@ const PrinterPage = () => {
             <Typography variant='h6' >SWITCH THE PRINTER STATUS</Typography>
             <ButtonGroup>
               <Button sx={{cursor:'pointer'}} onClick={() => switchOnPrinter()} disabled={statoPresa}>ON</Button>
-              {isLoadingButton && (
-                  <LinearProgress/>
-                )}
               <Button sx={{cursor:'pointer'}} onClick={() => switchOffPrinter()} disabled={!statoPresa}>OFF</Button>
             </ButtonGroup>
           </Box>

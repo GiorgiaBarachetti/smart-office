@@ -12,7 +12,6 @@ interface Props {
 
 const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
   const navigate = useNavigate();
-
   const gotoPage = () => {
     navigate(PATH.coffee);
   };
@@ -22,8 +21,7 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
       open={open}
       onClose={() => handleClose()}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+      aria-describedby="modal-modal-description">
       <Box component='div' sx={MODALSTYLE}>
         <Typography variant="h6" component="h1">Coffee machine, id {idCoffee}</Typography>
         <Box component='div'>
@@ -32,7 +30,6 @@ const ModalCoffee = ({ open, handleClose, idCoffee }: Props) => {
         </Box>
       </Box>
     </Modal>
-
   );
 };
 

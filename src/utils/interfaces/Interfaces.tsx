@@ -17,7 +17,6 @@ export interface Lights {
     };
   }
 }
-
 export interface Printer {
   tplinkStampante: {
     id: number
@@ -39,7 +38,6 @@ export interface Printer {
     }
   }
 }
-
 export interface Energy {
   id: number,
   powerUsed: number,
@@ -49,7 +47,6 @@ export interface Energy {
   energyUsedF3: number,
   currentHour: number
 }
-
 export interface PrinterStatus {
   stato_presa: boolean
 }
@@ -62,7 +59,6 @@ export interface Coffee {
     spegnimento: number;
   }
 }
-
 export interface CoffeeConsumes {
   id: number,
   data: {
@@ -74,8 +70,6 @@ export interface CoffeeConsumes {
     timestamp: number
   }
 }
-
-
 export interface Niveus {
   id: number,
   data: {

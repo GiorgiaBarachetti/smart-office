@@ -1,8 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box';
-import { ListItemProps } from '@mui/material/ListItem';
 import {  Route,  Routes,  BrowserRouter} from "react-router-dom";
-import { useState } from 'react'
 import MainPage from '../../pages/Main/MainPage';
 import Layout from '../../pages/Layout/Layout';
 import LightsPage from '../../pages/Layout/Lights/LightsPage';
@@ -20,12 +18,7 @@ import Printer from '../../pages/Layout/Printer/PrinterPage';
 import Energy from '../../pages/Layout/Energy/EnergyPage';
 import Niveus from '../../pages/Layout/Niveus/Niveus';
 
-interface ListItemLinkProps extends ListItemProps {
-  to: string;
-  open?: boolean;
-}
 const AppRoutes = () => {
-
   return (
     <BrowserRouter>
       <Box component="div" sx={{ display: 'flex', flexDirection: 'column' }}>

@@ -16,43 +16,53 @@ interface ChartData {
 const ChartLights = ({ id }: Props) => {
     const [message, setMessage] = useState('')
     const [open, setOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedDateRange, setSelectedDateRange] = useState('today');
+    const [lightsDatasArray, setLightsDatasArray] = useState<ChartData[]>([]);
+    
     const handleClose = () => {
         setOpen(false);
         setMessage('')
     };
-
-    const [lightsDatasArray, setLightsDatasArray] = useState<ChartData[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    let [selectedDateRange, setSelectedDateRange] = useState('today');
-
+    
     const handleDateRangeClick = (dateRange: string) => {
         setSelectedDateRange(dateRange);
         fetchLightsData(dateRange)
     }
+    
+    const chartData = lightsDatasArray || [];
+    const chartItems = chartData.map(({ time, watt }) => [
+        new Date(time),
+        watt
+    ])
 
     const fetchLightsData = async (range: string) => {
         try {
             setIsLoading(true);
             const currentDate = new Date();
             let startDate = '';
-            let endDate = currentDate;
+            const endDate = currentDate;
 
             switch (range) {
-                case 'today':
+                case 'today':{
                     startDate = currentDate.toISOString().split('T')[0];
                     break;
-                case 'yesterday':
+                }
+                case 'yesterday':{
                     const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
                     break;
-                case 'lastWeek':
+                }
+                case 'lastWeek':{
                     const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
                     startDate = lastWeekStart.toISOString().split('T')[0];
                     break;
-                case 'lastMonth':
+                }
+                case 'lastMonth':{
                     const lastMonthStart = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
                     startDate = lastMonthStart.toISOString().split('T')[0];
                     break;
+                }
                 default:
                     break;
             }
@@ -60,6 +70,7 @@ const ChartLights = ({ id }: Props) => {
             const data = await response.json();
             setLightsDatasArray(data);
             setIsLoading(false);
+            
             if (!response.ok) {
                 throw new Error
             }
@@ -74,8 +85,25 @@ const ChartLights = ({ id }: Props) => {
     }, []);
 
     const options = {
-
-    };
+        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
+            count: -1,
+            units: {
+                days: { format: ['dd/MM/YY'] },
+                hours: { format: ['HH'] },
+                minutes: { format: ['HH'] },
+            }
+        },
+        minorGridlines: {
+            units: {
+                days: { format: ['dd/MM/YY'] },
+                hours: { format: ['HH'] },
+                minutes: { format: ['HH'] },
+            }
+        },
+        vAxis: { title: "Watt", minValue: 0 },
+        chartArea: { width: "50%", height: "60%" },
+        legend: 'none',
+    }
 
     return (
         <Box component='div' sx={{ mt: '30px' }}>
@@ -107,19 +135,14 @@ const ChartLights = ({ id }: Props) => {
                             chartType="LineChart"
                             data={[
                                 ['time', 'watt'],
-                                ...lightsDatasArray.map(({ time, watt }) => {
-                                    return [new Date(time), watt];
-                                }),
+                                ...chartItems,
                             ]}
                             options={options}
                         />
                     )}
                 </Box>
-
-
             </Paper >
             {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
-
         </Box >
     );
 };

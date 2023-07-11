@@ -5,19 +5,19 @@ import { baseURL, urlAlhpa, urlEvents } from '../../../utils/fetch/api';
 import { Box, Typography } from '@mui/material';
 import { CONTAINERBOX, SHADOWSTYLE } from '../../../utils/const/Const';
 import background from '../../../img/energyy.jpg'
-import ChartLights from '../../../components/Chart/ChartEnergy';
 import ChartEnergy from '../../../components/Chart/ChartEnergy';
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const EnergyPage = () => {
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
+  
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
-  const [isLoading, setIsLoading] = useState(false)
-  const [energyStatus, setEnergyStatus] = useState<Energy[]>([]);
 
   const fetchEnergy = async () => {
     try {
@@ -36,14 +36,12 @@ const EnergyPage = () => {
     fetchEnergy();
   }, []);
 
-
   useEffect(() => {
     const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
       if (event.data) {
         const json: Energy = JSON.parse(event.data)
-
         if (json.id === 200 && json) {
           const newData: Energy = {
             ...json
@@ -65,8 +63,9 @@ const EnergyPage = () => {
   }, []);
 
   const [boltStyle, setBoltStyle] = useState({
-    backgroundColor: "rgba(113,200,16)"
+    backgroundColor: "rgb(113,200,16)"
   })
+  
   const changeStyleBolt = () => {
     //if the powerused of the first element of energy array is >= 690 
     if (energyStatus[0]?.powerUsed >= 1308) {
@@ -93,12 +92,10 @@ const EnergyPage = () => {
     return boltStyle;
   };
 
-
   useEffect(() => {
     const updatedBoltStyle = changeStyleBolt();
     setBoltStyle(updatedBoltStyle);
   }, [energyStatus]);
-
 
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '94vh' }}>

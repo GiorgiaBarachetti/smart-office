@@ -9,8 +9,6 @@ interface Props {
 }
 
 const TableEnergy = ({ loading, energy }: Props) => {
-
-
   return <TableContainer sx={{ borderRadius: '8px', mx: 'auto', my: '5px', width: '99%', ...SHADOWSTYLE, ...TABLECOLOR }} >
     <Table size="small">
       <TableHead>

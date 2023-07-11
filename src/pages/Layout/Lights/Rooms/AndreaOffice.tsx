@@ -10,20 +10,17 @@ import { baseURL, urlEvents, urlShelly } from '../../../../utils/fetch/api';
 import SnackbarGeneral from '../../../../components/Snackbar/SnackbarGeneral';
 
 const AndreaOffice = () => {
+  const id = 0;
+  const isXsScreen = useMediaQuery('(min-width:770px)');
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  const [room, setRoom] = useState<Lights[]>([]);
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
+  
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
-
-  const id = 0;
-  const [room, setRoom] = useState<Lights[]>([]);
-
-  const isXsScreen = useMediaQuery('(min-width:770px)');
-
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true)
-  const [loading, setLoading] = useState<boolean>(false)
 
   const fetchRoom = async () => {
     try {
@@ -48,7 +45,6 @@ const AndreaOffice = () => {
     source.onmessage = (event) => {
       if (event.data) {
         const json: Lights = JSON.parse(event.data)
-
         if (json?.state?.id === id) {
           const newData: Lights = {
             ...json
@@ -73,7 +69,6 @@ const AndreaOffice = () => {
     fetchRoom()
   }, [])
 
-
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', minHeight: 'calc(100vh - 60px)' }} >
       {isLoadingPage ? <CircularProgress sx={{ position: 'absolute', top: 100, right: 50 }} /> :
@@ -83,12 +78,12 @@ const AndreaOffice = () => {
               {isXsScreen ? (
                 <Stack direction="row" spacing={2} alignItems={'center'} >
                   <SwitchComponent id={id} room={room} />
-                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} />
                 </Stack>
               ) : (
                 <Stack direction="column" spacing={2} alignItems={'center'} justifyContent={'center'} px={'auto'} >
                   <SwitchComponent id={id} room={room} />
-                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()} loading={loading} />
+                  <TableRooms idRoom={id} light={room} fetchRoom={() => fetchRoom()}  />
                 </Stack>
               )}
               <ChartLights id={id} />

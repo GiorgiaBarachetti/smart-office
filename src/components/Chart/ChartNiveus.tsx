@@ -4,7 +4,6 @@ import { Paper, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { SHADOWSTYLE } from "../../utils/const/Const";
 import { baseURL, urlNiveus } from "../../utils/fetch/api";
 import SnackbarGeneral from "../Snackbar/SnackbarGeneral";
-
 interface ChartDataNiveus {
     data: {
         timestamp: string,
@@ -14,42 +13,54 @@ interface ChartDataNiveus {
 const ChartNiveus = () => {
     const [message, setMessage] = useState('')
     const [open, setOpen] = useState(false);
+    const [NiveusDatas, setNiveusDatas] = useState<ChartDataNiveus[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedDateRange, setSelectedDateRange] = useState('today');
+
     const handleClose = () => {
         setOpen(false);
         setMessage('')
     };
-
-    const [NiveusDatas, setNiveusDatas] = useState<ChartDataNiveus[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    let [selectedDateRange, setSelectedDateRange] = useState('today');
 
     const handleDateRangeClick = (dateRange: string) => {
         setSelectedDateRange(dateRange);
         fetchNiveusData(dateRange)
     }
 
+
+    const chartData = NiveusDatas[0]?.data || [];
+    const chartItems = chartData.map(({ timestamp, watt }) => [
+        new Date(timestamp),
+        watt
+    ]);
+
     const fetchNiveusData = async (range: string) => {
         try {
             setIsLoading(true);
             const currentDate = new Date();
             let startDate = '';
-            let endDate = currentDate;
+            const endDate = currentDate;
             switch (range) {
-                case 'today':
+
+                case 'today': {
                     startDate = currentDate.toISOString().split('T')[0];
                     break;
-                case 'yesterday':
+                }
+                case 'yesterday': {
                     const yesterday = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
                     startDate = yesterday.toISOString().split('T')[0];
                     break;
-                case 'lastWeek':
+                }
+                case 'lastWeek': {
                     const lastWeekStart = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
                     startDate = lastWeekStart.toISOString().split('T')[0];
                     break;
-                case 'lastMonth':
+                }
+                case 'lastMonth': {
                     const lastMonthStart = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
                     startDate = lastMonthStart.toISOString().split('T')[0];
                     break;
+                }
                 default:
                     break;
             }
@@ -57,6 +68,7 @@ const ChartNiveus = () => {
             const data = await response.json();
             setNiveusDatas(Array.isArray(data) ? data : [data]);
             setIsLoading(false);
+
             if (!response.ok) {
                 throw new Error
             }
@@ -69,26 +81,6 @@ const ChartNiveus = () => {
     useEffect(() => {
         fetchNiveusData('today')
     }, []);
-
-    const options = {
-        hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
-            count: -1,
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        minorGridlines: {
-            units: {
-                days: { format: ['dd/MM/YY'] },
-                hours: { format: ['HH'] },
-                minutes: { format: ['HH'] },
-            }
-        },
-        vAxis: { title: "Watt", minValue: 0 },
-        chartArea: { width: "50%", height: "60%" },
-    };
 
     return (
         <Box component='div' sx={{ padding: '20px', width: '100%', mx: 'auto' }}>
@@ -120,20 +112,28 @@ const ChartNiveus = () => {
                             chartType="LineChart"
                             data={[
                                 ['timestamp', 'watt'],
-                                [
-                                    new Date(new Date().setHours(0, 0, 0, 0)),
-                                    0
-                                ],
-                                ...NiveusDatas[0]?.data.map(({ timestamp, watt }) => [
-                                    new Date(timestamp),
-                                    watt
-                                ]),
-                                [
-                                    new Date(new Date()),
-                                    0
-                                ]
+                                ...chartItems
                             ]}
-                            options={options}
+                            options={{
+                                hAxis: { title: "Time", titleTextStyle: { color: "#333" } }, gridlines: {
+                                    count: -1,
+                                    units: {
+                                        days: { format: ['dd/MM/YY'] },
+                                        hours: { format: ['HH'] },
+                                        minutes: { format: ['HH'] },
+                                    }
+                                },
+                                minorGridlines: {
+                                    units: {
+                                        days: { format: ['dd/MM/YY'] },
+                                        hours: { format: ['HH'] },
+                                        minutes: { format: ['HH'] },
+                                    }
+                                },
+                                vAxis: { title: "Watt", minValue: 0 },
+                                chartArea: { width: "50%", height: "60%" },
+                                legend: 'none',
+                            }}
                         />
                     )}
                 </Box>

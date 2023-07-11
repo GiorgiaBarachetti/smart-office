@@ -13,27 +13,24 @@ import ChartCoffee from '../../../components/Chart/ChartCoffee';
 import TableCoffee from '../../../components/Tables/TableCoffee';
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
-
 const CoffeePage = () => {
+  const isXsScreen = useMediaQuery('(min-width:910px)');
   const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [coffeeConsumes, setCoffeeConsumes] = useState<CoffeeConsumes[]>([]);
+  const [coffeeData, setCoffeeData] = useState<Coffee[]>([]);
+  const defaultValue: [Dayjs | null, Dayjs | null] = [dayjs(new Date().setHours(0)), dayjs(new Date())];
+  const [selectedDates, setSelectedDates] = useState<[Dayjs | null, Dayjs | null]>(defaultValue);
+  
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
 
-  const isXsScreen = useMediaQuery('(min-width:910px)');
-
-  const defaultValue: [Dayjs | null, Dayjs | null] = [dayjs(new Date().setHours(0)), dayjs(new Date())];
-  const [selectedDates, setSelectedDates] = useState<[Dayjs | null, Dayjs | null]>(defaultValue);
-
   const handleDateChange = (newDates: [Dayjs | null, Dayjs | null]) => {
     setSelectedDates(newDates);
   };
-
-  const [loading, setLoading] = useState<boolean>(false)
-
-  const [coffeeConsumes, setCoffeeConsumes] = useState<CoffeeConsumes[]>([]);
 
   const fetchCoffeeConsumes = async () => {
     try {
@@ -49,7 +46,6 @@ const CoffeePage = () => {
     }
   };
 
-  const [coffeeData, setCoffeeData] = useState<Coffee[]>([]);
   const fetchCoffee = async () => {
     try {
       setLoading(true)
@@ -74,13 +70,9 @@ const CoffeePage = () => {
 
   useEffect(() => {
     setLoading(true)
-
     fetchCoffee()
     fetchCoffeeConsumes()
-
-  }, [selectedDates]
-
-  )
+  }, [selectedDates])
 
   useEffect(() => {
     const source = new EventSource(`${baseURL}${urlEvents}`);
@@ -88,7 +80,6 @@ const CoffeePage = () => {
     source.onmessage = (event) => {
       if (event.data) {
         const json: CoffeeConsumes = JSON.parse(event.data)
-
         if (json.id === 100 && json) {
           const newData: CoffeeConsumes = {
             ...json
@@ -102,7 +93,6 @@ const CoffeePage = () => {
       setOpen(true)
       setMessage(`Error finding coffee events`);
     }
-
 
     return () => {
       source.close();
@@ -148,7 +138,7 @@ const CoffeePage = () => {
                               <Typography fontWeight={'bold'} display={'inline'}>TOTAL DOUBLE COFFEES </Typography>{coffee.data.DUECaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.DUECaffe} coffee` : `${coffee.data.DUECaffe} coffees`) : '0 coffees'}
                             </Box>
                           </Box>
-                          <Box component='div' sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '10px'/*, justifyContent: 'space-between' */ }}>
+                          <Box component='div' sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#b9ec86', color: '#4d8317' }}>
                               <Typography fontWeight={'bold'} display={'inline'}>IGNITIONS </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
                             </Box>
@@ -161,7 +151,6 @@ const CoffeePage = () => {
                     </Box>
                   ) : (
                     <Box key={coffee.id}>
-
                       <Box component='div' key={coffee.id} sx={{ textAlign: 'center', pt: '10px' }}>
                         <Box component='div' sx={{ borderRadius: '11px', padding: '10px', backgroundColor: 'rgba(79, 64, 61, 0.75)', color: 'rgba(238, 231, 225, 0.77)' }}>
                           <Typography variant="h6" fontWeight={'bold'} display={'inline'}>TOTAL COFFEES TODAY </Typography>{coffeeSum === 1 ? `${coffeeSum} coffee` : `${coffeeSum} coffees`}
@@ -176,7 +165,7 @@ const CoffeePage = () => {
                               <Typography fontWeight={'bold'} display={'inline'}>TOTAL DOUBLE COFFEES </Typography>{coffee.data.DUECaffe != undefined ? (coffee.data.UNCaffe === 1 ? `${coffee.data.DUECaffe} coffee` : `${coffee.data.DUECaffe} coffees`) : '0 coffees'}
                             </Box>
                           </Box>
-                          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px'/*, justifyContent: 'space-between' */ }}>
+                          <Box component='div' sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <Box component='div' sx={{ borderRadius: '11px', padding: '10px', bgcolor: '#b9ec86', color: '#4d8317' }}>
                               <Typography fontWeight={'bold'} display={'inline'}>IGNITIONS </Typography>{coffee.data.accensione != undefined ? (coffee.data.accensione === 1 ? `${coffee.data.accensione} time` : `${coffee.data.accensione} times`) : '0 times'}
                             </Box>

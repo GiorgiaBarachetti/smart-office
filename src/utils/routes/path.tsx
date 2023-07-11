@@ -1,5 +1,3 @@
-
-
 export const PATH = {
     main: '/',
     lightsPage: '/lights',

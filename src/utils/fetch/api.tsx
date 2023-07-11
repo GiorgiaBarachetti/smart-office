@@ -1,4 +1,3 @@
-
 export const baseURL = process.env.REACT_APP_BASE_API_URL
 export const urlShelly = process.env.REACT_APP_BASE_SHELLY_URL
 export const urlCoffee = process.env.REACT_APP_BASE_COFFEE_URL

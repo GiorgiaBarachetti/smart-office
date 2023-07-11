@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Lights } from '../../utils/interfaces/Interfaces';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 
 interface Props {
   idRoom: number;
   light: Lights[]
-  loading: boolean
   fetchRoom: ()=>void
 }
 
-const TableRooms = ({ idRoom, light, loading, fetchRoom }: Props) => {
+const TableRooms = ({ idRoom, light, fetchRoom }: Props) => {
   
   useEffect(() => {
     const interval = setTimeout(()=>fetchRoom(),1000)
@@ -32,14 +31,6 @@ const TableRooms = ({ idRoom, light, loading, fetchRoom }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {loading && (
-          <TableRow>
-            <TableCell colSpan={4}>
-              <LinearProgress />
-            </TableCell>
-          </TableRow>
-        )}
-
           {light.length && light != undefined ? ( 
             light.map((r) => (
             <TableRow key={r.state.id}>

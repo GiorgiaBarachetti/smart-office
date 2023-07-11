@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PATH, SIDEBARROOMS } from '../../utils/routes/path';
-import { Box, Button, ButtonGroup, Typography, Modal, LinearProgress } from '@mui/material';
+import { Box, Button, ButtonGroup, Typography, Modal } from '@mui/material';
 import { baseURL, urlShelly } from '../../utils/fetch/api';
 import { MODALSTYLE } from '../../utils/const/Const';
 import { Lights } from '../../utils/interfaces/Interfaces';
@@ -14,23 +14,22 @@ interface Props {
   handleClose: () => void;
 }
 
-const ModalLights = ({ open, handleClose, lights, idRoomModal/*, fetchLights*/ }: Props) => {
+const ModalLights = ({ open, handleClose, lights, idRoomModal}: Props) => {
   const [message, setMessage] = useState('')
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const navigate = useNavigate();
+
   const handleCloseSnackBar = () => {
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    (false);
+    setOpenSnackbar(false);
     setMessage('')
   };
-
-  const navigate = useNavigate();
   const gotoPage = () => {
     navigate(PATH.lightsPage);
   };
   const gotoPageById = (key: number | undefined) => {
     if (key != undefined) {
       navigate(SIDEBARROOMS[key].href);
-    } else { }
+    }
   }
 
   const getRoomName = (roomId: number | undefined) => {
@@ -104,7 +103,7 @@ const ModalLights = ({ open, handleClose, lights, idRoomModal/*, fetchLights*/ }
             <Button sx={{ cursor: 'pointer', color: 'red' }} onClick={() => handleClose()}>CLOSE</Button>
           </Box>
         </Box>
-      {message != '' ? <SnackbarGeneral openSnackbar={open} handleClose={() => handleClose()} message={message} /> : null}
+      {message != '' ? <SnackbarGeneral openSnackbar={openSnackbar} handleClose={() => handleCloseSnackBar()} message={message} /> : null}
       </Box>
     </Modal>
 

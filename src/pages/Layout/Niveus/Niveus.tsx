@@ -10,23 +10,22 @@ import './style.css'
 import SnackbarGeneral from '../../../components/Snackbar/SnackbarGeneral';
 
 const NiveusPage = () => {
-   const [message, setMessage] = useState('')
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
+  const [niveusData, setNiveusData] = useState<Niveus[]>([]);
+  const [message, setMessage] = useState('')
   const [open, setOpen] = useState(false);
+  
   const handleClose = () => {
     setOpen(false);
     setMessage('')
   };
 
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [niveusData, setNiveusData] = useState<Niveus[]>([]);
-
   const fetchNiveus = async () => {
     try {
-        const response = await fetch(`${baseURL}${urlNiveus}/registers`);
-        const data = await response?.json();
-        setNiveusData(Array.isArray(data) ? data : [data]);
-        setIsLoadingPage(false);
+      const response = await fetch(`${baseURL}${urlNiveus}/registers`);
+      const data = await response?.json();
+      setNiveusData(Array.isArray(data) ? data : [data]);
+      setIsLoadingPage(false);
     } catch (error) {
       setOpen(true)
       setMessage(`Error fetching niveus`);
@@ -42,15 +41,15 @@ const NiveusPage = () => {
     const source = new EventSource(`${baseURL}${urlEvents}`);
 
     source.onmessage = (event) => {
-      if(event.data){
-      const json : Niveus = JSON.parse(event.data)
+      if (event.data) {
+        const json: Niveus = JSON.parse(event.data)
 
-        if(json.id === 400 && json.data.receivedData){
+        if (json.id === 400 && json.data.receivedData) {
           const { volts, ampere, watt } = json.data.receivedData;
-          const newData : Niveus = {
+          const newData: Niveus = {
             id: json.id,
             data: {
-              receivedData:{
+              receivedData: {
                 volts: volts,
                 ampere: ampere,
                 watt: watt,
@@ -61,8 +60,8 @@ const NiveusPage = () => {
         }
       }
     };
-    
-    source.onerror=()=>{
+
+    source.onerror = () => {
       setOpen(true)
       setMessage(`Error fetching niveus`);
     }
@@ -72,7 +71,7 @@ const NiveusPage = () => {
     };
 
   }, []);
-  
+
   return (
     <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', minHeight: '94vh' }}>
       {isLoadingPage ? (
@@ -80,8 +79,8 @@ const NiveusPage = () => {
       ) : (
         <Box component="div" py={'30px'}>
           <Box component="div" className="test" sx={{ ...CONTAINERBOX }}>
-            <Typography variant="h6" sx={{ color: 'white', textAlign: 'center'}}>CONSUMPTIONS</Typography>
-            <TableNiveus niveus={niveusData} loading={isLoading} />
+            <Typography variant="h6" sx={{ color: 'white', textAlign: 'center' }}>CONSUMPTIONS</Typography>
+            <TableNiveus niveus={niveusData} />
             <ChartNiveus />
           </Box>
         </Box>

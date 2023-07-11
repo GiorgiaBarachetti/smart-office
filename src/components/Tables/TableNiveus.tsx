@@ -1,17 +1,14 @@
 import React from 'react'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
 import { Niveus } from '../../utils/interfaces/Interfaces';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined';
 interface Props {
   niveus: Niveus[]
-  loading: boolean
 }
 
-const TableNiveus = ({ loading, niveus }: Props) => {
-
-
+const TableNiveus = ({ niveus }: Props) => {
   return (<>
           {niveus?.map((n) => (
             <Box component='div' key={n.id} sx={{textAlign:'center', p:'10px'}}>
@@ -53,14 +50,6 @@ const TableNiveus = ({ loading, niveus }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/*{loading && (
-            <TableRow>
-              <TableCell colSpan={4}>
-                <LinearProgress />
-              </TableCell>
-            </TableRow>
-          )}*/}
-
           {niveus?.map((n) => (
             <TableRow key={n.id}>
               <TableCell>{n?.data?.receivedData?.watt != undefined ? n.data.receivedData.watt : '0'} W</TableCell>

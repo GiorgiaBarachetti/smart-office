@@ -1,17 +1,13 @@
 import React from 'react'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, LinearProgress } from '@mui/material';
 import { SHADOWSTYLE, TABLECOLOR } from '../../utils/const/Const';
-import { CoffeeConsumes, Niveus } from '../../utils/interfaces/Interfaces';
-import Brightness1Icon from '@mui/icons-material/Brightness1';
-import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined';
-import CoffeePage from '../../pages/Layout/Coffe/CoffeePage';
+import { CoffeeConsumes } from '../../utils/interfaces/Interfaces';
 interface Props {
   coffee: CoffeeConsumes[]
   loading: boolean
 }
 
 const TableCoffee = ({ loading, coffee }: Props) => {
-
 
   return (
     <TableContainer sx={{ borderRadius: '11px', mb: '20px',mt:'30px', mx: 'auto', width: '70%', ...SHADOWSTYLE, ...TABLECOLOR }} >

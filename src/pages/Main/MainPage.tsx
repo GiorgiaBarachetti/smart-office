@@ -9,7 +9,7 @@ import AirIcon from '@mui/icons-material/Air';
 import { CircularProgress } from '@mui/material';
 import planimetry from '../../img/background.png';
 import { baseURL, urlShelly, urlCoffee, urlAlhpa, urlTplink, urlNiveus, urlEvents } from '../../utils/fetch/api';
-import { Energy, Lights, Printer, Coffee, PrinterStatus, Niveus, CoffeeConsumes } from '../../utils/interfaces/Interfaces';
+import { Energy, Lights, Printer, PrinterStatus, Niveus, CoffeeConsumes } from '../../utils/interfaces/Interfaces';
 import ModalLights from '../../components/ModalsMain/ModalLights';
 import ModalPrinter from '../../components/ModalsMain/ModalPrinter';
 import ModalCoffee from '../../components/ModalsMain/ModalCoffee';
@@ -48,6 +48,17 @@ const MainPage = () => {
 
   const [openModalLight, setOpenModalLight] = useState(false)
   const [idRoomModal, setIdRoomModal] = useState<number | undefined>();
+  const [openModalCoffee, setOpenModalCoffee] = useState(false)
+  const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
+  const [openModalEnergy, setOpenModalEnergy] = useState(false)
+  const [idEnergyModal, setIdEnergyModal] = useState<number | undefined>();
+  const [openModalNiveus, setOpenModalNiveus] = useState(false)
+  const [idNiveusModal, setIdNiveusModal] = useState<number | undefined>();
+  const [openModalPrinter, setOpenModalPrinter] = useState(false)
+  const [idPrinterModal, setIdPrinterModal] = useState<number | undefined>();
+  const [isLoading, setIsLoading] = useState(false)
+  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
+
 
   const openModalLights = (id: number) => {
     if (id !== undefined) {
@@ -59,9 +70,6 @@ const MainPage = () => {
     setOpenModalLight(false)
   }
 
-  const [openModalCoffee, setOpenModalCoffee] = useState(false)
-  const [idCoffeeModal, setIdCoffeeModal] = useState<number | undefined>();
-
   const openCoffeeModal = (id: number) => {
     if (id !== undefined) {
       setIdCoffeeModal(id);
@@ -72,10 +80,6 @@ const MainPage = () => {
     setOpenModalCoffee(false)
   }
 
-
-  const [openModalEnergy, setOpenModalEnergy] = useState(false)
-  const [idEnergyModal, setIdEnergyModal] = useState<number | undefined>();
-
   const openEnergyModal = (id: number) => {
     if (id !== undefined) {
       setIdEnergyModal(id);
@@ -85,11 +89,7 @@ const MainPage = () => {
   const closeEnergyModal = () => {
     setOpenModalEnergy(false)
   }
-
-
-  const [openModalNiveus, setOpenModalNiveus] = useState(false)
-  const [idNiveusModal, setIdNiveusModal] = useState<number | undefined>();
-
+  
   const openNiveusModal = (id: number) => {
     if (id !== undefined) {
       setIdNiveusModal(id);
@@ -99,11 +99,7 @@ const MainPage = () => {
   const closeNiveusModal = () => {
     setOpenModalNiveus(false)
   }
-
-
-
-  const [openModalPrinter, setOpenModalPrinter] = useState(false)
-  const [idPrinterModal, setIdPrinterModal] = useState<number | undefined>();
+  
   const openPrinterModal = (id: number) => {
     if (id !== undefined) {
       setIdPrinterModal(id);
@@ -113,12 +109,6 @@ const MainPage = () => {
   const closePrinterModal = () => {
     setOpenModalPrinter(false)
   }
-
-
-  const [isLoading, setIsLoading] = useState(false)
-
-  const [lightsDatasArray, setLightsDatasArray] = useState<Lights[]>([]);
-
 
   const fetchLights = async () => {
     try {
@@ -134,7 +124,11 @@ const MainPage = () => {
 
 
   const [coffeeConsumes, setCoffeeConsumes] = useState<CoffeeConsumes[]>([]);
-
+  const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
+  const [niveusData, setNiveusData] = useState<Niveus[]>([]);
+  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
+  const [printerStatus, setPrinterStatus] = useState<PrinterStatus[]>([]);
+  
   const fetchCoffee = async () => {
     try {
       const response = await fetch(`${baseURL}${urlCoffee}/registers`);
@@ -147,7 +141,7 @@ const MainPage = () => {
     }
   };
 
-  const [energyDatas, setEnergyDatas] = useState<Energy[]>([]);
+  
   const fetchEnergy = async () => {
     try {
       const response = await fetch(`${baseURL}${urlAlhpa}/registers`);
@@ -160,7 +154,6 @@ const MainPage = () => {
     }
   };
 
-  const [niveusData, setNiveusData] = useState<Niveus[]>([]);
 
   const fetchNiveus = async () => {
     try {
@@ -173,7 +166,6 @@ const MainPage = () => {
     }
   };
 
-  const [printerDatas, setPrinterDatas] = useState<Printer[]>([]);
 
   const fetchPrinter = async () => {
     try {
@@ -187,7 +179,6 @@ const MainPage = () => {
     }
   };
 
-  const [printerStatus, setPrinterStatus] = useState<PrinterStatus[]>([]);
 
   const fetchPrinterStatus = async () => {
     try {
@@ -221,7 +212,6 @@ const MainPage = () => {
           }
         });
         setLightsDatasArray(updatedArray);
-      } else {
       }
     }
   }, [updatedLights]);
@@ -277,7 +267,6 @@ const MainPage = () => {
     };
   }, []);
 
-
   useEffect(() => {
     setIsLoading(true)
     fetchLights()
@@ -287,8 +276,6 @@ const MainPage = () => {
     fetchPrinter()
     fetchPrinterStatus()
   }, []);
-
-
 
   const [boltStyle, setBoltStyle] = useState({
     color: "rgba(113,200, 46)",
@@ -324,18 +311,14 @@ const MainPage = () => {
     return boltStyle;
   };
 
-
   useEffect(() => {
     const updatedBoltStyle = changeStyleBolt();
     setBoltStyle(updatedBoltStyle);
   }, [energyDatas]);
 
-
-
   const getCoordinates = (roomId: number) => {
     let x = 0;
     let y = 0;
-
     switch (roomId) {
       // UFFICIO ANDREA
       case 0:
@@ -414,6 +397,7 @@ const MainPage = () => {
     }
     return { x, y };
   };
+  
   const { x, y } = getCoordinates(100);
 
   return (
@@ -446,7 +430,6 @@ const MainPage = () => {
           'lightsDatasArray is empty'
         )}
 
-        {/*cordinate rect: x = 300+50 e y = 60 + 300*/}
         {coffeeConsumes.map((c) =>
           <g key={c.id} style={{ ...coffeeStyle, cursor: 'pointer' }} >
             <SvgIcon component={CoffeeMakerIcon} x={x} y={y} width="80px" onClick={() => openCoffeeModal(100)} />
@@ -516,7 +499,7 @@ const MainPage = () => {
         }
       </svg>
 
-      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} /*fetchLights={fetchLights}*/ />
+      <ModalLights open={openModalLight} handleClose={() => closeModalLight()} idRoomModal={idRoomModal} lights={lightsDatasArray} />
       <ModalCoffee open={openModalCoffee} handleClose={() => closeCoffeeModal()} idCoffee={idCoffeeModal} />
       <ModalEnergy open={openModalEnergy} handleClose={() => closeEnergyModal()} idEnergy={idEnergyModal} />
       <ModalNiveus open={openModalNiveus} handleClose={() => closeNiveusModal()} idNiveus={idNiveusModal} />

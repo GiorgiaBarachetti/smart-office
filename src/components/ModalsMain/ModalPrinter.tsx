@@ -20,8 +20,7 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
   const [message, setMessage] = useState('')
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const handleCloseSnackBar = () => {
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    (false);
+    setOpenSnackbar(false);
     setMessage('')
   };
 
@@ -37,7 +36,7 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
       if (printerStatus) {
         const response = await fetch(`${baseURL}${urlTplink}/on`, { method: 'POST' });
         setRefreshDatas((prevState) => !prevState);
-        if(response.ok){
+        if(!response.ok){
           throw new Error
       }
       }
@@ -52,7 +51,7 @@ const ModalPrinter = ({ open, idPrinter, printerStatus, handleClose, fetchPrinte
       if (printerStatus) {
         const response = await fetch(`${baseURL}${urlTplink}/off`, { method: 'POST' });
         setRefreshDatas((prevState) => !prevState);
-        if(response.ok){
+        if(!response.ok){
           throw new Error
       }
       }
